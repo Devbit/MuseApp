@@ -55,11 +55,13 @@ public class MyMapActivity extends Activity {
 				String lat = c.getString(TAG_LAT);
 				String lon = c.getString(TAG_LONG);
 				String mid = c.getString(TAG_MID);
-				if (lat.equals("") || lon.equals(""))
+				LatLng loc = new LatLng(0,0);
+				try {
+					loc = new LatLng(Double.parseDouble(lat), Double.parseDouble(lon));
+				} catch (NumberFormatException nfe) {
 					continue;
-				
+				}
 				mapPlaceToId.put(title, mid);
-				LatLng loc = new LatLng(Double.parseDouble(lat), Double.parseDouble(lon));
 				googleMap.addMarker(new MarkerOptions()
 	                .position(loc)
 	                .title(title)
