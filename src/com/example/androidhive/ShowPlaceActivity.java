@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -22,7 +23,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -147,6 +152,32 @@ public class ShowPlaceActivity extends Activity {
 								imgId = place.getString(TAG_IMAGE);
 								Bitmap bitmap = BitmapFactory.decodeStream((InputStream)new URL(imageUrl + imgId).getContent());
 								  i.setImageBitmap(bitmap);
+								  
+								  final Dialog nagDialog = new Dialog(ShowPlaceActivity.this,android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+						            nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); 
+						            nagDialog.setCancelable(false);
+						            nagDialog.setContentView(R.layout.preview_image);
+						            Button btnClose = (Button)nagDialog.findViewById(R.id.btnClose);
+						            ImageView ivPreview = (ImageView)nagDialog.findViewById(R.id.preview_image);
+						            ivPreview.setImageBitmap(bitmap);
+						            
+									  i.setOnClickListener(new OnClickListener() {
+							                @Override
+							                public void onClick(View arg0) {
+
+							                	nagDialog.show();
+							                }
+							            });
+
+						            btnClose.setOnClickListener(new OnClickListener() {
+						                @Override
+						                public void onClick(View arg0) {
+
+						                    nagDialog.dismiss();
+						                }
+						            });
+						            
+								  
 								} catch (MalformedURLException e) {
 								  e.printStackTrace();
 								} catch (IOException e) {
