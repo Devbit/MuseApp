@@ -216,8 +216,4 @@ pip-log.txt
 
 #Project
 res/values/maps_apikey.xml
-<<<<<<< HEAD
 gen/com/example/androidhive/R.java
-=======
-R.java
->>>>>>> a02e248d70012499a1c541642d29b5f501e0a771
