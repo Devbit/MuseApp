@@ -45,6 +45,10 @@ $RECYCLE.BIN/
 # Mac crap
 .DS_Store
 
+#############
+## Android
+#############
+
 # built application files
 *.apk
 *.ap_
@@ -77,4 +81,3 @@ proguard/
 
 #Project
 res/values/maps_apikey.xml
-gen/com/example/androidhive/R.java
