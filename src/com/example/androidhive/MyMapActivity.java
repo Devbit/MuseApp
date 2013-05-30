@@ -2,6 +2,7 @@ package com.example.androidhive;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,17 +10,21 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MyMapActivity extends Activity {
+	private static final String TAG_MID = "ID";
 	private static final String TAG_NAME = "title";
 	private static final String TAG_LAT = "latitude";
 	private static final String TAG_LONG = "longitude";
@@ -27,6 +32,7 @@ public class MyMapActivity extends Activity {
     private GoogleMap googleMap;
     private int mapType = GoogleMap.MAP_TYPE_NORMAL;
     private JSONArray places;
+    private HashMap<String, String> mapPlaceToId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,48 +42,38 @@ public class MyMapActivity extends Activity {
         FragmentManager fragmentManager = getFragmentManager();
         MapFragment mapFragment =  (MapFragment) fragmentManager.findFragmentById(R.id.map);
         googleMap = mapFragment.getMap();
-        
-        LatLng sfLatLng = new LatLng(37.7750, -122.4183);
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        googleMap.addMarker(new MarkerOptions()
-                .position(sfLatLng)
-                .title("San Francisco")
-                .snippet("Population: 776733")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-
-        LatLng sLatLng = new LatLng(37.857236, -122.486916);
-        googleMap.addMarker(new MarkerOptions()
-                .position(sLatLng)
-                .title("Sausalito")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
         
         places = PlacesLoader.getPlaces();
+        mapPlaceToId = new HashMap<String, String>();
+        LatLng cameraLatLng = new LatLng(0,0);
         try {
+        	cameraLatLng = new LatLng(Double.parseDouble(places.getJSONObject(0).getString(TAG_LAT)), Double.parseDouble(places.getJSONObject(0).getString(TAG_LONG)));
         	for (int i = 0; i < places.length(); i++) {
 				JSONObject c = places.getJSONObject(i);
 				String title = c.getString(TAG_NAME);
 				String lat = c.getString(TAG_LAT);
 				String lon = c.getString(TAG_LONG);
+				String mid = c.getString(TAG_MID);
 				if (lat.equals("") || lon.equals(""))
 					continue;
 				
+				mapPlaceToId.put(title, mid);
 				LatLng loc = new LatLng(Double.parseDouble(lat), Double.parseDouble(lon));
 				googleMap.addMarker(new MarkerOptions()
 	                .position(loc)
 	                .title(title)
+	                /*.snippet(mid)*/
 	                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         	}
         } catch (JSONException e) {
 			e.printStackTrace();
 		}
         
-
         googleMap.getUiSettings().setCompassEnabled(true);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
 
-
-        LatLng cameraLatLng = sfLatLng;
         float cameraZoom = 10;
 
         if(savedInstanceState != null){
@@ -92,6 +88,24 @@ public class MyMapActivity extends Activity {
 
         googleMap.setMapType(mapType);
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(cameraLatLng, cameraZoom));
+        googleMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener () {
+
+			@Override
+			public void onInfoWindowClick(Marker marker) {
+				String title = marker.getTitle();
+				String mid = mapPlaceToId.get(title);
+				// Starting new intent
+				Intent in = new Intent(getApplicationContext(),
+						ShowPlaceActivity.class);
+				// sending mid to next activity
+				in.putExtra(TAG_MID, mid);
+				
+				// starting new activity and expecting some response back
+				startActivityForResult(in, 100);
+				
+			}
+        	
+        });
     }
 
     @Override
