@@ -28,6 +28,7 @@ public class ShowPlaceActivity extends Activity {
 	TextView txtInfo;
 	Button btnSave;
 	Button btnDelete;
+	int test;
 
 	String mid;
 
