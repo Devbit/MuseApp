@@ -206,7 +206,7 @@ containing a value of this type.
         public static final int map_styles_menu=0x7f070000;
     }
     public static final class string {
-        public static final int app_name=0x7f060013;
+        public static final int app_name=0x7f060014;
         /**   Title for notification shown when GooglePlayServices is unavailable [CHAR LIMIT=70] 
          */
         public static final int auth_client_availability_notification_title=0x7f06000e;
@@ -270,7 +270,8 @@ containing a value of this type.
         find the service-side assets. [CHAR LIMIT=25] 
          */
         public static final int common_signin_button_text_long=0x7f06000d;
-        public static final int hello=0x7f060012;
+        public static final int hello=0x7f060013;
+        public static final int maps_apikey=0x7f060012;
     }
     public static final class styleable {
         /** Attributes that can be used with a MapAttrs.
