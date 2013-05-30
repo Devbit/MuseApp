@@ -1,10 +1,15 @@
 package com.example.androidhive;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -17,10 +22,13 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -97,6 +105,56 @@ public class ShowPlaceActivity extends Activity {
 			pDialog.setCancelable(true);
 			pDialog.show();
 		}
+		
+		
+		 
+		// Method:
+		private Intent generateCustomChooserIntent(Intent prototype, String[] forbiddenChoices) {
+			List<Intent> targetedShareIntents = new ArrayList<Intent>();
+			List<HashMap<String, String>> intentMetaInfo = new ArrayList<HashMap<String, String>>();
+			Intent chooserIntent;
+		 
+			Intent dummy = new Intent(prototype.getAction());
+			dummy.setType(prototype.getType());
+			List<ResolveInfo> resInfo = getPackageManager().queryIntentActivities(dummy, 0);
+		 
+			if (!resInfo.isEmpty()) {
+				for (ResolveInfo resolveInfo : resInfo) {
+					if (resolveInfo.activityInfo == null || Arrays.asList(forbiddenChoices).contains(resolveInfo.activityInfo.packageName))
+						continue;
+		 
+					HashMap<String, String> info = new HashMap<String, String>();
+					info.put("packageName", resolveInfo.activityInfo.packageName);
+					info.put("className", resolveInfo.activityInfo.name);
+					info.put("simpleName", String.valueOf(resolveInfo.activityInfo.loadLabel(getPackageManager())));
+					intentMetaInfo.add(info);
+				}
+		 
+				if (!intentMetaInfo.isEmpty()) {
+					// sorting for nice readability
+					Collections.sort(intentMetaInfo, new Comparator<HashMap<String, String>>() {
+						@Override
+						public int compare(HashMap<String, String> map, HashMap<String, String> map2) {
+							return map.get("simpleName").compareTo(map2.get("simpleName"));
+						}
+					});
+		 
+					// create the custom intent list
+					for (HashMap<String, String> metaInfo : intentMetaInfo) {
+						Intent targetedShareIntent = (Intent) prototype.clone();
+						targetedShareIntent.setPackage(metaInfo.get("packageName"));
+						targetedShareIntent.setClassName(metaInfo.get("packageName"), metaInfo.get("className"));
+						targetedShareIntents.add(targetedShareIntent);
+					}
+		 
+					chooserIntent = Intent.createChooser(targetedShareIntents.remove(targetedShareIntents.size() - 1), getString(R.string.hello));
+					chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[]{}));
+					return chooserIntent;
+				}
+			}
+		 
+			return Intent.createChooser(prototype, getString(R.string.hello));
+		}
 
 		/**
 		 * Getting place details in background thread
@@ -121,6 +179,7 @@ public class ShowPlaceActivity extends Activity {
 						// check your log for json response
 						Log.d("Single Place Details", json.toString());
 						
+						
 						// json success tag
 						success = json.getInt(TAG_SUCCESS);
 						if (success == 1) {
@@ -144,6 +203,10 @@ public class ShowPlaceActivity extends Activity {
 							txtAddress.setText(place.getString(TAG_ADDRESS));
 							txtCity.setText(place.getString(TAG_CITY));
 							txtInfo.setText(place.getString(TAG_INFO));
+							
+							
+							final String titelMonument;
+							final String beschrijvingMonument;
 							
 							String imgId;
 							try {
@@ -175,8 +238,28 @@ public class ShowPlaceActivity extends Activity {
 
 						                    nagDialog.dismiss();
 						                }
-						            });
+						            }); 
 						            
+						            
+						            titelMonument = place.getString(TAG_TITLE);
+						            beschrijvingMonument = place.getString(TAG_TITLE);
+						            
+									Button share = (Button)findViewById(R.id.share);
+									share.setOnClickListener(new OnClickListener() {
+						                @Override
+						                public void onClick(View arg0) {
+						                	// blacklist
+											String[] blacklist = new String[]{"com.any.package", "net.other.package"};
+											// your share intent
+											Intent intent = new Intent(Intent.ACTION_SEND);
+											intent.setType("text/plain");
+											intent.putExtra(Intent.EXTRA_TEXT, beschrijvingMonument);
+											intent.putExtra(android.content.Intent.EXTRA_SUBJECT, titelMonument);
+											// ... anything else you want to add
+											// invoke custom chooser
+											startActivity(generateCustomChooserIntent(intent, blacklist));
+						                }
+						            });
 								  
 								} catch (MalformedURLException e) {
 								  e.printStackTrace();
@@ -205,5 +288,6 @@ public class ShowPlaceActivity extends Activity {
 			// dismiss the dialog once got all details
 			pDialog.dismiss();
 		}
+		
 	}
 }
