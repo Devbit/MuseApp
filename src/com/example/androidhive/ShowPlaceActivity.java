@@ -1,5 +1,9 @@
 package com.example.androidhive;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,12 +16,15 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ShowPlaceActivity extends Activity {
@@ -28,7 +35,6 @@ public class ShowPlaceActivity extends Activity {
 	TextView txtInfo;
 	Button btnSave;
 	Button btnDelete;
-	int test;
 
 	String mid;
 
@@ -49,6 +55,7 @@ public class ShowPlaceActivity extends Activity {
 	private static final String TAG_ADDRESS = "address";
 	private static final String TAG_CITY = "city";
 	private static final String TAG_INFO = "otherinfo";
+	private static final String TAG_IMAGE = "image";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +63,7 @@ public class ShowPlaceActivity extends Activity {
 		StrictMode.setThreadPolicy(policy);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.edit_place);
+
 
 		// getting place details from intent
 		Intent i = getIntent();
@@ -131,10 +139,24 @@ public class ShowPlaceActivity extends Activity {
 							txtAddress.setText(place.getString(TAG_ADDRESS));
 							txtCity.setText(place.getString(TAG_CITY));
 							txtInfo.setText(place.getString(TAG_INFO));
+							
+							String imgId;
+							try {
+								  ImageView i = (ImageView)findViewById(R.id.afbeelding);
+								  String imageUrl = "http://www.4en5mei.nl/";
+								imgId = place.getString(TAG_IMAGE);
+								Bitmap bitmap = BitmapFactory.decodeStream((InputStream)new URL(imageUrl + imgId).getContent());
+								  i.setImageBitmap(bitmap);
+								} catch (MalformedURLException e) {
+								  e.printStackTrace();
+								} catch (IOException e) {
+								  e.printStackTrace();
+								}
 
 						}else{
 							// place with mid not found
 						}
+						
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
