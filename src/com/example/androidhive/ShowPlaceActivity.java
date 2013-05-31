@@ -84,7 +84,6 @@ public class ShowPlaceActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.edit_place);
 
-
 		// getting place details from intent
 		Intent i = getIntent();
 		
@@ -115,17 +114,12 @@ public class ShowPlaceActivity extends Activity {
 			pDialog.setCancelable(true);
 			pDialog.show();
 		}
-		
-		
-		 
-		
+
 
 		/**
 		 * Getting place details in background thread
 		 * */
-		
-		
-		
+	
 		protected String doInBackground(String... params) {
 
 			// updating UI from Background Thread
@@ -172,11 +166,11 @@ public class ShowPlaceActivity extends Activity {
 							txtInfo.setText(place.getString(TAG_INFO));
 							
 							
-							
-							
 							titelMonument = place.getString(TAG_TITLE);
 				            beschrijvingMonument = place.getString(TAG_INFO);
 							
+				            setTitle(titelMonument);
+				            
 							String imgId;
 							try {
 								  ImageView i = (ImageView)findViewById(R.id.afbeelding);
