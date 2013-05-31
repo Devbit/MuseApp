@@ -31,6 +31,9 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,6 +42,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ShowPlaceActivity extends Activity {
 
@@ -69,6 +73,9 @@ public class ShowPlaceActivity extends Activity {
 	private static final String TAG_CITY = "city";
 	private static final String TAG_INFO = "otherinfo";
 	private static final String TAG_IMAGE = "image";
+	
+	public String titelMonument;
+	public String beschrijvingMonument;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -86,7 +93,10 @@ public class ShowPlaceActivity extends Activity {
 
 		// Getting complete place details in background thread
 		new GetPlaceDetails().execute();
+		
 	}
+	
+	
 
 	/**
 	 * Background Async Task to Get complete place details
@@ -108,57 +118,14 @@ public class ShowPlaceActivity extends Activity {
 		
 		
 		 
-		// Method:
-		private Intent generateCustomChooserIntent(Intent prototype, String[] forbiddenChoices) {
-			List<Intent> targetedShareIntents = new ArrayList<Intent>();
-			List<HashMap<String, String>> intentMetaInfo = new ArrayList<HashMap<String, String>>();
-			Intent chooserIntent;
-		 
-			Intent dummy = new Intent(prototype.getAction());
-			dummy.setType(prototype.getType());
-			List<ResolveInfo> resInfo = getPackageManager().queryIntentActivities(dummy, 0);
-		 
-			if (!resInfo.isEmpty()) {
-				for (ResolveInfo resolveInfo : resInfo) {
-					if (resolveInfo.activityInfo == null || Arrays.asList(forbiddenChoices).contains(resolveInfo.activityInfo.packageName))
-						continue;
-		 
-					HashMap<String, String> info = new HashMap<String, String>();
-					info.put("packageName", resolveInfo.activityInfo.packageName);
-					info.put("className", resolveInfo.activityInfo.name);
-					info.put("simpleName", String.valueOf(resolveInfo.activityInfo.loadLabel(getPackageManager())));
-					intentMetaInfo.add(info);
-				}
-		 
-				if (!intentMetaInfo.isEmpty()) {
-					// sorting for nice readability
-					Collections.sort(intentMetaInfo, new Comparator<HashMap<String, String>>() {
-						@Override
-						public int compare(HashMap<String, String> map, HashMap<String, String> map2) {
-							return map.get("simpleName").compareTo(map2.get("simpleName"));
-						}
-					});
-		 
-					// create the custom intent list
-					for (HashMap<String, String> metaInfo : intentMetaInfo) {
-						Intent targetedShareIntent = (Intent) prototype.clone();
-						targetedShareIntent.setPackage(metaInfo.get("packageName"));
-						targetedShareIntent.setClassName(metaInfo.get("packageName"), metaInfo.get("className"));
-						targetedShareIntents.add(targetedShareIntent);
-					}
-		 
-					chooserIntent = Intent.createChooser(targetedShareIntents.remove(targetedShareIntents.size() - 1), getString(R.string.hello));
-					chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[]{}));
-					return chooserIntent;
-				}
-			}
-		 
-			return Intent.createChooser(prototype, getString(R.string.hello));
-		}
+		
 
 		/**
 		 * Getting place details in background thread
 		 * */
+		
+		
+		
 		protected String doInBackground(String... params) {
 
 			// updating UI from Background Thread
@@ -205,8 +172,10 @@ public class ShowPlaceActivity extends Activity {
 							txtInfo.setText(place.getString(TAG_INFO));
 							
 							
-							final String titelMonument;
-							final String beschrijvingMonument;
+							
+							
+							titelMonument = place.getString(TAG_TITLE);
+				            beschrijvingMonument = place.getString(TAG_INFO);
 							
 							String imgId;
 							try {
@@ -241,25 +210,8 @@ public class ShowPlaceActivity extends Activity {
 						            }); 
 						            
 						            
-						            titelMonument = place.getString(TAG_TITLE);
-						            beschrijvingMonument = place.getString(TAG_TITLE);
 						            
-									Button share = (Button)findViewById(R.id.share);
-									share.setOnClickListener(new OnClickListener() {
-						                @Override
-						                public void onClick(View arg0) {
-						                	// blacklist
-											String[] blacklist = new String[]{"com.any.package", "net.other.package"};
-											// your share intent
-											Intent intent = new Intent(Intent.ACTION_SEND);
-											intent.setType("text/plain");
-											intent.putExtra(Intent.EXTRA_TEXT, beschrijvingMonument);
-											intent.putExtra(android.content.Intent.EXTRA_SUBJECT, titelMonument);
-											// ... anything else you want to add
-											// invoke custom chooser
-											startActivity(generateCustomChooserIntent(intent, blacklist));
-						                }
-						            });
+									
 								  
 								} catch (MalformedURLException e) {
 								  e.printStackTrace();
@@ -290,4 +242,92 @@ public class ShowPlaceActivity extends Activity {
 		}
 		
 	}
+	
+	
+	// Method:
+	private Intent generateCustomChooserIntent(Intent prototype, String[] forbiddenChoices) {
+		List<Intent> targetedShareIntents = new ArrayList<Intent>();
+		List<HashMap<String, String>> intentMetaInfo = new ArrayList<HashMap<String, String>>();
+		Intent chooserIntent;
+	 
+		Intent dummy = new Intent(prototype.getAction());
+		dummy.setType(prototype.getType());
+		List<ResolveInfo> resInfo = getPackageManager().queryIntentActivities(dummy, 0);
+	 
+		if (!resInfo.isEmpty()) {
+			for (ResolveInfo resolveInfo : resInfo) {
+				if (resolveInfo.activityInfo == null || Arrays.asList(forbiddenChoices).contains(resolveInfo.activityInfo.packageName))
+					continue;
+	 
+				HashMap<String, String> info = new HashMap<String, String>();
+				info.put("packageName", resolveInfo.activityInfo.packageName);
+				info.put("className", resolveInfo.activityInfo.name);
+				info.put("simpleName", String.valueOf(resolveInfo.activityInfo.loadLabel(getPackageManager())));
+				intentMetaInfo.add(info);
+			}
+	 
+			if (!intentMetaInfo.isEmpty()) {
+				// sorting for nice readability
+				Collections.sort(intentMetaInfo, new Comparator<HashMap<String, String>>() {
+					@Override
+					public int compare(HashMap<String, String> map, HashMap<String, String> map2) {
+						return map.get("simpleName").compareTo(map2.get("simpleName"));
+					}
+				});
+	 
+				// create the custom intent list
+				for (HashMap<String, String> metaInfo : intentMetaInfo) {
+					Intent targetedShareIntent = (Intent) prototype.clone();
+					targetedShareIntent.setPackage(metaInfo.get("packageName"));
+					targetedShareIntent.setClassName(metaInfo.get("packageName"), metaInfo.get("className"));
+					targetedShareIntents.add(targetedShareIntent);
+				}
+	 
+				chooserIntent = Intent.createChooser(targetedShareIntents.remove(targetedShareIntents.size() - 1), getString(R.string.hello));
+				chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[]{}));
+				return chooserIntent;
+			}
+		}
+	 
+		return Intent.createChooser(prototype, getString(R.string.hello));
+	}
+
+
+@Override
+public boolean onCreateOptionsMenu(Menu menu) {
+MenuInflater inflater = getMenuInflater();
+inflater.inflate(R.menu.places_details_menu, menu);
+return true;
+} 
+
+@Override
+public boolean onOptionsItemSelected(MenuItem item) {
+switch (item.getItemId()) {
+case R.id.action_share:
+ 
+	
+        
+        
+        	// blacklist
+			String[] blacklist = new String[]{"com.any.package", "net.other.package"};
+			// your share intent
+			Intent intent = new Intent(Intent.ACTION_SEND);
+			intent.setType("text/plain");
+			intent.putExtra(Intent.EXTRA_TEXT, beschrijvingMonument);
+			intent.putExtra(android.content.Intent.EXTRA_SUBJECT, titelMonument);
+			// ... anything else you want to add
+			// invoke custom chooser
+			startActivity(generateCustomChooserIntent(intent, blacklist));
+        
+    
+	
+  break;
+
+default:
+  break;
+}
+
+return true;
+} 
+
 }
