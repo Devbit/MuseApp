@@ -28,69 +28,78 @@ public class MyMapActivity extends Activity {
 	private static final String TAG_NAME = "title";
 	private static final String TAG_LAT = "latitude";
 	private static final String TAG_LONG = "longitude";
-	
-    private GoogleMap googleMap;
-    private int mapType = GoogleMap.MAP_TYPE_NORMAL;
-    private JSONArray places;
-    private HashMap<String, String> mapPlaceToId;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.mymap);
+	private GoogleMap googleMap;
+	private int mapType = GoogleMap.MAP_TYPE_NORMAL;
+	private JSONArray places;
+	private HashMap<String, String> mapPlaceToId;
 
-        FragmentManager fragmentManager = getFragmentManager();
-        MapFragment mapFragment =  (MapFragment) fragmentManager.findFragmentById(R.id.map);
-        googleMap = mapFragment.getMap();
-        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        
-        places = PlacesLoader.getPlaces();
-        mapPlaceToId = new HashMap<String, String>();
-        LatLng cameraLatLng = new LatLng(0,0);
-        try {
-        	cameraLatLng = new LatLng(Double.parseDouble(places.getJSONObject(0).getString(TAG_LAT)), Double.parseDouble(places.getJSONObject(0).getString(TAG_LONG)));
-        	for (int i = 0; i < places.length(); i++) {
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.mymap);
+
+		FragmentManager fragmentManager = getFragmentManager();
+		MapFragment mapFragment = (MapFragment) fragmentManager
+				.findFragmentById(R.id.map);
+		googleMap = mapFragment.getMap();
+		googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+		places = PlacesLoader.getPlaces();
+		mapPlaceToId = new HashMap<String, String>();
+		LatLng cameraLatLng = new LatLng(0, 0);
+		try {
+			cameraLatLng = new LatLng(Double.parseDouble(places
+					.getJSONObject(0).getString(TAG_LAT)),
+					Double.parseDouble(places.getJSONObject(0).getString(
+							TAG_LONG)));
+			for (int i = 0; i < places.length(); i++) {
 				JSONObject c = places.getJSONObject(i);
 				String title = c.getString(TAG_NAME);
 				String lat = c.getString(TAG_LAT);
 				String lon = c.getString(TAG_LONG);
 				String mid = c.getString(TAG_MID);
-				LatLng loc = new LatLng(0,0);
+				LatLng loc = new LatLng(0, 0);
 				try {
-					loc = new LatLng(Double.parseDouble(lat), Double.parseDouble(lon));
+					loc = new LatLng(Double.parseDouble(lat),
+							Double.parseDouble(lon));
 				} catch (NumberFormatException nfe) {
 					continue;
 				}
 				mapPlaceToId.put(title, mid);
-				googleMap.addMarker(new MarkerOptions()
-	                .position(loc)
-	                .title(title)
-	                /*.snippet(mid)*/
-	                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        	}
-        } catch (JSONException e) {
+				googleMap
+						.addMarker(new MarkerOptions()
+								.position(loc)
+								.title(title)
+								/* .snippet(mid) */
+								.icon(BitmapDescriptorFactory
+										.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+			}
+		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-        
-        googleMap.getUiSettings().setCompassEnabled(true);
-        googleMap.getUiSettings().setZoomControlsEnabled(true);
-        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
 
-        float cameraZoom = 10;
+		googleMap.getUiSettings().setCompassEnabled(true);
+		googleMap.getUiSettings().setZoomControlsEnabled(true);
+		googleMap.getUiSettings().setMyLocationButtonEnabled(true);
 
-        if(savedInstanceState != null){
-            mapType = savedInstanceState.getInt("map_type", GoogleMap.MAP_TYPE_NORMAL);
+		float cameraZoom = 10;
 
-            double savedLat = savedInstanceState.getDouble("lat");
-            double savedLng = savedInstanceState.getDouble("lng");
-            cameraLatLng = new LatLng(savedLat, savedLng);
+		if (savedInstanceState != null) {
+			mapType = savedInstanceState.getInt("map_type",
+					GoogleMap.MAP_TYPE_NORMAL);
 
-            cameraZoom = savedInstanceState.getFloat("zoom", 10);
-        }
+			double savedLat = savedInstanceState.getDouble("lat");
+			double savedLng = savedInstanceState.getDouble("lng");
+			cameraLatLng = new LatLng(savedLat, savedLng);
 
-        googleMap.setMapType(mapType);
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(cameraLatLng, cameraZoom));
-        googleMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener () {
+			cameraZoom = savedInstanceState.getFloat("zoom", 10);
+		}
+
+		googleMap.setMapType(mapType);
+		googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(cameraLatLng,
+				cameraZoom));
+		googleMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
 
 			@Override
 			public void onInfoWindowClick(Marker marker) {
@@ -101,58 +110,59 @@ public class MyMapActivity extends Activity {
 						ShowPlaceActivity.class);
 				// sending mid to next activity
 				in.putExtra(TAG_MID, mid);
-				
+
 				// starting new activity and expecting some response back
 				startActivityForResult(in, 100);
-				
+
 			}
-        	
-        });
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.map_styles_menu, menu);
-        return true;
-    }
+		});
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		getMenuInflater().inflate(R.menu.map_styles_menu, menu);
+		return true;
+	}
 
-        switch(item.getItemId()){
-            case R.id.normal_map:
-                mapType = GoogleMap.MAP_TYPE_NORMAL;
-                break;
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		super.onOptionsItemSelected(item);
 
-            case R.id.satellite_map:
-                mapType = GoogleMap.MAP_TYPE_SATELLITE;
-                break;
+		switch (item.getItemId()) {
+		case R.id.normal_map:
+			mapType = GoogleMap.MAP_TYPE_NORMAL;
+			break;
 
-            case R.id.terrain_map:
-                mapType = GoogleMap.MAP_TYPE_TERRAIN;
-                break;
+		case R.id.satellite_map:
+			mapType = GoogleMap.MAP_TYPE_SATELLITE;
+			break;
 
-            case R.id.hybrid_map:
-                mapType = GoogleMap.MAP_TYPE_HYBRID;
-                break;
-        }
+		case R.id.terrain_map:
+			mapType = GoogleMap.MAP_TYPE_TERRAIN;
+			break;
 
-        googleMap.setMapType(mapType);
-        return true;
-    }
+		case R.id.hybrid_map:
+			mapType = GoogleMap.MAP_TYPE_HYBRID;
+			break;
+		}
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+		googleMap.setMapType(mapType);
+		return true;
+	}
 
-        // save the map type so when we change orientation, the mape type can be restored
-        LatLng cameraLatLng = googleMap.getCameraPosition().target;
-        float cameraZoom = googleMap.getCameraPosition().zoom;
-        outState.putInt("map_type", mapType);
-        outState.putDouble("lat", cameraLatLng.latitude);
-        outState.putDouble("lng", cameraLatLng.longitude);
-        outState.putFloat("zoom", cameraZoom);
-    }
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+
+		// save the map type so when we change orientation, the mape type can be
+		// restored
+		LatLng cameraLatLng = googleMap.getCameraPosition().target;
+		float cameraZoom = googleMap.getCameraPosition().zoom;
+		outState.putInt("map_type", mapType);
+		outState.putDouble("lat", cameraLatLng.latitude);
+		outState.putDouble("lng", cameraLatLng.longitude);
+		outState.putFloat("zoom", cameraZoom);
+	}
 }

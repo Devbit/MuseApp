@@ -71,7 +71,7 @@ public class AllPlacesActivity extends ListActivity {
 						ShowPlaceActivity.class);
 				// sending mid to next activity
 				in.putExtra(TAG_MID, mid);
-				
+
 				// starting new activity and expecting some response back
 				startActivityForResult(in, 100);
 			}
@@ -85,7 +85,7 @@ public class AllPlacesActivity extends ListActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		// if result code 100
 		if (resultCode == 100) {
-			// if result code 100 is received 
+			// if result code 100 is received
 			// means user edited/deleted place
 			// reload this screen again
 			Intent intent = getIntent();
@@ -136,7 +136,7 @@ public class AllPlacesActivity extends ListActivity {
 					ListAdapter adapter = new SimpleAdapter(
 							AllPlacesActivity.this, placesList,
 							R.layout.list_item, new String[] { TAG_MID,
-									TAG_NAME},
+									TAG_NAME },
 							new int[] { R.id.mid, R.id.name });
 					// updating listview
 					setListAdapter(adapter);

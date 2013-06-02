@@ -14,13 +14,13 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 public class PlacesLoader {
-	
+
 	// Creating JSON Parser object
 	private static JSONParser jParser = new JSONParser();
-	
+
 	private static JSONArray places;
 	private static ArrayList<HashMap<String, String>> placesList;
-	
+
 	// JSON Node names
 	private static final String TAG_SUCCESS = "success";
 	private static final String TAG_PLACES = "places";
@@ -28,27 +28,27 @@ public class PlacesLoader {
 	private static final String TAG_NAME = "title";
 	private static final String TAG_LAT = "latitude";
 	private static final String TAG_LONG = "longitude";
-	
+
 	public static JSONArray loadPlaces(String url) {
 		parser(url);
 		return places;
 	}
-	
+
 	public static ArrayList<HashMap<String, String>> loadPlacesList(String url) {
 		if (places == null)
 			parser(url);
 		makeListFromPlaces();
 		return placesList;
 	}
-	
+
 	public static JSONArray getPlaces() {
 		return places;
 	}
-	
+
 	public static ArrayList<HashMap<String, String>> getPlacesList() {
 		return placesList;
 	}
-	
+
 	private static ArrayList<HashMap<String, String>> makeListFromPlaces() {
 		placesList = new ArrayList<HashMap<String, String>>();
 		try {
@@ -68,22 +68,21 @@ public class PlacesLoader {
 
 				// adding HashList to ArrayList
 				placesList.add(map);
-				
+
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		
+
 		return placesList;
 	}
-	
-	
+
 	private static String parser(String url, String... args) {
 		// Building Parameters
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		// getting JSON string from URL
 		JSONObject json = jParser.makeHttpRequest(url, "GET", params);
-		
+
 		// Check your log cat for JSON reponse
 		Log.d("All Places: ", json.toString());
 
