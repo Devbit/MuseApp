@@ -22,50 +22,54 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-
-public class MainScreenActivity extends Activity{
+public class MainScreenActivity extends Activity {
 	Button btnViewPlaces;
 	Button btnShowVersion;
 	Button btnMapButton;
 	JSONParser jParser = new JSONParser();
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_screen);
-		
+
 		// Buttons
 		btnViewPlaces = (Button) findViewById(R.id.btnViewPlaces);
 		btnShowVersion = (Button) findViewById(R.id.btnShowVersion);
 		btnMapButton = (Button) findViewById(R.id.btnMapButton);
-		
+
 		// view places click event
 		btnViewPlaces.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				// Launching All places Activity
-				Intent i = new Intent(getApplicationContext(), AllPlacesActivity.class);
+				Intent i = new Intent(getApplicationContext(),
+						AllPlacesActivity.class);
 				startActivity(i);
-				
-			}});
-		
+
+			}
+		});
+
 		btnShowVersion.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				// Launching All places Activity
 				Intent i = new Intent(getApplicationContext(), null);
 				startActivity(i);
-				
-			}});
-		
+
+			}
+		});
+
 		btnMapButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				// Launching All places Activity
-				Intent i = new Intent(getApplicationContext(), MyMapActivity.class);
+				Intent i = new Intent(getApplicationContext(),
+						MyMapActivity.class);
 				startActivity(i);
-				
-			}});
-		
+
+			}
+		});
+
 	}
 }

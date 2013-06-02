@@ -73,29 +73,29 @@ public class ShowPlaceActivity extends Activity {
 	private static final String TAG_CITY = "city";
 	private static final String TAG_INFO = "otherinfo";
 	private static final String TAG_IMAGE = "image";
-	
+
 	public String titelMonument;
 	public String beschrijvingMonument;
+	public String afbeeldingMonument;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+				.permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.edit_place);
 
 		// getting place details from intent
 		Intent i = getIntent();
-		
+
 		// getting place id (mid) from intent
 		mid = i.getStringExtra(TAG_MID);
 
 		// Getting complete place details in background thread
 		new GetPlaceDetails().execute();
-		
+
 	}
-	
-	
 
 	/**
 	 * Background Async Task to Get complete place details
@@ -115,11 +115,10 @@ public class ShowPlaceActivity extends Activity {
 			pDialog.show();
 		}
 
-
 		/**
 		 * Getting place details in background thread
 		 * */
-	
+
 		protected String doInBackground(String... params) {
 
 			// updating UI from Background Thread
@@ -139,21 +138,20 @@ public class ShowPlaceActivity extends Activity {
 
 						// check your log for json response
 						Log.d("Single Place Details", json.toString());
-						
-						
+
 						// json success tag
 						success = json.getInt(TAG_SUCCESS);
 						if (success == 1) {
 							// successfully received place details
-							JSONArray placeObj = json
-									.getJSONArray(TAG_PLACE); // JSON Array
-							
+							JSONArray placeObj = json.getJSONArray(TAG_PLACE); // JSON
+																				// Array
+
 							// get first place object from JSON Array
 							JSONObject place = placeObj.getJSONObject(0);
 
 							// place with this mid found
 							// Edit Text
-							
+
 							TextView txtTitle = (TextView) findViewById(R.id.inputTitle);
 							TextView txtAddress = (TextView) findViewById(R.id.inputAddress);
 							TextView txtCity = (TextView) findViewById(R.id.inputCity);
@@ -164,59 +162,17 @@ public class ShowPlaceActivity extends Activity {
 							txtAddress.setText(place.getString(TAG_ADDRESS));
 							txtCity.setText(place.getString(TAG_CITY));
 							txtInfo.setText(place.getString(TAG_INFO));
-							
-							
+
 							titelMonument = place.getString(TAG_TITLE);
-				            beschrijvingMonument = place.getString(TAG_INFO);
-							
-				            setTitle(titelMonument);
-				            
-							String imgId;
-							try {
-								  ImageView i = (ImageView)findViewById(R.id.afbeelding);
-								  String imageUrl = "http://www.4en5mei.nl/";
-								imgId = place.getString(TAG_IMAGE);
-								Bitmap bitmap = BitmapFactory.decodeStream((InputStream)new URL(imageUrl + imgId).getContent());
-								  i.setImageBitmap(bitmap);
-								  
-								  final Dialog nagDialog = new Dialog(ShowPlaceActivity.this,android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
-						            nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); 
-						            nagDialog.setCancelable(false);
-						            nagDialog.setContentView(R.layout.preview_image);
-						            Button btnClose = (Button)nagDialog.findViewById(R.id.btnClose);
-						            ImageView ivPreview = (ImageView)nagDialog.findViewById(R.id.preview_image);
-						            ivPreview.setImageBitmap(bitmap);
-						            
-									  i.setOnClickListener(new OnClickListener() {
-							                @Override
-							                public void onClick(View arg0) {
+							beschrijvingMonument = place.getString(TAG_INFO);
+							afbeeldingMonument = place.getString(TAG_IMAGE);
 
-							                	nagDialog.show();
-							                }
-							            });
+							setTitle(titelMonument);
 
-						            btnClose.setOnClickListener(new OnClickListener() {
-						                @Override
-						                public void onClick(View arg0) {
-
-						                    nagDialog.dismiss();
-						                }
-						            }); 
-						            
-						            
-						            
-									
-								  
-								} catch (MalformedURLException e) {
-								  e.printStackTrace();
-								} catch (IOException e) {
-								  e.printStackTrace();
-								}
-
-						}else{
+						} else {
 							// place with mid not found
 						}
-						
+
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
@@ -226,84 +182,134 @@ public class ShowPlaceActivity extends Activity {
 			return null;
 		}
 
-
 		/**
 		 * After completing background task Dismiss the progress dialog
 		 * **/
 		protected void onPostExecute(String file_url) {
 			// dismiss the dialog once got all details
 			pDialog.dismiss();
+
+			try {
+				ImageView i = (ImageView) findViewById(R.id.afbeelding);
+				String imageUrl = "http://www.4en5mei.nl/";
+
+				Bitmap bitmap = BitmapFactory
+						.decodeStream((InputStream) new URL(imageUrl
+								+ afbeeldingMonument).getContent());
+				i.setImageBitmap(bitmap);
+
+				final Dialog nagDialog = new Dialog(ShowPlaceActivity.this,
+						android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+				nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+				nagDialog.setCancelable(false);
+				nagDialog.setContentView(R.layout.preview_image);
+				Button btnClose = (Button) nagDialog
+						.findViewById(R.id.btnClose);
+				ImageView ivPreview = (ImageView) nagDialog
+						.findViewById(R.id.preview_image);
+				ivPreview.setImageBitmap(bitmap);
+
+				i.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View arg0) {
+
+						nagDialog.show();
+					}
+				});
+
+				btnClose.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View arg0) {
+
+						nagDialog.dismiss();
+					}
+				});
+
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		
+
 	}
-	
-	
+
 	// Method:
-	private Intent generateCustomChooserIntent(Intent prototype, String[] forbiddenChoices) {
+	private Intent generateCustomChooserIntent(Intent prototype,
+			String[] forbiddenChoices) {
 		List<Intent> targetedShareIntents = new ArrayList<Intent>();
 		List<HashMap<String, String>> intentMetaInfo = new ArrayList<HashMap<String, String>>();
 		Intent chooserIntent;
-	 
+
 		Intent dummy = new Intent(prototype.getAction());
 		dummy.setType(prototype.getType());
-		List<ResolveInfo> resInfo = getPackageManager().queryIntentActivities(dummy, 0);
-	 
+		List<ResolveInfo> resInfo = getPackageManager().queryIntentActivities(
+				dummy, 0);
+
 		if (!resInfo.isEmpty()) {
 			for (ResolveInfo resolveInfo : resInfo) {
-				if (resolveInfo.activityInfo == null || Arrays.asList(forbiddenChoices).contains(resolveInfo.activityInfo.packageName))
+				if (resolveInfo.activityInfo == null
+						|| Arrays.asList(forbiddenChoices).contains(
+								resolveInfo.activityInfo.packageName))
 					continue;
-	 
+
 				HashMap<String, String> info = new HashMap<String, String>();
 				info.put("packageName", resolveInfo.activityInfo.packageName);
 				info.put("className", resolveInfo.activityInfo.name);
-				info.put("simpleName", String.valueOf(resolveInfo.activityInfo.loadLabel(getPackageManager())));
+				info.put("simpleName", String.valueOf(resolveInfo.activityInfo
+						.loadLabel(getPackageManager())));
 				intentMetaInfo.add(info);
 			}
-	 
+
 			if (!intentMetaInfo.isEmpty()) {
 				// sorting for nice readability
-				Collections.sort(intentMetaInfo, new Comparator<HashMap<String, String>>() {
-					@Override
-					public int compare(HashMap<String, String> map, HashMap<String, String> map2) {
-						return map.get("simpleName").compareTo(map2.get("simpleName"));
-					}
-				});
-	 
+				Collections.sort(intentMetaInfo,
+						new Comparator<HashMap<String, String>>() {
+							@Override
+							public int compare(HashMap<String, String> map,
+									HashMap<String, String> map2) {
+								return map.get("simpleName").compareTo(
+										map2.get("simpleName"));
+							}
+						});
+
 				// create the custom intent list
 				for (HashMap<String, String> metaInfo : intentMetaInfo) {
 					Intent targetedShareIntent = (Intent) prototype.clone();
 					targetedShareIntent.setPackage(metaInfo.get("packageName"));
-					targetedShareIntent.setClassName(metaInfo.get("packageName"), metaInfo.get("className"));
+					targetedShareIntent.setClassName(
+							metaInfo.get("packageName"),
+							metaInfo.get("className"));
 					targetedShareIntents.add(targetedShareIntent);
 				}
-	 
-				chooserIntent = Intent.createChooser(targetedShareIntents.remove(targetedShareIntents.size() - 1), getString(R.string.hello));
-				chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[]{}));
+
+				chooserIntent = Intent.createChooser(targetedShareIntents
+						.remove(targetedShareIntents.size() - 1),
+						getString(R.string.hello));
+				chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS,
+						targetedShareIntents.toArray(new Parcelable[] {}));
 				return chooserIntent;
 			}
 		}
-	 
+
 		return Intent.createChooser(prototype, getString(R.string.hello));
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.places_details_menu, menu);
+		return true;
+	}
 
-@Override
-public boolean onCreateOptionsMenu(Menu menu) {
-MenuInflater inflater = getMenuInflater();
-inflater.inflate(R.menu.places_details_menu, menu);
-return true;
-} 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_share:
 
-@Override
-public boolean onOptionsItemSelected(MenuItem item) {
-switch (item.getItemId()) {
-case R.id.action_share:
- 
-	
-        
-        
-        	// blacklist
-			String[] blacklist = new String[]{"com.any.package", "net.other.package"};
+			// blacklist
+			String[] blacklist = new String[] { "com.any.package",
+					"net.other.package" };
 			// your share intent
 			Intent intent = new Intent(Intent.ACTION_SEND);
 			intent.setType("text/plain");
@@ -312,16 +318,14 @@ case R.id.action_share:
 			// ... anything else you want to add
 			// invoke custom chooser
 			startActivity(generateCustomChooserIntent(intent, blacklist));
-        
-    
-	
-  break;
 
-default:
-  break;
-}
+			break;
 
-return true;
-} 
+		default:
+			break;
+		}
+
+		return true;
+	}
 
 }
