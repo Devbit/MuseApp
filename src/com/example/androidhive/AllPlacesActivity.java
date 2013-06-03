@@ -117,7 +117,7 @@ public class AllPlacesActivity extends ListActivity {
 		 * getting All places from url
 		 * */
 		protected String doInBackground(String... args) {
-			placesList = PlacesLoader.loadPlacesList(url_all_places);
+			placesList = PlacesLoader.loadPlacesList();
 			return null;
 		}
 

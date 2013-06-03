@@ -28,15 +28,12 @@ public class PlacesLoader {
 	private static final String TAG_NAME = "title";
 	private static final String TAG_LAT = "latitude";
 	private static final String TAG_LONG = "longitude";
-
-	public static JSONArray loadPlaces(String url) {
-		parser(url);
-		return places;
+	
+	public static void setCache(JSONArray cache) {
+		places = cache;
 	}
 
-	public static ArrayList<HashMap<String, String>> loadPlacesList(String url) {
-		if (places == null)
-			parser(url);
+	public static ArrayList<HashMap<String, String>> loadPlacesList() {
 		makeListFromPlaces();
 		return placesList;
 	}
@@ -75,31 +72,6 @@ public class PlacesLoader {
 		}
 
 		return placesList;
-	}
-
-	private static String parser(String url, String... args) {
-		// Building Parameters
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		// getting JSON string from URL
-		JSONObject json = jParser.makeHttpRequest(url, "GET", params);
-
-		// Check your log cat for JSON reponse
-		Log.d("All Places: ", json.toString());
-
-		try {
-			// Checking for SUCCESS TAG
-			int success = json.getInt(TAG_SUCCESS);
-
-			if (success == 1) {
-				// places found
-				// Getting Array of Places
-				places = json.getJSONArray(TAG_PLACES);
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-
-		return null;
 	}
 
 }
