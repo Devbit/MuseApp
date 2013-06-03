@@ -3,99 +3,84 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-
+    
     <!-- Name Label -->
-
-    <TextView
-        android:layout_width="fill_parent"
+    <TextView android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="10dip"
-        android:paddingRight="10dip"
-        android:paddingTop="10dip"
         android:text="Monument titel"
-        android:textSize="17dip"
-        android:textStyle="bold" />
-
+        android:textStyle="bold"
+        android:paddingLeft="10dip"
+        android:paddingRight="10dip"
+        android:paddingTop="10dip"
+        android:textSize="17dip"/>
+    
     <!-- Input Name -->
-
-    <TextView
-        android:id="@+id/inputTitle"
-        android:layout_width="fill_parent"
+	<TextView android:id="@+id/inputTitle"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_margin="5dip"
+	    android:layout_marginBottom="15dip"
+	    />
+	
+	<!-- Adres Label -->
+    <TextView android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dip"
-        android:layout_marginBottom="15dip" />
-
-    <!-- Adres Label -->
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dip"
-        android:paddingRight="10dip"
-        android:paddingTop="10dip"
         android:text="Adres"
-        android:textSize="17dip"
-        android:textStyle="bold" />
-
+        android:textStyle="bold"
+        android:paddingLeft="10dip"
+        android:paddingRight="10dip"
+        android:paddingTop="10dip"
+        android:textSize="17dip"/>
+    
     <!-- Input Adres -->
-
-    <TextView
-        android:id="@+id/inputAddress"
-        android:layout_width="fill_parent"
+	<TextView android:id="@+id/inputAddress" 
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_margin="5dip"
+	    android:layout_marginBottom="15dip"
+	    android:singleLine="true"/>
+	
+	<!-- Stad Label -->
+    <TextView android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dip"
-        android:layout_marginBottom="15dip"
-        android:singleLine="true" />
-
-    <!-- Stad Label -->
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dip"
-        android:paddingRight="10dip"
-        android:paddingTop="10dip"
         android:text="Stad"
-        android:textSize="17dip"
-        android:textStyle="bold" />
-
-    <!-- Stad Price -->
-
-    <TextView
-        android:id="@+id/inputCity"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dip"
-        android:layout_marginBottom="15dip"
-        android:singleLine="true" />
-
-    <!-- Description Label -->
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:textStyle="bold"
         android:paddingLeft="10dip"
         android:paddingRight="10dip"
         android:paddingTop="10dip"
+        android:textSize="17dip"/>
+    
+    <!-- Stad Price -->
+	<TextView android:id="@+id/inputCity" 
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_margin="5dip"
+	    android:layout_marginBottom="15dip"
+	    android:singleLine="true"/>
+	
+	<!-- Description Label -->
+    <TextView android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:text="Beschrijving"
-        android:textSize="17dip"
-        android:textStyle="bold" />
-
+        android:paddingLeft="10dip"
+        android:textStyle="bold"
+        android:paddingRight="10dip"
+        android:paddingTop="10dip"
+        android:textSize="17dip"/>
+    
     <!-- Input description -->
-
-    <TextView
-        android:id="@+id/inputInfo"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dip"
-        android:layout_marginBottom="15dip"
-        android:gravity="top"
-        android:lines="4" />
-
-    <ImageView
-        android:id="@+id/afbeelding"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxHeight="100px" />
-
+	<ImageView
+	    android:id="@+id/afbeelding"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:maxHeight="100px" />
+    
+	<TextView android:id="@+id/inputInfo" 
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_margin="5dip"
+	    android:layout_marginBottom="15dip"
+	    android:lines="4"
+	    android:gravity="top"/>
+	
 </LinearLayout>

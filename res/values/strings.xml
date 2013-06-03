@@ -3,5 +3,6 @@
 
     <string name="hello">Hello World, AndroidConnectingToPhpMySQLActivity!</string>
     <string name="app_name">MainScreen</string>
+    <string name="start_menu">Start</string>
 
 </resources>

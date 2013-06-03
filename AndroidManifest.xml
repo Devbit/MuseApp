@@ -47,15 +47,37 @@
     <application
         android:configChanges="keyboardHidden|orientation"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name" android:theme="@android:style/Theme.Holo.Light">
-
+        android:theme="@android:style/Theme.Holo.Light"
+        android:label="@string/app_name" >
+
+		<!-- Startup screen -->
+        <activity
+            android:name="com.example.androidhive.Launch"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <!-- Start menu -->
+        <activity
+            android:name="com.example.androidhive.Start"
+            android:label="@string/start_menu" >
+            <intent-filter>
+                <action android:name="com.example.androidhive.START" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".MainScreenActivity"
             android:label="@string/app_name" >
 			<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="com.example.androidhive.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
@@ -68,7 +90,7 @@
         <!-- Edit Place Activity -->
         <activity
             android:name=".ShowPlaceActivity"
-            android:label="Titel" >
+            android:label="Edit Place" >
         </activity>
         <activity android:name="com.example.androidhive.MyMapActivity"
             android:label="@string/app_name" >
