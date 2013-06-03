@@ -35,34 +35,7 @@ public class MyMapActivity extends Activity implements LocationListener{
 	private static final String TAG_NAME = "title";
 	private static final String TAG_LAT = "latitude";
 	private static final String TAG_LONG = "longitude";
-<<<<<<< HEAD
 
-	private GoogleMap googleMap;
-	private int mapType = GoogleMap.MAP_TYPE_NORMAL;
-	private JSONArray places;
-	private HashMap<String, String> mapPlaceToId;
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.mymap);
-
-		FragmentManager fragmentManager = getFragmentManager();
-		MapFragment mapFragment = (MapFragment) fragmentManager
-				.findFragmentById(R.id.map);
-		googleMap = mapFragment.getMap();
-		googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
-		places = PlacesLoader.getPlaces();
-		mapPlaceToId = new HashMap<String, String>();
-		LatLng cameraLatLng = new LatLng(0, 0);
-		try {
-			cameraLatLng = new LatLng(Double.parseDouble(places
-					.getJSONObject(0).getString(TAG_LAT)),
-					Double.parseDouble(places.getJSONObject(0).getString(
-							TAG_LONG)));
-			for (int i = 0; i < places.length(); i++) {
-=======
     public static double latitude;
     public static double longitude;
     public LatLng cameraLatLng;
@@ -124,7 +97,6 @@ public class MyMapActivity extends Activity implements LocationListener{
         
         try {
         	for (int i = 0; i < places.length(); i++) {
->>>>>>> Ophalen locatie voor positioneren map
 				JSONObject c = places.getJSONObject(i);
 				String title = c.getString(TAG_NAME);
 				String lat = c.getString(TAG_LAT);
@@ -150,12 +122,9 @@ public class MyMapActivity extends Activity implements LocationListener{
 			e.printStackTrace();
 		}
 
-<<<<<<< HEAD
 		googleMap.getUiSettings().setCompassEnabled(true);
 		googleMap.getUiSettings().setZoomControlsEnabled(true);
 		googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-=======
->>>>>>> Ophalen locatie voor positioneren map
 
 		float cameraZoom = 10;
 
@@ -189,7 +158,6 @@ public class MyMapActivity extends Activity implements LocationListener{
 				startActivityForResult(in, 100);
 
 			}
-<<<<<<< HEAD
 
 		});
 	}
@@ -231,64 +199,16 @@ public class MyMapActivity extends Activity implements LocationListener{
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 
-		// save the map type so when we change orientation, the mape type can be
-		// restored
+		// save the map type so when we change orientation, the mape type can be restored
 		LatLng cameraLatLng = googleMap.getCameraPosition().target;
 		float cameraZoom = googleMap.getCameraPosition().zoom;
 		outState.putInt("map_type", mapType);
 		outState.putDouble("lat", cameraLatLng.latitude);
 		outState.putDouble("lng", cameraLatLng.longitude);
 		outState.putFloat("zoom", cameraZoom);
-=======
         	
-        });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.map_styles_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
-
-        switch(item.getItemId()){
-            case R.id.normal_map:
-                mapType = GoogleMap.MAP_TYPE_NORMAL;
-                break;
-
-            case R.id.satellite_map:
-                mapType = GoogleMap.MAP_TYPE_SATELLITE;
-                break;
-
-            case R.id.terrain_map:
-                mapType = GoogleMap.MAP_TYPE_TERRAIN;
-                break;
-
-            case R.id.hybrid_map:
-                mapType = GoogleMap.MAP_TYPE_HYBRID;
-                break;
         }
 
-        googleMap.setMapType(mapType);
-        return true;
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        // save the map type so when we change orientation, the mape type can be restored
-        LatLng cameraLatLng = googleMap.getCameraPosition().target;
-        float cameraZoom = googleMap.getCameraPosition().zoom;
-        outState.putInt("map_type", mapType);
-        outState.putDouble("lat", cameraLatLng.latitude);
-        outState.putDouble("lng", cameraLatLng.longitude);
-        outState.putFloat("zoom", cameraZoom);
-    }
 
 	@Override
 	public void onLocationChanged(Location loc) {
@@ -314,7 +234,5 @@ public class MyMapActivity extends Activity implements LocationListener{
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
 		// TODO Auto-generated method stub
-		
->>>>>>> Ophalen locatie voor positioneren map
 	}
 }
