@@ -26,6 +26,8 @@ public class MainScreenActivity extends Activity {
 	Button btnViewPlaces;
 	Button btnShowVersion;
 	Button btnMapButton;
+	Button btnCluster;
+
 	JSONParser jParser = new JSONParser();
 
 	@Override
@@ -37,6 +39,7 @@ public class MainScreenActivity extends Activity {
 		btnViewPlaces = (Button) findViewById(R.id.btnViewPlaces);
 		btnShowVersion = (Button) findViewById(R.id.btnShowVersion);
 		btnMapButton = (Button) findViewById(R.id.btnMapButton);
+		btnCluster = (Button) findViewById(R.id.btnCluster); 
 
 		// view places click event
 		btnViewPlaces.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +73,17 @@ public class MainScreenActivity extends Activity {
 
 			}
 		});
+		
+		btnCluster.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				// Launching All places Activity
+				Intent i = new Intent(getApplicationContext(),
+						DemoActivity.class);
+				startActivity(i);
+			}
+		});
+		
 
 	}
 }
