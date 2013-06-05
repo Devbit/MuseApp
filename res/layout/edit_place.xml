@@ -7,7 +7,7 @@
     <!-- Name Label -->
     <TextView android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Monument titel"
+        android:text="@string/titel"
         android:textStyle="bold"
         android:paddingLeft="10dip"
         android:paddingRight="10dip"
@@ -25,7 +25,7 @@
 	<!-- Adres Label -->
     <TextView android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Adres"
+        android:text="@string/adres"
         android:textStyle="bold"
         android:paddingLeft="10dip"
         android:paddingRight="10dip"
@@ -43,7 +43,7 @@
 	<!-- Stad Label -->
     <TextView android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Stad"
+        android:text="@string/stad"
         android:textStyle="bold"
         android:paddingLeft="10dip"
         android:paddingRight="10dip"
@@ -61,7 +61,7 @@
 	<!-- Description Label -->
     <TextView android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Beschrijving"
+        android:text="@string/beschrijving"
         android:paddingLeft="10dip"
         android:textStyle="bold"
         android:paddingRight="10dip"

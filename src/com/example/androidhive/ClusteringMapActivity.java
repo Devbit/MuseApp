@@ -30,11 +30,16 @@ import pl.mg6.android.maps.extensions.GoogleMap.OnInfoWindowClickListener;
 import pl.mg6.android.maps.extensions.GoogleMap.OnMapClickListener;
 import pl.mg6.android.maps.extensions.Marker;
 import pl.mg6.android.maps.extensions.SupportMapFragment;
+import android.app.ActionBar;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -53,7 +58,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.LatLngBounds.Builder;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class DemoActivity extends FragmentActivity {
+public class ClusteringMapActivity extends FragmentActivity {
 
 	private static final double[] CLUSTER_SIZES = new double[] { 180, 160, 144, 120, 96 };
 
@@ -77,7 +82,10 @@ public class DemoActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.demo);
+		setContentView(R.layout.cluster_map);
+		
+		ActionBar actionBar = getActionBar();
+		actionBar.show();
 
 		FragmentManager fm = getSupportFragmentManager();
 		SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
@@ -103,7 +111,7 @@ public class DemoActivity extends FragmentActivity {
 			public void onMapClick(LatLng position) {
 				for (Circle circle : map.getCircles()) {
 					if (circle.contains(position)) {
-						Toast.makeText(DemoActivity.this, "Clicked " + circle.getData(), Toast.LENGTH_SHORT).show();
+						Toast.makeText(ClusteringMapActivity.this, "Clicked " + circle.getData(), Toast.LENGTH_SHORT).show();
 						return;
 					}
 				}
@@ -116,7 +124,7 @@ public class DemoActivity extends FragmentActivity {
 
 			private TextView tv;
 			{
-				tv = new TextView(DemoActivity.this);
+				tv = new TextView(ClusteringMapActivity.this);
 				tv.setTextColor(Color.BLACK);
 			}
 
@@ -208,7 +216,31 @@ public class DemoActivity extends FragmentActivity {
 			m.setData(data);
 		}
 
-		setUpClusteringViews();
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.map_menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.list_view:
+			Intent i = new Intent(getApplicationContext(),
+					AllPlacesActivity.class);
+			i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT );
+			startActivity(i);
+
+			break;
+
+		default:
+			break;
+		}
+
+		return true;
 	}
 	
 	@Override
@@ -240,34 +272,7 @@ public class DemoActivity extends FragmentActivity {
 		circle.setData("second circle");
 	}
 
-	private void setUpClusteringViews() {
-		CheckBox clusterCheckbox = (CheckBox) findViewById(R.id.checkbox_cluster);
-		final SeekBar clusterSizeSeekbar = (SeekBar) findViewById(R.id.seekbar_cluster_size);
-		clusterCheckbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				clusterSizeSeekbar.setEnabled(isChecked);
-
-				updateClustering(clusterSizeSeekbar.getProgress(), isChecked);
-			}
-		});
-		clusterSizeSeekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-			}
-
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				updateClustering(progress, true);
-			}
-
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-			}
-		});
-	}
+	
 
 	void updateClustering(int clusterSizeIndex, boolean enabled) {
 		ClusteringSettings clusteringSettings = new ClusteringSettings();
@@ -295,4 +300,6 @@ public class DemoActivity extends FragmentActivity {
 			this.position = position;
 		}
 	}
+	
+
 }

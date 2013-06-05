@@ -79,7 +79,7 @@ public class MainScreenActivity extends Activity {
 			public void onClick(View view) {
 				// Launching All places Activity
 				Intent i = new Intent(getApplicationContext(),
-						DemoActivity.class);
+						ClusteringMapActivity.class);
 				startActivity(i);
 			}
 		});

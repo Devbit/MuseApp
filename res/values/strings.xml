@@ -4,5 +4,13 @@
     <string name="hello">Hello World, AndroidConnectingToPhpMySQLActivity!</string>
     <string name="app_name">MainScreen</string>
     <string name="start_menu">Start</string>
+    <string name="adres">Adres</string>
+    <string name="titel">Titel</string>
+    <string name="stad">Stad</string>
+    <string name="beschrijving">Beschrijving</string>
+    <string name="list">Lijst weergave</string>
+    <string name="share">Delen</string>
+    <string name="map">Kaart weergave</string>
+    <string name="update_check">Controleren op updates</string>
 
 </resources>

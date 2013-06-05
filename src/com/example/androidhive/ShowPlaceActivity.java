@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -85,6 +86,9 @@ public class ShowPlaceActivity extends Activity {
 		StrictMode.setThreadPolicy(policy);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.edit_place);
+		
+		ActionBar actionBar = getActionBar();
+		actionBar.show();
 
 		// getting place details from intent
 		Intent i = getIntent();
@@ -318,6 +322,14 @@ public class ShowPlaceActivity extends Activity {
 			// ... anything else you want to add
 			// invoke custom chooser
 			startActivity(generateCustomChooserIntent(intent, blacklist));
+
+			break;
+			
+		case R.id.map_view:
+
+			Intent i = new Intent(getApplicationContext(),
+					ClusteringMapActivity.class);
+			startActivity(i);
 
 			break;
 

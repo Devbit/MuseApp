@@ -9,12 +9,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.ActionBar;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -45,6 +49,9 @@ public class AllPlacesActivity extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.all_places);
+
+		ActionBar actionBar = getActionBar();
+		actionBar.show();
 
 		// Hashmap for ListView
 		placesList = new ArrayList<HashMap<String, String>>();
@@ -93,6 +100,33 @@ public class AllPlacesActivity extends ListActivity {
 			startActivity(intent);
 		}
 
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.all_places_menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+
+		case R.id.map_view:
+
+			Intent i = new Intent(getApplicationContext(),
+					ClusteringMapActivity.class);
+			i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT );
+			startActivity(i);
+
+			break;
+
+		default:
+			break;
+		}
+
+		return true;
 	}
 
 	/**
@@ -146,4 +180,7 @@ public class AllPlacesActivity extends ListActivity {
 		}
 
 	}
+
+	
+
 }
