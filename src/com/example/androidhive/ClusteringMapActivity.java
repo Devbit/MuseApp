@@ -202,6 +202,18 @@ public class ClusteringMapActivity extends FragmentActivity {
 					LatLngBounds bounds = builder.build();
 					map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, getResources().getDimensionPixelSize(R.dimen.padding)));
 				}
+				else {
+					String title = marker.getTitle();
+					String mid = MarkerGenerator.mapPlaceToId.get(title);
+					
+					Intent in = new Intent(getApplicationContext(),
+							ShowPlaceActivity.class);
+					// sending mid to next activity
+					in.putExtra(MarkerGenerator.TAG_MID, mid);
+
+					// starting new activity and expecting some response back
+					startActivityForResult(in, 100);
+				}
 			}
 		});
 

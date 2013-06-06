@@ -28,13 +28,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MarkerGenerator {
-	private static final String TAG_MID = "ID";
-	private static final String TAG_NAME = "title";
+	static final String TAG_MID = "ID";
+	static final String TAG_NAME = "title";
 	private static final String TAG_LAT = "latitude";
 	private static final String TAG_LONG = "longitude";
 	
 	private static JSONArray places;
-	private static HashMap<String, String> mapPlaceToId;
+	static HashMap<String, String> mapPlaceToId;
 
 	public static void addMarkersInPoland(GoogleMap map) {
 		MarkerOptions options = new MarkerOptions();

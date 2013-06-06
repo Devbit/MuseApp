@@ -69,18 +69,17 @@
         android:textSize="17dip"/>
     
     <!-- Input description -->
-	<ImageView
-	    android:id="@+id/afbeelding"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:maxHeight="100px" />
-    
-	<TextView android:id="@+id/inputInfo" 
+    	<TextView android:id="@+id/inputInfo" 
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_margin="5dip"
 	    android:layout_marginBottom="15dip"
 	    android:lines="4"
 	    android:gravity="top"/>
+	<ImageView
+	    android:id="@+id/afbeelding"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:maxHeight="100px" />
 	
 </LinearLayout>
