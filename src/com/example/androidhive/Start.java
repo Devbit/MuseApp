@@ -15,14 +15,11 @@ import android.widget.SimpleAdapter;
 public class Start extends Activity 
 {
 	Button button1, button2, button3, button4, button5;
-	private ProgressDialog pDialog;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start);
-		
-		new BackgroundUpdate().execute();
 		
 		button1 = (Button)findViewById(R.id.button1); // Top button
 		button2 = (Button)findViewById(R.id.button2); // Mid left
@@ -47,48 +44,6 @@ public class Start extends Activity
 				startActivity(i);
 				
 			}});
-	}
-	
-	class BackgroundUpdate extends AsyncTask<String, String, String> {
-
-		/**
-		 * Before starting background thread Show Progress Dialog
-		 * */
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			pDialog = new ProgressDialog(Start.this);
-			pDialog.setMessage("Checking for updates...");
-			pDialog.setIndeterminate(false);
-			pDialog.setCancelable(false);
-			pDialog.show();
-		}
-
-		/**
-		 * getting All places from url
-		 * */
-		protected String doInBackground(String... args) {
-			CacheHandler cache = new CacheHandler(getApplicationContext());
-			boolean update = cache.check();
-			if (update) {
-				cache.update();
-			}
-			PlacesLoader.setCache(cache.getCache());
-			
-			return null;
-		}
-
-		/**
-		 * After completing background task Dismiss the progress dialog
-		 * **/
-		protected void onPostExecute(String file_url) {
-			// dismiss the dialog after getting all places
-			pDialog.dismiss();
-			// updating UI from Background Thread
-			
-
-		}
-
 	}
 	
 }
