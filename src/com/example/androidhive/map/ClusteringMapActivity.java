@@ -35,8 +35,11 @@ import pl.mg6.android.maps.extensions.Marker;
 import pl.mg6.android.maps.extensions.SupportMapFragment;
 import android.app.ActionBar;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -63,6 +66,7 @@ import com.example.androidhive.R.dimen;
 import com.example.androidhive.R.id;
 import com.example.androidhive.R.layout;
 import com.example.androidhive.R.menu;
+import android.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -80,7 +84,6 @@ public class ClusteringMapActivity extends FragmentActivity {
 	private View mapView;
 	private ProgressDialog pDialog;
 
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -95,8 +98,8 @@ public class ClusteringMapActivity extends FragmentActivity {
 		
 		//mapView = (MapView) this.findViewById(R.id.map);
 		
-		float cameraZoom = 12;
-		LatLng cameraLatLng = new LatLng(51.4921324, 3.8231482);
+		float cameraZoom = 8;
+		LatLng cameraLatLng = new LatLng(52.281602, 5.503235);
 		if (savedInstanceState != null) {
 			double savedLat = savedInstanceState.getDouble("lat");
 			double savedLng = savedInstanceState.getDouble("lng");
@@ -109,7 +112,8 @@ public class ClusteringMapActivity extends FragmentActivity {
 		
 
 		map.setClustering(new ClusteringSettings().iconDataProvider(new DemoIconProvider(getResources())).addMarkersDynamically(true));
-
+		map.setMyLocationEnabled(true);
+		
 		map.setInfoWindowAdapter(new InfoWindowAdapter() {
 
 			private TextView tv;
@@ -301,10 +305,11 @@ public class ClusteringMapActivity extends FragmentActivity {
 		        m.setData(pairs.getKey());
 		        it.remove(); // avoids a ConcurrentModificationException
 		    }
-			/*float cameraZoom = 12;
-			LatLng cameraLatLng = new LatLng(51.4921324, 3.8231482);
+			float cameraZoom = 16;
+			Location loc = map.getMyLocation();
+			LatLng cameraLatLng = new LatLng(loc.getLatitude(), loc.getLongitude());
 			map.animateCamera(CameraUpdateFactory.newLatLngZoom(cameraLatLng,
-					cameraZoom));*/
+					cameraZoom), 2000, null);
 		}
 
 	}
