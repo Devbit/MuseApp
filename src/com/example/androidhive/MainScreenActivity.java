@@ -10,6 +10,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.example.androidhive.ShowPlaceActivity.GetPlaceDetails;
+import com.example.androidhive.map.ClusteringMapActivity;
+import com.example.androidhive.map.MyMapActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;

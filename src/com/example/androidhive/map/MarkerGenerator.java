@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.androidhive;
+package com.example.androidhive.map;
 
 import java.util.HashMap;
 
@@ -24,6 +24,7 @@ import org.json.JSONObject;
 import pl.mg6.android.maps.extensions.GoogleMap;
 import pl.mg6.android.maps.extensions.Marker;
 
+import com.example.androidhive.PlacesLoader;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;

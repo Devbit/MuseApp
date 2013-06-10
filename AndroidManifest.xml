@@ -91,12 +91,12 @@
             android:name=".ShowPlaceActivity"
             android:label="Edit Place" >
         </activity>
-        <activity android:name="com.example.androidhive.MyMapActivity"
+        <activity android:name="com.example.androidhive.map.MyMapActivity"
             android:label="@string/app_name" >
         </activity>
       
         <activity 
-            android:name=".ClusteringMapActivity"
+            android:name="com.example.androidhive.map.ClusteringMapActivity"
             android:launchMode = "singleTop" >
         </activity>
         

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.androidhive;
+package com.example.androidhive.map;
 
 import java.text.Collator;
 import java.util.Collections;
@@ -56,6 +56,13 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.androidhive.AllPlacesActivity;
+import com.example.androidhive.R;
+import com.example.androidhive.ShowPlaceActivity;
+import com.example.androidhive.R.dimen;
+import com.example.androidhive.R.id;
+import com.example.androidhive.R.layout;
+import com.example.androidhive.R.menu;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;

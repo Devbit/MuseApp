@@ -9,6 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.example.androidhive.map.ClusteringMapActivity;
+
 import android.app.ActionBar;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
