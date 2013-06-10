@@ -18,6 +18,8 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
 import android.util.Log;
 
@@ -46,22 +48,24 @@ public class CacheHandler {
 	}
 	
 	public boolean check() {
-		getRemoteVersion();
-		getLocalVersion();
-		double local = Double.parseDouble(localVersion);
-		double remote = Double.parseDouble(remoteVersion);
-		
-		//Check cache file
-		File cacheFile = context.getFileStreamPath(cache);
-		if (!cacheFile.isFile()) {
-			return true;
-		} else if (cacheFile.length() == 0) {
-			return true;
-		}
-		
-		if (local < remote){
-			//update();
-			return true;
+		if (isOnline()) {
+			getRemoteVersion();
+			getLocalVersion();
+			double local = Double.parseDouble(localVersion);
+			double remote = Double.parseDouble(remoteVersion);
+			
+			//Check cache file
+			File cacheFile = context.getFileStreamPath(cache);
+			if (!cacheFile.isFile()) {
+				return true;
+			} else if (cacheFile.length() == 0) {
+				return true;
+			}
+			
+			if (local < remote){
+				//update();
+				return true;
+			}
 		}
 		return false;
 	}
@@ -169,5 +173,15 @@ public class CacheHandler {
 			return FAIL;
 		}
 		return SUCCESS;
+	}
+	
+	public boolean isOnline() {
+	    ConnectivityManager cm =
+	        (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo netInfo = cm.getActiveNetworkInfo();
+	    if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+	        return true;
+	    }
+	    return false;
 	}
 }

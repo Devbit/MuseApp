@@ -1,4 +1,4 @@
-package com.example.androidhive;
+package com.example.androidhive.map;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +14,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.example.androidhive.PlacesLoader;
+import com.example.androidhive.R;
+import com.example.androidhive.ShowPlaceActivity;
+import com.example.androidhive.R.id;
+import com.example.androidhive.R.layout;
+import com.example.androidhive.R.menu;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
