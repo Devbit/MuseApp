@@ -18,6 +18,8 @@ package com.example.androidhive;
 import java.text.Collator;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.json.JSONException;
@@ -28,15 +30,20 @@ import pl.mg6.android.maps.extensions.GoogleMap;
 import pl.mg6.android.maps.extensions.GoogleMap.InfoWindowAdapter;
 import pl.mg6.android.maps.extensions.GoogleMap.OnInfoWindowClickListener;
 import pl.mg6.android.maps.extensions.GoogleMap.OnMapClickListener;
+import pl.mg6.android.maps.extensions.MapView;
 import pl.mg6.android.maps.extensions.Marker;
 import pl.mg6.android.maps.extensions.SupportMapFragment;
 import android.app.ActionBar;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -63,21 +70,9 @@ public class ClusteringMapActivity extends FragmentActivity {
 	private static final double[] CLUSTER_SIZES = new double[] { 180, 160, 144, 120, 96 };
 
 	private GoogleMap map;
+	private View mapView;
+	private ProgressDialog pDialog;
 
-	private MutableData[] dataArray = { new MutableData(6, new LatLng(-50, 0)), new MutableData(28, new LatLng(-52, 1)),
-			new MutableData(496, new LatLng(-51, -2)), };
-	private Handler handler = new Handler();
-	private Runnable dataUpdater = new Runnable() {
-
-		@Override
-		public void run() {
-			for (MutableData data : dataArray) {
-				data.value = 7 + 3 * data.value;
-			}
-			onDataUpdate();
-			handler.postDelayed(this, 1000);
-		}
-	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +86,8 @@ public class ClusteringMapActivity extends FragmentActivity {
 		SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
 		map = f.getExtendedMap();
 		
+		//mapView = (MapView) this.findViewById(R.id.map);
+		
 		float cameraZoom = 12;
 		LatLng cameraLatLng = new LatLng(51.4921324, 3.8231482);
 		if (savedInstanceState != null) {
@@ -100,23 +97,9 @@ public class ClusteringMapActivity extends FragmentActivity {
 
 			cameraZoom = savedInstanceState.getFloat("zoom", 12);
 		}
-		map.animateCamera(CameraUpdateFactory.newLatLngZoom(cameraLatLng,
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(cameraLatLng,
 				cameraZoom));
-
-		addCircles();
-
-		map.setOnMapClickListener(new OnMapClickListener() {
-
-			@Override
-			public void onMapClick(LatLng position) {
-				for (Circle circle : map.getCircles()) {
-					if (circle.contains(position)) {
-						Toast.makeText(ClusteringMapActivity.this, "Clicked " + circle.getData(), Toast.LENGTH_SHORT).show();
-						return;
-					}
-				}
-			}
-		});
+		
 
 		map.setClustering(new ClusteringSettings().iconDataProvider(new DemoIconProvider(getResources())).addMarkersDynamically(true));
 
@@ -177,15 +160,10 @@ public class ClusteringMapActivity extends FragmentActivity {
 					tv.setText(text);
 					return tv;
 				} else {
-					Object data = marker.getData();
-					if (data instanceof MutableData) {
-						MutableData mutableData = (MutableData) data;
-						tv.setText("Value: " + mutableData.value);
-						return tv;
-					}
+					String title = marker.getTitle();
+					tv.setText(title);
+					return tv;
 				}
-
-				return null;
 			}
 		});
 
@@ -203,8 +181,9 @@ public class ClusteringMapActivity extends FragmentActivity {
 					map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, getResources().getDimensionPixelSize(R.dimen.padding)));
 				}
 				else {
-					String title = marker.getTitle();
-					String mid = MarkerGenerator.mapPlaceToId.get(title);
+					//String title = marker.getTitle();
+					//String mid = MarkerGenerator.mapPlaceToId.get(title);
+					String mid = (String) marker.getData();
 					
 					Intent in = new Intent(getApplicationContext(),
 							ShowPlaceActivity.class);
@@ -217,16 +196,8 @@ public class ClusteringMapActivity extends FragmentActivity {
 			}
 		});
 
-		/*MarkerGenerator.addMarkersInPoland(map);
-		MarkerGenerator.addMarkersInWorld(map);*/
-		MarkerGenerator.addMarkers(map);
-		
-
-		BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
-		for (MutableData data : dataArray) {
-			Marker m = map.addMarker(new MarkerOptions().position(data.position).icon(icon));
-			m.setData(data);
-		}
+		//MarkerGenerator.addMarkers(map);
+		new AddMarkersInBackground().execute();
 
 	}
 	
@@ -258,33 +229,19 @@ public class ClusteringMapActivity extends FragmentActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		handler.post(dataUpdater);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		handler.removeCallbacks(dataUpdater);
 	}
 
 	private void onDataUpdate() {
 		Marker m = map.getMarkerShowingInfoWindow();
-		if (m != null && !m.isCluster() && m.getData() instanceof MutableData) {
+		if (m != null && !m.isCluster() && m.getData() instanceof String) {
 			m.showInfoWindow();
 		}
-	}
-
-	private void addCircles() {
-		float strokeWidth = getResources().getDimension(R.dimen.circle_stroke_width);
-		CircleOptions options = new CircleOptions().strokeWidth(strokeWidth);
-		Circle circle;
-		circle = map.addCircle(options.center(new LatLng(0.0, 0.0)).radius(2000000));
-		circle.setData("first circle");
-		circle = map.addCircle(options.center(new LatLng(30.0, 30.0)).radius(1000000));
-		circle.setData("second circle");
-	}
-
-	
+	}	
 
 	void updateClustering(int clusterSizeIndex, boolean enabled) {
 		ClusteringSettings clusteringSettings = new ClusteringSettings();
@@ -300,18 +257,49 @@ public class ClusteringMapActivity extends FragmentActivity {
 		}
 		map.setClustering(clusteringSettings);
 	}
-
-	private static class MutableData {
-
-		private int value;
-
-		private LatLng position;
-
-		public MutableData(int value, LatLng position) {
-			this.value = value;
-			this.position = position;
-		}
-	}
 	
+	class AddMarkersInBackground extends AsyncTask<String, String, HashMap<String, MarkerOptions>> {
+
+		/**
+		 * Before starting background thread Show Progress Dialog
+		 * */
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			pDialog = new ProgressDialog(ClusteringMapActivity.this);
+			pDialog.setMessage("Adding places...");
+			pDialog.setIndeterminate(false);
+			pDialog.setCancelable(false);
+			pDialog.show();
+		}
+
+		/**
+		 * getting All places from url
+		 * @return 
+		 * */
+		protected HashMap<String, MarkerOptions> doInBackground(String... args) {
+			Log.d("MarkerGenerator", "Started");
+			HashMap<String, MarkerOptions> markers = MarkerGenerator.addMarkers(map);
+			Log.d("MarkerGenerator", "Done");
+			return markers;
+		}
+		
+		protected void onPostExecute(HashMap<String, MarkerOptions> result) {
+			pDialog.dismiss();
+			Iterator it = result.entrySet().iterator();
+		    while (it.hasNext()) {
+		        HashMap.Entry pairs = (HashMap.Entry)it.next();
+		        //Log.d("Test", pairs.getKey() + " = " + pairs.getValue());
+		        Marker m = map.addMarker((MarkerOptions) pairs.getValue());
+		        m.setData(pairs.getKey());
+		        it.remove(); // avoids a ConcurrentModificationException
+		    }
+			/*float cameraZoom = 12;
+			LatLng cameraLatLng = new LatLng(51.4921324, 3.8231482);
+			map.animateCamera(CameraUpdateFactory.newLatLngZoom(cameraLatLng,
+					cameraZoom));*/
+		}
+
+	}
 
 }
