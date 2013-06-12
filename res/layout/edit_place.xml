@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:orientation="vertical" >
     
     <!-- Name Label -->
-    <TextView android:layout_width="fill_parent"
+    <TextView android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/titel"
         android:textStyle="bold"
@@ -16,14 +16,14 @@
     
     <!-- Input Name -->
 	<TextView android:id="@+id/inputTitle"
-	    android:layout_width="fill_parent"
+	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_margin="5dip"
 	    android:layout_marginBottom="15dip"
 	    />
 	
 	<!-- Adres Label -->
-    <TextView android:layout_width="fill_parent"
+    <TextView android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/adres"
         android:textStyle="bold"
@@ -34,14 +34,14 @@
     
     <!-- Input Adres -->
 	<TextView android:id="@+id/inputAddress" 
-	    android:layout_width="fill_parent"
+	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_margin="5dip"
 	    android:layout_marginBottom="15dip"
 	    android:singleLine="true"/>
 	
 	<!-- Stad Label -->
-    <TextView android:layout_width="fill_parent"
+    <TextView android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/stad"
         android:textStyle="bold"
@@ -52,14 +52,14 @@
     
     <!-- Stad Price -->
 	<TextView android:id="@+id/inputCity" 
-	    android:layout_width="fill_parent"
+	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_margin="5dip"
 	    android:layout_marginBottom="15dip"
 	    android:singleLine="true"/>
 	
 	<!-- Description Label -->
-    <TextView android:layout_width="fill_parent"
+    <TextView android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/beschrijving"
         android:paddingLeft="10dip"
@@ -70,7 +70,7 @@
     
     <!-- Input description -->
     	<TextView android:id="@+id/inputInfo" 
-	    android:layout_width="fill_parent"
+	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_margin="5dip"
 	    android:layout_marginBottom="15dip"
