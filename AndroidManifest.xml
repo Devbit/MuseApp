@@ -92,6 +92,12 @@
             android:name=".ShowPlaceActivity"
             android:label="Edit Place" >
         </activity>
+        
+        <activity
+            android:name="com.example.androidhive.FavouritesList"
+            android:label="Favourites" >
+        </activity>
+        
         <activity android:name="com.example.androidhive.map.MyMapActivity"
             android:label="@string/app_name" >
         </activity>

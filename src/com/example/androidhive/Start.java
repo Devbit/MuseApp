@@ -40,7 +40,16 @@ public class Start extends Activity
 			@Override
 			public void onClick(View view) {
 				// Launching All places Activity
-				Intent i = new Intent("com.example.androidhive.MAIN");
+				Intent i = new Intent(getApplicationContext(), FavouritesList.class);
+				startActivity(i);
+				
+			}});
+		
+		button3.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				// Launching All places Activity
+				Intent i = new Intent(getApplicationContext(), FavouritesList.class);
 				startActivity(i);
 				
 			}});

@@ -52,9 +52,6 @@ public class AllPlacesActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.all_places);
 
-		ActionBar actionBar = getActionBar();
-		actionBar.show();
-
 		// Hashmap for ListView
 		placesList = new ArrayList<HashMap<String, String>>();
 

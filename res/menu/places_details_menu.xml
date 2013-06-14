@@ -5,7 +5,14 @@
         android:id="@+id/action_share"
         android:orderInCategory="100"
         android:showAsAction="always"
-        android:icon="@drawable/social_share"
+        android:icon="@drawable/ic_action_share"
         android:title="@string/share"/>
+    
+    <item
+        android:id="@+id/action_favourite"
+        android:orderInCategory="99"
+        android:showAsAction="always"
+        android:icon="@drawable/ic_action_important"
+        android:title="@string/favourite"/>
 
 </menu> 

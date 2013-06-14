@@ -2,32 +2,44 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:gravity="center_horizontal">
-	
-    <!--  Sample Dashboard screen with Two buttons -->
-    <Button android:id="@+id/btnViewPlaces"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <!-- Sample Dashboard screen with Two buttons -->
+
+    <Button
+        android:id="@+id/btnViewPlaces"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="View Places"
-        android:layout_marginTop="25dip"/>
-    
-   <Button android:id="@+id/btnShowVersion"
+        android:layout_marginTop="25dip"
+        android:text="View Places" />
+
+    <Button
+        android:id="@+id/btnShowVersion"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="View Version"
-        android:layout_marginTop="25dip"/>
-   
-      <Button android:id="@+id/btnMapButton"
+        android:layout_marginTop="25dip"
+        android:text="View Version" />
+
+    <Button
+        android:id="@+id/btnMapButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="View Map"
-        android:layout_marginTop="25dip"/>
-      
-      <Button android:id="@+id/btnCluster"
+        android:layout_marginTop="25dip"
+        android:text="View Map" />
+
+    <Button
+        android:id="@+id/btnCluster"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="View Cluster Map"
-        android:layout_marginTop="25dip"/>
-      
+        android:layout_marginTop="25dip"
+        android:text="View Cluster Map" />
+
+    <Button
+        android:id="@+id/btnFavourites"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dip"
+        android:text="View Favourites" />
+
 </LinearLayout>

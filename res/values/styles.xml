@@ -9,5 +9,5 @@
     </style>        
    <style name="Theme.MyAppTheme.ActionBar.TitleTextStyle" parent="android:style/TextAppearance.Holo.Widget.ActionBar.Title">
         <item name="android:textColor">#FFF</item>
-    </style>           
+    </style>
 </resources>

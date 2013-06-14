@@ -20,9 +20,8 @@ public class Launch extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
-        SystemClock.sleep(500);
+        getActionBar().hide();
         new BackgroundUpdate().execute();
-        
     }
     
     class BackgroundUpdate extends AsyncTask<String, String, String> {
@@ -71,6 +70,7 @@ public class Launch extends Activity
 			};
 			
 			runStartup.start();
+			SystemClock.sleep(500);
 			
 		}
 

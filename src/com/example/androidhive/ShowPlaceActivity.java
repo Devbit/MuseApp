@@ -1,6 +1,8 @@
 package com.example.androidhive;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -24,15 +26,19 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Parcelable;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -60,6 +66,8 @@ public class ShowPlaceActivity extends Activity {
 
 	// Progress Dialog
 	private ProgressDialog pDialog;
+	
+	private Context con;
 
 	// JSON parser class
 	JSONParser jsonParser = new JSONParser();
@@ -71,6 +79,7 @@ public class ShowPlaceActivity extends Activity {
 	private static final String TAG_SUCCESS = "success";
 	private static final String TAG_PLACE = "places";
 	private static final String TAG_MID = "ID";
+	private static final String TAG_NAME = "name";
 	private static final String TAG_TITLE = "title";
 	private static final String TAG_ADDRESS = "address";
 	private static final String TAG_CITY = "city";
@@ -78,6 +87,7 @@ public class ShowPlaceActivity extends Activity {
 	private static final String TAG_IMAGE = "image";
 
 	public String titelMonument;
+	public String idMonument;
 	public String beschrijvingMonument;
 	public String afbeeldingMonument;
 
@@ -94,7 +104,8 @@ public class ShowPlaceActivity extends Activity {
 
 		// getting place id (mid) from intent
 		mid = i.getStringExtra(TAG_MID);
-
+		
+		con = this.getApplicationContext();
 		// Getting complete place details in background thread
 		new GetPlaceDetails().execute();
 
@@ -167,14 +178,80 @@ public class ShowPlaceActivity extends Activity {
 							txtInfo.setText(place.getString(TAG_INFO));
 
 							titelMonument = place.getString(TAG_TITLE);
+							idMonument = place.getString(TAG_MID);
 							beschrijvingMonument = place.getString(TAG_INFO);
 							afbeeldingMonument = place.getString(TAG_IMAGE);
+							
+							SharedPreferences preferences = con.getSharedPreferences(
+									"myAppPrefs", Context.MODE_PRIVATE);
+							String test =  preferences.getString(idMonument, "");
+							if (test == "") {
+								
+							} else {
+								
+							}
 
 							setTitle(titelMonument);
 
 						} else {
 							// place with mid not found
 						}
+
+						ImageView img = (ImageView) findViewById(R.id.afbeelding);
+						String imageUrl = "http://www.4en5mei.nl/";
+
+						Bitmap bitmap = null;
+
+						try {
+							bitmap = BitmapFactory
+									.decodeStream((InputStream) new URL(
+											imageUrl + afbeeldingMonument)
+											.getContent());
+						} catch (MalformedURLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+						img.setImageBitmap(bitmap);
+
+						final Dialog nagDialog = new Dialog(
+								ShowPlaceActivity.this,
+								android.R.style.Theme_Black_NoTitleBar);
+						nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+						nagDialog.setCancelable(false);
+						nagDialog.setContentView(R.layout.preview_image);
+						Button btnClose = (Button) nagDialog
+								.findViewById(R.id.btnClose);
+						ImageView ivPreview = (ImageView) nagDialog
+								.findViewById(R.id.preview_image);
+						ivPreview.setImageBitmap(bitmap);
+
+						img.setOnClickListener(new OnClickListener() {
+							@Override
+							public void onClick(View arg0) {
+
+								nagDialog.show();
+							}
+						});
+
+						btnClose.setOnClickListener(new OnClickListener() {
+							@Override
+							public void onClick(View arg0) {
+
+								nagDialog.dismiss();
+							}
+						});
+
+						ivPreview.setOnClickListener(new OnClickListener() {
+							@Override
+							public void onClick(View arg0) {
+
+								nagDialog.dismiss();
+							}
+						});
 
 					} catch (JSONException e) {
 						e.printStackTrace();
@@ -191,48 +268,6 @@ public class ShowPlaceActivity extends Activity {
 		protected void onPostExecute(String file_url) {
 			// dismiss the dialog once got all details
 			pDialog.dismiss();
-
-			try {
-				ImageView img = (ImageView) findViewById(R.id.afbeelding);
-				String imageUrl = "http://www.4en5mei.nl/";
-
-				Bitmap bitmap = BitmapFactory
-						.decodeStream((InputStream) new URL(imageUrl
-								+ afbeeldingMonument).getContent());
-				img.setImageBitmap(bitmap);
-
-				final Dialog nagDialog = new Dialog(ShowPlaceActivity.this,
-						android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
-				nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-				nagDialog.setCancelable(false);
-				nagDialog.setContentView(R.layout.preview_image);
-				Button btnClose = (Button) nagDialog
-						.findViewById(R.id.btnClose);
-				ImageView ivPreview = (ImageView) nagDialog
-						.findViewById(R.id.preview_image);
-				ivPreview.setImageBitmap(bitmap);
-
-				img.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View arg0) {
-
-						nagDialog.show();
-					}
-				});
-
-				btnClose.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View arg0) {
-
-						nagDialog.dismiss();
-					}
-				});
-
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 
 	}
@@ -307,6 +342,7 @@ public class ShowPlaceActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+
 		switch (item.getItemId()) {
 		case R.id.action_share:
 
@@ -322,6 +358,22 @@ public class ShowPlaceActivity extends Activity {
 			// invoke custom chooser
 			startActivity(generateCustomChooserIntent(intent, blacklist));
 
+			break;
+
+		case R.id.action_favourite:
+
+			SharedPreferences preferences = this.getSharedPreferences(
+					"myAppPrefs", Context.MODE_PRIVATE);
+			String test = preferences.getString(idMonument, "");
+			if (test.equals("")) {
+				SharedPreferences.Editor editor = preferences.edit();
+				editor.putString(idMonument, titelMonument);
+				editor.commit();
+			} else {
+				SharedPreferences.Editor editor = preferences.edit();
+				editor.putString(idMonument, "");
+				editor.commit();
+			}
 			break;
 
 		default:

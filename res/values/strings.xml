@@ -12,5 +12,6 @@
     <string name="share">Delen</string>
     <string name="map">Kaart weergave</string>
     <string name="update_check">Controleren op updates</string>
+    <string name="favourite">Favoriet</string>
 
 </resources>
