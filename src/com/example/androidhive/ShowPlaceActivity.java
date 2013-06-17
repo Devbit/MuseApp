@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import com.example.androidhive.map.ClusteringMapActivity;
 
+import android.R.menu;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
@@ -68,6 +69,8 @@ public class ShowPlaceActivity extends Activity {
 	private ProgressDialog pDialog;
 	
 	private Context con;
+	
+	int duration = Toast.LENGTH_SHORT;
 
 	// JSON parser class
 	JSONParser jsonParser = new JSONParser();
@@ -182,14 +185,7 @@ public class ShowPlaceActivity extends Activity {
 							beschrijvingMonument = place.getString(TAG_INFO);
 							afbeeldingMonument = place.getString(TAG_IMAGE);
 							
-							SharedPreferences preferences = con.getSharedPreferences(
-									"myAppPrefs", Context.MODE_PRIVATE);
-							String test =  preferences.getString(idMonument, "");
-							if (test == "") {
-								
-							} else {
-								
-							}
+							
 
 							setTitle(titelMonument);
 
@@ -337,6 +333,18 @@ public class ShowPlaceActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.places_details_menu, menu);
+		
+		SharedPreferences preferences = con.getSharedPreferences(
+				"myAppPrefs", Context.MODE_PRIVATE);
+		String test =  preferences.getString(idMonument, "");
+		MenuItem favItem = menu.getItem(0);
+		if (!(test == "")) {
+			favItem.setIcon(R.drawable.ic_action_important_pressed);
+			
+		} else {
+			favItem.setIcon(R.drawable.ic_action_important_normal);
+		}
+		
 		return true;
 	}
 
@@ -366,13 +374,20 @@ public class ShowPlaceActivity extends Activity {
 					"myAppPrefs", Context.MODE_PRIVATE);
 			String test = preferences.getString(idMonument, "");
 			if (test.equals("")) {
+				Toast addFav = Toast.makeText(con, "Favoriet toegevoegd", duration);
+				addFav.show();
 				SharedPreferences.Editor editor = preferences.edit();
 				editor.putString(idMonument, titelMonument);
 				editor.commit();
+				item.setIcon(R.drawable.ic_action_important_pressed);
 			} else {
+				Toast delFav = Toast.makeText(con, "Favoriet verwijderd", duration);
+				delFav.show();
 				SharedPreferences.Editor editor = preferences.edit();
 				editor.putString(idMonument, "");
 				editor.commit();
+				item.setIcon(R.drawable.ic_action_important_normal);
+				setResult(100);
 			}
 			break;
 
@@ -382,5 +397,5 @@ public class ShowPlaceActivity extends Activity {
 
 		return true;
 	}
-
+	
 }

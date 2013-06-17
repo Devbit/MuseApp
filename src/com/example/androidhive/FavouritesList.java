@@ -30,7 +30,7 @@ public class FavouritesList extends ListActivity {
 	private ProgressDialog pDialog;
 
 	ArrayList<HashMap<String, String>> favouritesList;
-	
+
 	SharedPreferences preferences = null;
 
 	ArrayList<HashMap<String, String>> favourites;
@@ -43,8 +43,9 @@ public class FavouritesList extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.all_places);
-		
-		preferences = this.getSharedPreferences("myAppPrefs", Context.MODE_PRIVATE);
+
+		preferences = this.getSharedPreferences("myAppPrefs",
+				Context.MODE_PRIVATE);
 
 		favourites = new ArrayList<HashMap<String, String>>();
 
@@ -101,55 +102,59 @@ public class FavouritesList extends ListActivity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			/*pDialog = new ProgressDialog(FavouritesList.this);
-			pDialog.setMessage("Loading places. Please wait...");
-			pDialog.setIndeterminate(false);
-			pDialog.setCancelable(false);
-			pDialog.show();*/
+			/*
+			 * pDialog = new ProgressDialog(FavouritesList.this);
+			 * pDialog.setMessage("Loading places. Please wait...");
+			 * pDialog.setIndeterminate(false); pDialog.setCancelable(false);
+			 * pDialog.show();
+			 */
 		}
 
 		/**
 		 * getting All places from url
 		 * */
 		protected String doInBackground(String... args) {
-			Map<String, String> favs = (Map<String, String>) preferences.getAll();
-			
+			Map<String, String> favs = (Map<String, String>) preferences
+					.getAll();
+
 			ArrayList<String> ids = new ArrayList<String>();
 			ArrayList<String> names = new ArrayList<String>();
-			
-			
-			for (Map.Entry<String, String> entry : favs.entrySet())
-			{
-			    String id = entry.getKey();
-			    String name = entry.getValue();
-			    
-			    Log.d("FavList", id);
-			    Log.d("FavList", name);
-			    
-			    HashMap<String, String> fav = new HashMap<String, String>();
+
+			for (Map.Entry<String, String> entry : favs.entrySet()) {
+				String id = entry.getKey();
+				String name = entry.getValue();
 				
+				if (name.equals("")) {
+					continue;
+				}
+
+				Log.d("FavList", id);
+				Log.d("FavList", name);
+
+				HashMap<String, String> fav = new HashMap<String, String>();
+
 				fav.put(TAG_MID, id);
 				fav.put(TAG_TITLE, name);
-				
+
 				favourites.add(fav);
-			    
-			    /*if (id.equals("id"))
-			    	ids.add(name);
-			    else if (id.equals("name"))
-			    	names.add(name);*/
-			    
+
+				/*
+				 * if (id.equals("id")) ids.add(name); else if
+				 * (id.equals("name")) names.add(name);
+				 */
+
 			}
-			
-			/*for (int i = 0; i < ids.size(); i++) {
-				String id = ids.get(i);
-				String name = names.get(i);
-				
-				Log.d("FavList2", id);
-				Log.d("FavList2", name);
-				
-				
-			}*/
-			
+
+			/*
+			 * for (int i = 0; i < ids.size(); i++) { String id = ids.get(i);
+			 * String name = names.get(i);
+			 * 
+			 * Log.d("FavList2", id); Log.d("FavList2", name);
+			 * 
+			 * 
+			 * }
+			 */
+
 			return null;
 		}
 
@@ -158,7 +163,7 @@ public class FavouritesList extends ListActivity {
 		 * **/
 		protected void onPostExecute(String file_url) {
 			// dismiss the dialog after getting all places
-			//pDialog.dismiss();
+			// pDialog.dismiss();
 			// updating UI from Background Thread
 			runOnUiThread(new Runnable() {
 				public void run() {
