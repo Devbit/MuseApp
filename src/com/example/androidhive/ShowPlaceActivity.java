@@ -40,6 +40,7 @@ import android.os.Debug;
 import android.os.Parcelable;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -172,20 +173,18 @@ public class ShowPlaceActivity extends Activity {
 							TextView txtTitle = (TextView) findViewById(R.id.inputTitle);
 							TextView txtAddress = (TextView) findViewById(R.id.inputAddress);
 							TextView txtCity = (TextView) findViewById(R.id.inputCity);
-							TextView txtInfo = (TextView) findViewById(R.id.inputInfo);
+							TextView txtInfo = (TextView) findViewById(R.id.inputInfo);						
 
 							// display place data in TextView
 							txtTitle.setText(place.getString(TAG_TITLE));
 							txtAddress.setText(place.getString(TAG_ADDRESS));
 							txtCity.setText(place.getString(TAG_CITY));
-							txtInfo.setText(place.getString(TAG_INFO));
+							txtInfo.setText(Html.fromHtml(place.getString(TAG_INFO)));
 
 							titelMonument = place.getString(TAG_TITLE);
 							idMonument = place.getString(TAG_MID);
 							beschrijvingMonument = place.getString(TAG_INFO);
 							afbeeldingMonument = place.getString(TAG_IMAGE);
-							
-							
 
 							setTitle(titelMonument);
 
@@ -194,14 +193,12 @@ public class ShowPlaceActivity extends Activity {
 						}
 
 						ImageView img = (ImageView) findViewById(R.id.afbeelding);
-						String imageUrl = "http://www.4en5mei.nl/";
 
 						Bitmap bitmap = null;
 
 						try {
 							bitmap = BitmapFactory
-									.decodeStream((InputStream) new URL(
-											imageUrl + afbeeldingMonument)
+									.decodeStream((InputStream) new URL(afbeeldingMonument)
 											.getContent());
 						} catch (MalformedURLException e) {
 							// TODO Auto-generated catch block

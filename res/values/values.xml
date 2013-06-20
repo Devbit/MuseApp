@@ -4,11 +4,13 @@
     <dimen name="text_size">15dp</dimen>
     <dimen name="padding">66dp</dimen>
     <dimen name="circle_stroke_width">5dp</dimen>
-    <color name="action_bar_bg_color">#33B5E5</color>
+
+    <color name="action_bar_bg_color">@color/dark_blue</color>
     <color name="action_bar_title_color">#FFF</color>
     <color name="blue">#33B5E5</color>
-     <color name="darker_blue">#2da2ce</color>
+    <color name="darker_blue">#2da2ce</color>
     <color name="dark_blue">#0099CC</color>
+    <color name="pressed_blue">#007aa3</color>
     <color name="splash_blue">#005b7f</color>
     <color name="white">#FFF</color>
     <color name="purple">#AA66CC</color>
@@ -17,6 +19,5 @@
     <color name="dark_green">#669900</color>
     <color name="red">#FF4444</color>
     <color name="dark_red">#CC0000</color>
-    
 
 </resources>

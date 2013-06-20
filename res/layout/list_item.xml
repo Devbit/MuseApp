@@ -1,25 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="fill_parent"
+    android:gravity="center_horizontal"
     android:orientation="vertical" >
 
-    <!-- Product id (pid) - will be HIDDEN - used to pass to other activity -->
+    <TextView
+        android:id="@+id/scrolltext"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="10dp"
+        android:textSize="16sp"
+        android:visibility="gone" >
+    </TextView>
+
     <TextView
         android:id="@+id/mid"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone" />
+        android:layout_height="fill_parent"
+        android:padding="10dp"
+        android:textSize="16sp"
+        android:visibility="gone" >
+    </TextView>
 
-
-    <!-- Name Label -->
     <TextView
         android:id="@+id/name"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="6dip"
-        android:paddingLeft="6dip"
-        android:textSize="17dip"
-        android:textStyle="bold" />
+        android:layout_height="fill_parent"
+        android:padding="10dp"
+        android:textSize="16sp" >
+    </TextView>
 
 </LinearLayout>

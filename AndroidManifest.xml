@@ -4,76 +4,81 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="17"/>
-    
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="17" />
+
     <permission
         android:name="com.example.androidhive.permission.MAPS_RECEIVE"
-        android:protectionLevel="signature"/>
+        android:protectionLevel="signature" />
+
+    <!-- Required permissions -->
+
+    <uses-permission
+        android:name="com.example.androidhive.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
+
+    <!-- Used by the API to download map tiles from Google Maps servers: -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Allows the API to access Google web-based services: -->
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+
+    <!-- Allows the API to cache map tile data in the device's external storage area: -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Optional permissions -->
 
 
-    <!--Required permissions-->
+    <!-- Allows the API to use WiFi or mobile cell data (or both) to determine the device's location: -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <uses-permission android:name="com.example.androidhive.permission.MAPS_RECEIVE"
-                     android:protectionLevel="signature"/>
+    <!-- Allows the API to use the Global Positioning System (GPS) to determine the device's location to within a very small area : -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-    <!--Used by the API to download map tiles from Google Maps servers: -->
-    <uses-permission android:name="android.permission.INTERNET"/>
-
-    <!--Allows the API to access Google web-based services: -->
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
-
-    <!--Allows the API to cache map tile data in the device's external storage area: -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
-
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-
-    <!--Optional permissions-->
-
-    <!--Allows the API to use WiFi or mobile cell data (or both) to determine the device's location: -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-
-    <!--Allows the API to use the Global Positioning System (GPS) to determine the device's location to within a very small area :-->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-
-
-
-    <!--Version 2 of the Google Maps Android API requires OpenGL ES version 2 -->
-    <!--This notifies external services of the requirement. In particular, it has the effect of preventing Google Play Store from displaying your app on devices that don't support OpenGL ES version 2.-->
+    <!-- Version 2 of the Google Maps Android API requires OpenGL ES version 2 -->
+    <!-- This notifies external services of the requirement. In particular, it has the effect of preventing Google Play Store from displaying your app on devices that don't support OpenGL ES version 2. -->
+    <uses-feature android:name="android.hardware.screen.portrait" />
     <uses-feature
         android:glEsVersion="0x00020000"
-        android:required="true"/>
+        android:required="true" />
 
     <application
         android:configChanges="keyboardHidden|orientation"
         android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
         android:logo="@drawable/ic_launcher"
-        android:theme="@style/Theme.MyAppTheme"
-        android:label="@string/app_name" >
+        android:theme="@style/Theme.MyAppTheme">
 
-		<!-- Startup screen -->
+        <!-- Startup screen -->
         <activity
             android:name="com.example.androidhive.Launch"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
+
         <!-- Start menu -->
         <activity
             android:name="com.example.androidhive.Start"
-            android:label="@string/start_menu" >
+            android:label="@string/start_menu"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="com.example.androidhive.START" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>
+        </activity>
         <activity
             android:name=".MainScreenActivity"
-            android:label="@string/app_name" >
-			<intent-filter>
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+            <intent-filter>
                 <action android:name="com.example.androidhive.MAIN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -83,35 +88,39 @@
         <!-- All Product Activity -->
         <activity
             android:name=".AllPlacesActivity"
-            android:launchMode = "singleTop"
-            android:label="All Places" >
+            android:label="All Places"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop" >
         </activity>
 
         <!-- Edit Place Activity -->
         <activity
             android:name=".ShowPlaceActivity"
-            android:label="Edit Place" >
+            android:label="Edit Place"
+            android:screenOrientation="portrait" >
         </activity>
-        
         <activity
             android:name="com.example.androidhive.FavouritesList"
-            android:label="Favourites" >
+            android:label="Favourites"
+            android:screenOrientation="portrait" >
         </activity>
-        
-        <activity android:name="com.example.androidhive.map.MyMapActivity"
-            android:label="@string/app_name" >
+        <activity
+            android:name="com.example.androidhive.map.MyMapActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
         </activity>
-      
-        <activity 
+        <activity
             android:name="com.example.androidhive.map.ClusteringMapActivity"
-            android:launchMode = "singleTop" >
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop" >
         </activity>
-        
-        <activity android:name=".LaunchTimeTestActivity" />
-        
-         <meta-data
-                android:name="com.google.android.maps.v2.API_KEY"
-                android:value="@string/maps_apikey"/>
+        <activity android:name=".LaunchTimeTestActivity"
+            android:screenOrientation="portrait" />
+
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="@string/maps_apikey"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
