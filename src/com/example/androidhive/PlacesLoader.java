@@ -19,7 +19,9 @@ public class PlacesLoader {
 	private static JSONParser jParser = new JSONParser();
 
 	private static JSONArray places;
+	private static JSONArray searches;
 	private static ArrayList<HashMap<String, String>> placesList;
+	private static ArrayList<HashMap<String, String>> searchList;
 
 	// JSON Node names
 	private static final String TAG_SUCCESS = "success";
@@ -34,7 +36,7 @@ public class PlacesLoader {
 	}
 
 	public static ArrayList<HashMap<String, String>> loadPlacesList() {
-		makeListFromPlaces();
+		placesList = makeListFromPlaces(places);
 		return placesList;
 	}
 
@@ -45,9 +47,19 @@ public class PlacesLoader {
 	public static ArrayList<HashMap<String, String>> getPlacesList() {
 		return placesList;
 	}
+	
+	public static JSONArray search(String input) {
+		//JSONArray searchResult = PlacesLoader.search(query)
+		//om te zoeken, returned hele JSON
+		//PlacesLoader.makeListFromPlaces(searchResult) voor list compatible ArrayList
+		String URL = "http://jsonapp.tk/search.php?s=%s";
+		URL = String.format(URL, input);
+		JSONArray result = getData(URL, TAG_PLACES);
+		return result;
+	}
 
-	private static ArrayList<HashMap<String, String>> makeListFromPlaces() {
-		placesList = new ArrayList<HashMap<String, String>>();
+	public static ArrayList<HashMap<String, String>> makeListFromPlaces(JSONArray places) {
+		ArrayList<HashMap<String, String>> result = new ArrayList<HashMap<String, String>>();
 		try {
 			for (int i = 0; i < places.length(); i++) {
 				JSONObject c = places.getJSONObject(i);
@@ -64,14 +76,34 @@ public class PlacesLoader {
 				map.put(TAG_NAME, name);
 
 				// adding HashList to ArrayList
-				placesList.add(map);
+				result.add(map);
 
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 
-		return placesList;
+		return result;
+	}
+	
+	private static JSONArray getData(String url, String tag, String... args) {
+		// Building Parameters
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		// getting JSON string from URL
+		JSONObject json = jParser.makeHttpRequest(url, "GET", params);
+		JSONArray result = new JSONArray();
+
+		try {
+			// Checking for SUCCESS TAG
+			int success = json.getInt(TAG_SUCCESS);
+
+			if (success == 1) {
+				result = json.getJSONArray(tag);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 }
