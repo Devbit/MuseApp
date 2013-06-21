@@ -2,7 +2,6 @@ package com.example.androidhive;
 
 import com.example.androidhive.R;
 
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -11,20 +10,18 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.view.Menu;
 
-public class Launch extends Activity 
-{
+public class Launch extends Activity {
 	private ProgressDialog pDialog;
-	
-    @Override
-    protected void onCreate(Bundle savedInstanceState) 
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_launch);
-        getActionBar().hide();
-        new BackgroundUpdate().execute();
-    }
-    
-    class BackgroundUpdate extends AsyncTask<String, String, String> {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_launch);
+		getActionBar().hide();
+		new BackgroundUpdate().execute();
+	}
+
+	class BackgroundUpdate extends AsyncTask<String, String, String> {
 
 		/**
 		 * Before starting background thread Show Progress Dialog
@@ -58,23 +55,19 @@ public class Launch extends Activity
 		protected void onPostExecute(String file_url) {
 			// dismiss the dialog after getting all places
 			pDialog.dismiss();
-			
-			Thread runStartup = new Thread()
-			{
-				public void run()
-				{
+
+			Thread runStartup = new Thread() {
+				public void run() {
 					Intent intent = new Intent("com.example.androidhive.START");
 					startActivity(intent);
 					finish();
 				}
 			};
-			
-			runStartup.start();
 			SystemClock.sleep(500);
-			
+			runStartup.start();
+
 		}
 
 	}
 
-    
 }

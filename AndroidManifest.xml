@@ -88,7 +88,7 @@
         <!-- All Product Activity -->
         <activity
             android:name=".AllPlacesActivity"
-            android:label="All Places"
+            android:label="@string/all_places"
             android:screenOrientation="portrait"
             android:launchMode="singleTop" >
         </activity>
@@ -96,12 +96,12 @@
         <!-- Edit Place Activity -->
         <activity
             android:name=".ShowPlaceActivity"
-            android:label="Edit Place"
+            android:label="@string/details"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.example.androidhive.FavouritesList"
-            android:label="Favourites"
+            android:label="@string/favourites"
             android:screenOrientation="portrait" >
         </activity>
         <activity
@@ -111,6 +111,7 @@
         </activity>
         <activity
             android:name="com.example.androidhive.map.ClusteringMapActivity"
+            android:label="@string/map_view"
             android:screenOrientation="portrait"
             android:launchMode="singleTop" >
         </activity>

@@ -79,7 +79,7 @@ public class ShowPlaceActivity extends Activity {
 	JSONParser jsonParser = new JSONParser();
 
 	// single place url
-	private static final String url_place_detials = "http://jsonapp.tk/get_place_details.php";
+	private static final String url_place_detials = "http://museapp.elektraenzo.nl/get_place_details.php";
 
 	// JSON Node names
 	private static final String TAG_SUCCESS = "success";
@@ -178,6 +178,7 @@ public class ShowPlaceActivity extends Activity {
 							// Edit Text
 
 							TextView txtTitle = (TextView) findViewById(R.id.inputTitle);
+							TextView labelAddress = (TextView) findViewById(R.id.address);
 							TextView txtAddress = (TextView) findViewById(R.id.inputAddress);
 							TextView txtInfo = (TextView) findViewById(R.id.inputInfo);
 
@@ -185,8 +186,19 @@ public class ShowPlaceActivity extends Activity {
 							idMonument = place.getString(TAG_MID);
 							beschrijvingMonument = Html.fromHtml(
 									place.getString(TAG_INFO)).toString();
-							locatieMonument = place.getString(TAG_ADDRESS)
-									+ ", " + place.getString(TAG_CITY);
+							
+							if (TAG_ADDRESS.equals("address")) {
+								locatieMonument = place.getString(TAG_CITY);
+							}
+							else if (TAG_ADDRESS.equals("address") && TAG_CITY.equals("city")) {
+								labelAddress.setVisibility(View.GONE);
+								txtAddress.setVisibility(View.GONE);
+							}
+							else {
+								locatieMonument = place.getString(TAG_ADDRESS)
+										+ ", " + place.getString(TAG_CITY);
+							}
+							
 							afbeeldingMonument = place.getString(TAG_IMAGE);
 
 							// display place data in TextView
