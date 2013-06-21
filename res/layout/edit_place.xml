@@ -1,85 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
-    
-    <!-- Name Label -->
-    <TextView android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/titel"
-        android:textStyle="bold"
-        android:paddingLeft="10dip"
-        android:paddingRight="10dip"
-        android:paddingTop="10dip"
-        android:textSize="17dip"/>
-    
-    <!-- Input Name -->
-	<TextView android:id="@+id/inputTitle"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_margin="5dip"
-	    android:layout_marginBottom="15dip"
-	    />
-	
-	<!-- Adres Label -->
-    <TextView android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/adres"
-        android:textStyle="bold"
-        android:paddingLeft="10dip"
-        android:paddingRight="10dip"
-        android:paddingTop="10dip"
-        android:textSize="17dip"/>
-    
-    <!-- Input Adres -->
-	<TextView android:id="@+id/inputAddress" 
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_margin="5dip"
-	    android:layout_marginBottom="15dip"
-	    android:singleLine="true"/>
-	
-	<!-- Stad Label -->
-    <TextView android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/stad"
-        android:textStyle="bold"
-        android:paddingLeft="10dip"
-        android:paddingRight="10dip"
-        android:paddingTop="10dip"
-        android:textSize="17dip"/>
-    
-    <!-- Stad Price -->
-	<TextView android:id="@+id/inputCity" 
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_margin="5dip"
-	    android:layout_marginBottom="15dip"
-	    android:singleLine="true"/>
-	
-	<!-- Description Label -->
-    <TextView android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/beschrijving"
-        android:paddingLeft="10dip"
-        android:textStyle="bold"
-        android:paddingRight="10dip"
-        android:paddingTop="10dip"
-        android:textSize="17dip"/>
-    
-    <!-- Input description -->
-    	<TextView android:id="@+id/inputInfo" 
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_margin="5dip"
-	    android:layout_marginBottom="15dip"
-	    android:lines="4"
-	    android:gravity="top"/>
-	<ImageView
-	    android:id="@+id/afbeelding"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:maxHeight="100px" />
-	
-</LinearLayout>
+    android:layout_height="fill_parent" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@color/black"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/afbeelding"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_horizontal"
+                android:orientation="vertical"
+                android:scaleType="centerCrop" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dip" >
+
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".33"
+                android:drawableTop="@drawable/ic_map"
+                android:text="Kaart" />
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".33"
+                android:drawableTop="@drawable/ic_map"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".33"
+                android:drawableTop="@drawable/ic_map"
+                android:text="Button" />
+        </LinearLayout>
+
+        <!-- Name Label -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dip"
+                android:paddingTop="10dip"
+                android:text="@string/titel"
+                android:textSize="17dip"
+                android:textStyle="bold" />
+
+            <!-- Input Name -->
+
+            <TextView
+                android:id="@+id/inputTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dip" />
+
+            <!-- Adres Label -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dip"
+                android:paddingTop="10dip"
+                android:text="@string/adres"
+                android:textSize="17dip"
+                android:textStyle="bold" />
+
+            <!-- Input Adres -->
+
+            <TextView
+                android:id="@+id/inputAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dip"
+                android:singleLine="true" />
+
+            <!-- Description Label -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dip"
+                android:paddingTop="10dip"
+                android:text="@string/beschrijving"
+                android:textSize="17dip"
+                android:textStyle="bold" />
+
+            <!-- Input description -->
+
+            <TextView
+                android:id="@+id/inputInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dip"
+                android:gravity="top"
+                android:lines="4" />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

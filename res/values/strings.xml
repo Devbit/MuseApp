@@ -13,5 +13,6 @@
     <string name="map">Kaart weergave</string>
     <string name="update_check">Controleren op updates</string>
     <string name="favourite">Favoriet</string>
+    <string name="calender">Toevoegen aan kalender</string>
 
 </resources>

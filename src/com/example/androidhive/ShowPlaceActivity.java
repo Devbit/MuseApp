@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -41,6 +42,7 @@ import android.os.Parcelable;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -68,9 +70,9 @@ public class ShowPlaceActivity extends Activity {
 
 	// Progress Dialog
 	private ProgressDialog pDialog;
-	
+
 	private Context con;
-	
+
 	int duration = Toast.LENGTH_SHORT;
 
 	// JSON parser class
@@ -89,11 +91,16 @@ public class ShowPlaceActivity extends Activity {
 	private static final String TAG_CITY = "city";
 	private static final String TAG_INFO = "otherinfo";
 	private static final String TAG_IMAGE = "image";
+	private static final String TAG_LAT = "latitude";
+	private static final String TAG_LON = "longitude";
 
 	public String titelMonument;
 	public String idMonument;
 	public String beschrijvingMonument;
+	public String locatieMonument;
 	public String afbeeldingMonument;
+
+	Bitmap bitmap = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -108,7 +115,7 @@ public class ShowPlaceActivity extends Activity {
 
 		// getting place id (mid) from intent
 		mid = i.getStringExtra(TAG_MID);
-		
+
 		con = this.getApplicationContext();
 		// Getting complete place details in background thread
 		new GetPlaceDetails().execute();
@@ -172,19 +179,20 @@ public class ShowPlaceActivity extends Activity {
 
 							TextView txtTitle = (TextView) findViewById(R.id.inputTitle);
 							TextView txtAddress = (TextView) findViewById(R.id.inputAddress);
-							TextView txtCity = (TextView) findViewById(R.id.inputCity);
-							TextView txtInfo = (TextView) findViewById(R.id.inputInfo);						
-
-							// display place data in TextView
-							txtTitle.setText(place.getString(TAG_TITLE));
-							txtAddress.setText(place.getString(TAG_ADDRESS));
-							txtCity.setText(place.getString(TAG_CITY));
-							txtInfo.setText(Html.fromHtml(place.getString(TAG_INFO)));
+							TextView txtInfo = (TextView) findViewById(R.id.inputInfo);
 
 							titelMonument = place.getString(TAG_TITLE);
 							idMonument = place.getString(TAG_MID);
-							beschrijvingMonument = place.getString(TAG_INFO);
+							beschrijvingMonument = Html.fromHtml(
+									place.getString(TAG_INFO)).toString();
+							locatieMonument = place.getString(TAG_ADDRESS)
+									+ ", " + place.getString(TAG_CITY);
 							afbeeldingMonument = place.getString(TAG_IMAGE);
+
+							// display place data in TextView
+							txtTitle.setText(titelMonument);
+							txtAddress.setText(locatieMonument);
+							txtInfo.setText(beschrijvingMonument);
 
 							setTitle(titelMonument);
 
@@ -194,12 +202,10 @@ public class ShowPlaceActivity extends Activity {
 
 						ImageView img = (ImageView) findViewById(R.id.afbeelding);
 
-						Bitmap bitmap = null;
-
 						try {
 							bitmap = BitmapFactory
-									.decodeStream((InputStream) new URL(afbeeldingMonument)
-											.getContent());
+									.decodeStream((InputStream) new URL(
+											afbeeldingMonument).getContent());
 						} catch (MalformedURLException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -330,18 +336,18 @@ public class ShowPlaceActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.places_details_menu, menu);
-		
-		SharedPreferences preferences = con.getSharedPreferences(
-				"myAppPrefs", Context.MODE_PRIVATE);
-		String test =  preferences.getString(idMonument, "");
+
+		SharedPreferences preferences = con.getSharedPreferences("myAppPrefs",
+				Context.MODE_PRIVATE);
+		String test = preferences.getString(idMonument, "");
 		MenuItem favItem = menu.getItem(0);
 		if (!(test == "")) {
-			favItem.setIcon(R.drawable.ic_action_important_pressed);
-			
-		} else {
 			favItem.setIcon(R.drawable.ic_action_important_normal);
+
+		} else {
+			favItem.setIcon(R.drawable.ic_action_not_important);
 		}
-		
+
 		return true;
 	}
 
@@ -371,21 +377,35 @@ public class ShowPlaceActivity extends Activity {
 					"myAppPrefs", Context.MODE_PRIVATE);
 			String test = preferences.getString(idMonument, "");
 			if (test.equals("")) {
-				Toast addFav = Toast.makeText(con, "Favoriet toegevoegd", duration);
+				Toast addFav = Toast.makeText(con, "Favoriet toegevoegd",
+						duration);
 				addFav.show();
 				SharedPreferences.Editor editor = preferences.edit();
 				editor.putString(idMonument, titelMonument);
 				editor.commit();
-				item.setIcon(R.drawable.ic_action_important_pressed);
+				item.setIcon(R.drawable.ic_action_important_normal);
 			} else {
-				Toast delFav = Toast.makeText(con, "Favoriet verwijderd", duration);
+				Toast delFav = Toast.makeText(con, "Favoriet verwijderd",
+						duration);
 				delFav.show();
 				SharedPreferences.Editor editor = preferences.edit();
 				editor.putString(idMonument, "");
 				editor.commit();
-				item.setIcon(R.drawable.ic_action_important_normal);
+				item.setIcon(R.drawable.ic_action_not_important);
 				setResult(100);
 			}
+			break;
+
+		case R.id.action_cal:
+			Calendar cal = Calendar.getInstance();
+			Intent calIntent = new Intent(Intent.ACTION_EDIT);
+			calIntent.setType("vnd.android.cursor.item/event");
+			calIntent.putExtra("beginTime", cal.getTimeInMillis());
+			calIntent.putExtra("title", titelMonument);
+			calIntent.putExtra("description", beschrijvingMonument);
+			calIntent.putExtra("eventLocation", locatieMonument);
+			startActivity(calIntent);
+
 			break;
 
 		default:
@@ -394,5 +414,18 @@ public class ShowPlaceActivity extends Activity {
 
 		return true;
 	}
-	
+
+	public static void clearBitmap(Bitmap bitmap) {
+
+		bitmap.recycle();
+
+		System.gc();
+
+	}
+
+	protected void onDestroy() {
+		super.onDestroy();
+		clearBitmap(bitmap);
+	}
+
 }

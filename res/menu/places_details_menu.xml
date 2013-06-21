@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
+	<item
+        android:id="@+id/action_favourite"
+        android:orderInCategory="98"
+        android:showAsAction="always"
+        android:icon="@drawable/star_drawable"
+        android:title="@string/favourite"/>
+	
+	<item
+        android:id="@+id/action_cal"
+        android:orderInCategory="99"
+        android:showAsAction="always"
+        android:icon="@drawable/ic_event"
+        android:title="@string/calender"/>
+	
     <item
         android:id="@+id/action_share"
         android:orderInCategory="100"
@@ -8,11 +21,6 @@
         android:icon="@drawable/ic_action_share"
         android:title="@string/share"/>
     
-    <item
-        android:id="@+id/action_favourite"
-        android:orderInCategory="99"
-        android:showAsAction="always"
-        android:icon="@drawable/star_drawable"
-        android:title="@string/favourite"/>
+    
 
 </menu> 
