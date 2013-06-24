@@ -1,17 +1,10 @@
 package com.hro.museapp;
 
-import com.example.androidhive.R;
-import com.hro.museapp.AllPlacesActivity.LoadAllPlaces;
-
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListAdapter;
-import android.widget.SimpleAdapter;
 
 public class Start extends Activity 
 {

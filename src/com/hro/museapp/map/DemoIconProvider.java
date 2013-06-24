@@ -26,12 +26,10 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Rect;
 
-import com.example.androidhive.R;
-import com.example.androidhive.R.dimen;
-import com.example.androidhive.R.drawable;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.hro.museapp.R;
 
 public class DemoIconProvider implements IconDataProvider {
 

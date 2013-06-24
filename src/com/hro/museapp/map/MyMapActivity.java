@@ -1,8 +1,6 @@
 package com.hro.museapp.map;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,10 +13,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.androidhive.R;
-import com.example.androidhive.R.id;
-import com.example.androidhive.R.layout;
-import com.example.androidhive.R.menu;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
@@ -28,6 +22,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.hro.museapp.PlacesLoader;
+import com.hro.museapp.R;
 import com.hro.museapp.ShowPlaceActivity;
 
 public class MyMapActivity extends Activity {

@@ -1,14 +1,11 @@
 package com.hro.museapp;
 
-import com.example.androidhive.R;
-
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.SystemClock;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.view.Menu;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.SystemClock;
 
 public class Launch extends Activity {
 	private ProgressDialog pDialog;
@@ -58,7 +55,7 @@ public class Launch extends Activity {
 
 			Thread runStartup = new Thread() {
 				public void run() {
-					Intent intent = new Intent("com.example.androidhive.START");
+					Intent intent = new Intent("com.hro.museapp.START");
 					startActivity(intent);
 					finish();
 				}

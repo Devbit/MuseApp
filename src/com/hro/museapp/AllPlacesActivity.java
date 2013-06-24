@@ -12,7 +12,6 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,13 +30,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.SearchView.OnCloseListener;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.SectionIndexer;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-import com.example.androidhive.R;
 import com.hro.museapp.map.ClusteringMapActivity;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
