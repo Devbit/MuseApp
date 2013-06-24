@@ -21,10 +21,12 @@ public class PlacesLoader {
 
 	private static JSONArray places;
 	private static JSONArray searches;
+	private static JSONArray singlePlace;
 	private static ArrayList<HashMap<String, String>> placesList;
 	private static ArrayList<HashMap<String, String>> searchList;
 	
 	private static String lastSearch = "";
+	private static boolean hasSingle = false;
 
 	// JSON Node names
 	private static final String TAG_SUCCESS = "success";
@@ -79,6 +81,24 @@ public class PlacesLoader {
 	
 	public static JSONArray getSearchResults() {
 		return searches;
+	}
+	
+	public static void setSinglePlace(JSONArray place) {
+		singlePlace = place;
+		hasSingle = true;
+	}
+	
+	public static JSONArray getSinglePlace() {
+		return singlePlace;
+	}
+	
+	public static void clearSinglePlace() {
+		hasSingle = false;
+		singlePlace = null;
+	}
+	
+	public static boolean hasSingle() {
+		return hasSingle;
 	}
 
 	public static ArrayList<HashMap<String, String>> makeListFromPlaces(JSONArray places) {

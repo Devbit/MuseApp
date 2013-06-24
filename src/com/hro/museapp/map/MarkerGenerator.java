@@ -39,10 +39,14 @@ public class MarkerGenerator {
 	static HashMap<String, MarkerOptions> mapPlaceToId;
 	
 	public static HashMap<String, MarkerOptions> addMarkers(GoogleMap map) {
-		if (PlacesLoader.getLastSearch().equals("")) {
-			places = PlacesLoader.getPlaces();
+		if (PlacesLoader.hasSingle()) {
+			places = PlacesLoader.getSinglePlace();
 		} else {
-			places = PlacesLoader.getSearchResults();
+			if (PlacesLoader.getLastSearch().equals("")) {
+				places = PlacesLoader.getPlaces();
+			} else {
+				places = PlacesLoader.getSearchResults();
+			}
 		}
 		
 		mapPlaceToId = new HashMap<String, MarkerOptions>();

@@ -344,7 +344,7 @@ public class ClusteringMapActivity extends FragmentActivity {
 			pDialog.dismiss();
 			Iterator it = result.entrySet().iterator();
 			LatLng loc = null;
-			boolean search = !PlacesLoader.getLastSearch().equals("");
+			boolean getMarkerLoc = (!PlacesLoader.getLastSearch().equals("") || PlacesLoader.hasSingle());
 			while (it.hasNext()) {
 				HashMap.Entry pairs = (HashMap.Entry) it.next();
 				// Log.d("Test", pairs.getKey() + " = " + pairs.getValue());
@@ -355,7 +355,7 @@ public class ClusteringMapActivity extends FragmentActivity {
 				}
 				
 				Marker m = map.addMarker(opt);
-				if (search && loc == null) {
+				if (getMarkerLoc && loc == null) {
 					loc = m.getPosition();
 				}
 				m.setData(pairs.getKey());

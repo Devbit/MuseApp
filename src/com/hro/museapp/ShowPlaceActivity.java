@@ -177,6 +177,7 @@ public class ShowPlaceActivity extends Activity {
 					// successfully received place details
 					JSONArray placeObj = json.getJSONArray(TAG_PLACE); // JSON
 																		// Array
+					PlacesLoader.setSinglePlace(placeObj);
 
 					// get first place object from JSON Array
 					JSONObject place = placeObj.getJSONObject(0);
@@ -281,6 +282,17 @@ public class ShowPlaceActivity extends Activity {
 						public void onClick(View arg0) {
 
 							nagDialog.dismiss();
+						}
+					});
+					
+					mapButton.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							Intent i = new Intent(getApplicationContext(),
+									ClusteringMapActivity.class);
+							i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+							startActivity(i);
 						}
 					});
 					
@@ -498,6 +510,7 @@ public class ShowPlaceActivity extends Activity {
 		if (bitmap != null) {
 			clearBitmap(bitmap);
 		}
+		PlacesLoader.clearSinglePlace();
 	}
 
 }
