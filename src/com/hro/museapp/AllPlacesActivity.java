@@ -48,9 +48,6 @@ public class AllPlacesActivity extends ListActivity {
 
 	ArrayList<HashMap<String, String>> placesList;
 
-	// url to get all places list
-	private static String url_all_places = "http://jsonapp.tk/get_all_places.php";
-
 	// JSON Node names
 	private static final String TAG_SUCCESS = "success";
 	private static final String TAG_PLACES = "places";
@@ -145,6 +142,10 @@ public class AllPlacesActivity extends ListActivity {
             intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intentHome);
             break;
+            
+		case R.id.menu_search:
+			//hier search dingen doen
+			break;
 
 		default:
 			break;

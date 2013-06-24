@@ -6,6 +6,13 @@
         android:orderInCategory="100"
         android:showAsAction="always"
         android:icon="@drawable/ic_action_map"
-        android:title="@string/map"/>
+        android:title="@string/map" />
+    
+    <item android:id="@+id/menu_search"
+          android:title="@string/menu_search"
+          android:orderInCategory="99"
+          android:icon="@drawable/ic_search"
+          android:showAsAction="ifRoom|collapseActionView"
+          android:actionViewClass="android.widget.SearchView" />
 
 </menu>

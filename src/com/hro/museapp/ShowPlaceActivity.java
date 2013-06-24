@@ -97,7 +97,7 @@ public class ShowPlaceActivity extends Activity {
 	private static final String TAG_ADDRESS = "address";
 	private static final String TAG_CITY = "city";
 	private static final String TAG_INFO = "otherinfo";
-	private static final String TAG_IMAGE = "image";
+	private static final String TAG_IMAGE = "thumb";
 	private static final String TAG_LAT = "latitude";
 	private static final String TAG_LON = "longitude";
 
