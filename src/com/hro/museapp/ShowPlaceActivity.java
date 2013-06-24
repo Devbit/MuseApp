@@ -23,6 +23,7 @@ import org.json.JSONObject;
 
 import com.example.androidhive.R;
 import com.hro.museapp.map.ClusteringMapActivity;
+import com.hro.museapp.map.GPSTracker;
 
 import android.R.menu;
 import android.annotation.TargetApi;
@@ -105,6 +106,8 @@ public class ShowPlaceActivity extends Activity {
 	public String beschrijvingMonument;
 	public String locatieMonument;
 	public String afbeeldingMonument;
+	public String longMonument;
+	public String latMonument;
 
 	Bitmap bitmap = null;
 
@@ -182,6 +185,8 @@ public class ShowPlaceActivity extends Activity {
 
 					titelMonument = place.getString(TAG_TITLE);
 					idMonument = place.getString(TAG_MID);
+					longMonument = place.getString(TAG_LON);
+					latMonument = place.getString(TAG_LAT);
 					beschrijvingMonument = Html.fromHtml(
 							place.getString(TAG_INFO)).toString();
 
@@ -218,6 +223,10 @@ public class ShowPlaceActivity extends Activity {
 					TextView labelAddress = (TextView) findViewById(R.id.address);
 					TextView txtAddress = (TextView) findViewById(R.id.inputAddress);
 					TextView txtInfo = (TextView) findViewById(R.id.inputInfo);
+					
+					Button mapButton = (Button) findViewById(R.id.mapBtn);
+					Button navButton = (Button) findViewById(R.id.navBtn);
+					Button callButton = (Button) findViewById(R.id.callBtn);
 					
 					if (TAG_ADDRESS.equals("address")
 							&& TAG_CITY.equals("city")) {
@@ -272,6 +281,36 @@ public class ShowPlaceActivity extends Activity {
 						public void onClick(View arg0) {
 
 							nagDialog.dismiss();
+						}
+					});
+					
+					navButton.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							gps = new GPSTracker(ShowPlaceActivity.this);
+							double latitude = 0;
+							double longitude = 0;
+
+							// check if GPS enabled
+							if (gps.canGetLocation()) {
+
+								double latitude1 = gps.getLatitude();
+								double longitude1 = gps.getLongitude();
+								
+								latitude = latitude1;
+								longitude = longitude1;
+
+							} else {
+								// can't get location
+								// GPS or Network is not enabled
+								// Ask user to enable GPS/network in settings
+								gps.showSettingsAlert();
+							}
+							
+							Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse("http://maps.google.com/maps?" + "saddr="+ latitude + "," + longitude + "&daddr=" + latMonument + "," + longMonument));
+						    intent.setClassName("com.google.android.apps.maps","com.google.android.maps.MapsActivity");
+						                        startActivity(intent);
 						}
 					});
 				}

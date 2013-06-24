@@ -76,7 +76,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.LatLngBounds.Builder;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.hro.museapp.AllPlacesActivity;
-import com.hro.museapp.GPSTracker;
 import com.hro.museapp.ShowPlaceActivity;
 import com.hro.museapp.Start;
 

@@ -1,4 +1,4 @@
-package com.hro.museapp;
+package com.hro.museapp.map;
  
 import android.app.AlertDialog;
 import android.app.Service;
