@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.androidhive.map;
+package com.hro.museapp.map;
 
 import java.text.Collator;
 import java.util.Collections;
@@ -33,6 +33,7 @@ import pl.mg6.android.maps.extensions.GoogleMap.OnMapClickListener;
 import pl.mg6.android.maps.extensions.MapView;
 import pl.mg6.android.maps.extensions.Marker;
 import pl.mg6.android.maps.extensions.SupportMapFragment;
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -41,6 +42,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -59,9 +61,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.androidhive.AllPlacesActivity;
 import com.example.androidhive.R;
-import com.example.androidhive.ShowPlaceActivity;
 import com.example.androidhive.R.dimen;
 import com.example.androidhive.R.id;
 import com.example.androidhive.R.layout;
@@ -75,14 +75,22 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.LatLngBounds.Builder;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.hro.museapp.AllPlacesActivity;
+import com.hro.museapp.GPSTracker;
+import com.hro.museapp.ShowPlaceActivity;
+import com.hro.museapp.Start;
 
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class ClusteringMapActivity extends FragmentActivity {
 
-	private static final double[] CLUSTER_SIZES = new double[] { 180, 160, 144, 120, 96 };
+	private static final double[] CLUSTER_SIZES = new double[] { 180, 160, 144,
+			120, 96 };
 
 	private GoogleMap map;
 	private View mapView;
 	private ProgressDialog pDialog;
+
+	GPSTracker gps;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,14 +98,18 @@ public class ClusteringMapActivity extends FragmentActivity {
 		setContentView(R.layout.cluster_map);
 		
 		ActionBar actionBar = getActionBar();
-		actionBar.show();
+		actionBar.setHomeButtonEnabled(true);
+		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		FragmentManager fm = getSupportFragmentManager();
-		SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
+		SupportMapFragment f = (SupportMapFragment) fm
+				.findFragmentById(R.id.map);
 		map = f.getExtendedMap();
 		
-		//mapView = (MapView) this.findViewById(R.id.map);
-		
+		gps = new GPSTracker(ClusteringMapActivity.this);
+
+		// mapView = (MapView) this.findViewById(R.id.map);
+
 		float cameraZoom = 8;
 		LatLng cameraLatLng = new LatLng(52.281602, 5.503235);
 		if (savedInstanceState != null) {
@@ -109,11 +121,12 @@ public class ClusteringMapActivity extends FragmentActivity {
 		}
 		map.moveCamera(CameraUpdateFactory.newLatLngZoom(cameraLatLng,
 				cameraZoom));
-		
 
-		map.setClustering(new ClusteringSettings().iconDataProvider(new DemoIconProvider(getResources())).addMarkersDynamically(true));
+		map.setClustering(new ClusteringSettings().iconDataProvider(
+				new DemoIconProvider(getResources())).addMarkersDynamically(
+				true));
 		map.setMyLocationEnabled(true);
-		
+
 		map.setInfoWindowAdapter(new InfoWindowAdapter() {
 
 			private TextView tv;
@@ -189,13 +202,15 @@ public class ClusteringMapActivity extends FragmentActivity {
 						builder.include(m.getPosition());
 					}
 					LatLngBounds bounds = builder.build();
-					map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, getResources().getDimensionPixelSize(R.dimen.padding)));
-				}
-				else {
-					//String title = marker.getTitle();
-					//String mid = MarkerGenerator.mapPlaceToId.get(title);
+					map.animateCamera(CameraUpdateFactory.newLatLngBounds(
+							bounds,
+							getResources().getDimensionPixelSize(
+									R.dimen.padding)));
+				} else {
+					// String title = marker.getTitle();
+					// String mid = MarkerGenerator.mapPlaceToId.get(title);
 					String mid = (String) marker.getData();
-					
+
 					Intent in = new Intent(getApplicationContext(),
 							ShowPlaceActivity.class);
 					// sending mid to next activity
@@ -207,11 +222,11 @@ public class ClusteringMapActivity extends FragmentActivity {
 			}
 		});
 
-		//MarkerGenerator.addMarkers(map);
+		// MarkerGenerator.addMarkers(map);
 		new AddMarkersInBackground().execute();
 
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -225,10 +240,17 @@ public class ClusteringMapActivity extends FragmentActivity {
 		case R.id.list_view:
 			Intent i = new Intent(getApplicationContext(),
 					AllPlacesActivity.class);
-			i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT );
+			i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 			startActivity(i);
 
 			break;
+			
+		case android.R.id.home:
+			// app icon in action bar clicked; go home
+            Intent intentHome = new Intent(this, Start.class);
+            intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intentHome);
+            break;
 
 		default:
 			break;
@@ -236,7 +258,7 @@ public class ClusteringMapActivity extends FragmentActivity {
 
 		return true;
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -252,14 +274,15 @@ public class ClusteringMapActivity extends FragmentActivity {
 		if (m != null && !m.isCluster() && m.getData() instanceof String) {
 			m.showInfoWindow();
 		}
-	}	
+	}
 
 	void updateClustering(int clusterSizeIndex, boolean enabled) {
 		ClusteringSettings clusteringSettings = new ClusteringSettings();
 		clusteringSettings.addMarkersDynamically(true);
 
 		if (enabled) {
-			clusteringSettings.iconDataProvider(new DemoIconProvider(getResources()));
+			clusteringSettings.iconDataProvider(new DemoIconProvider(
+					getResources()));
 
 			double clusterSize = CLUSTER_SIZES[clusterSizeIndex];
 			clusteringSettings.clusterSize(clusterSize);
@@ -268,8 +291,9 @@ public class ClusteringMapActivity extends FragmentActivity {
 		}
 		map.setClustering(clusteringSettings);
 	}
-	
-	class AddMarkersInBackground extends AsyncTask<String, String, HashMap<String, MarkerOptions>> {
+
+	class AddMarkersInBackground extends
+			AsyncTask<String, String, HashMap<String, MarkerOptions>> {
 
 		/**
 		 * Before starting background thread Show Progress Dialog
@@ -286,30 +310,59 @@ public class ClusteringMapActivity extends FragmentActivity {
 
 		/**
 		 * getting All places from url
-		 * @return 
+		 * 
+		 * @return
 		 * */
 		protected HashMap<String, MarkerOptions> doInBackground(String... args) {
 			Log.d("MarkerGenerator", "Started");
-			HashMap<String, MarkerOptions> markers = MarkerGenerator.addMarkers(map);
+			HashMap<String, MarkerOptions> markers = MarkerGenerator
+					.addMarkers(map);
 			Log.d("MarkerGenerator", "Done");
 			return markers;
 		}
-		
+
 		protected void onPostExecute(HashMap<String, MarkerOptions> result) {
+			double latitude = 0;
+			double longitude = 0;
+
+			// check if GPS enabled
+			if (gps.canGetLocation()) {
+
+				double latitude1 = gps.getLatitude();
+				double longitude1 = gps.getLongitude();
+				
+				latitude = latitude1;
+				longitude = longitude1;
+
+			} else {
+				// can't get location
+				// GPS or Network is not enabled
+				// Ask user to enable GPS/network in settings
+				gps.showSettingsAlert();
+			}
+
 			pDialog.dismiss();
 			Iterator it = result.entrySet().iterator();
-		    while (it.hasNext()) {
-		        HashMap.Entry pairs = (HashMap.Entry)it.next();
-		        //Log.d("Test", pairs.getKey() + " = " + pairs.getValue());
-		        Marker m = map.addMarker((MarkerOptions) pairs.getValue());
-		        m.setData(pairs.getKey());
-		        it.remove(); // avoids a ConcurrentModificationException
-		    }
+			while (it.hasNext()) {
+				HashMap.Entry pairs = (HashMap.Entry) it.next();
+				// Log.d("Test", pairs.getKey() + " = " + pairs.getValue());
+				Marker m = map.addMarker((MarkerOptions) pairs.getValue());
+				m.setData(pairs.getKey());
+				it.remove(); // avoids a ConcurrentModificationException
+			}
 			float cameraZoom = 16;
-			Location loc = map.getMyLocation();
-			LatLng cameraLatLng = new LatLng(loc.getLatitude(), loc.getLongitude());
-			map.animateCamera(CameraUpdateFactory.newLatLngZoom(cameraLatLng,
-					cameraZoom), 2000, null);
+			
+			//Location loc = map.getMyLocation();
+/*			LatLng cameraLatLng = new LatLng(loc.getLatitude(),
+					loc.getLongitude());*/
+			LatLng cameraLatLng = new LatLng(latitude,
+					longitude);
+			Log.d("LAT", String.valueOf(latitude));
+			Log.d("LON", String.valueOf(longitude));
+			Log.d("LATLNG", String.valueOf(cameraLatLng));
+			map.animateCamera(
+					CameraUpdateFactory.newLatLngZoom(cameraLatLng, cameraZoom),
+					2000, null);
 		}
 
 	}

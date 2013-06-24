@@ -1,11 +1,12 @@
-package com.example.androidhive;
+package com.hro.museapp;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.example.androidhive.AllPlacesActivity.LoadAllPlaces;
+import com.example.androidhive.R;
+import com.hro.museapp.AllPlacesActivity.LoadAllPlaces;
 
 import android.app.Activity;
 import android.app.ListActivity;

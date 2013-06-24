@@ -1,4 +1,4 @@
-package com.example.androidhive;
+package com.hro.museapp;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,9 +21,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.androidhive.map.ClusteringMapActivity;
+import com.example.androidhive.R;
+import com.hro.museapp.map.ClusteringMapActivity;
 
 import android.R.menu;
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
@@ -36,6 +38,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
 import android.os.Parcelable;
@@ -57,6 +60,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class ShowPlaceActivity extends Activity {
 
 	TextView txtTitle;
@@ -78,8 +82,10 @@ public class ShowPlaceActivity extends Activity {
 	// JSON parser class
 	JSONParser jsonParser = new JSONParser();
 
+	GPSTracker gps;
+
 	// single place url
-	private static final String url_place_detials = "http://museapp.elektraenzo.nl/get_place_details.php";
+	private static final String url_place_detials = "http://jsonapp.tk/get_place_details.php";
 
 	// JSON Node names
 	private static final String TAG_SUCCESS = "success";
@@ -109,6 +115,10 @@ public class ShowPlaceActivity extends Activity {
 		StrictMode.setThreadPolicy(policy);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.edit_place);
+
+		ActionBar actionBar = getActionBar();
+		actionBar.setHomeButtonEnabled(true);
+		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		// getting place details from intent
 		Intent i = getIntent();
@@ -186,19 +196,18 @@ public class ShowPlaceActivity extends Activity {
 							idMonument = place.getString(TAG_MID);
 							beschrijvingMonument = Html.fromHtml(
 									place.getString(TAG_INFO)).toString();
-							
+
 							if (TAG_ADDRESS.equals("address")) {
 								locatieMonument = place.getString(TAG_CITY);
-							}
-							else if (TAG_ADDRESS.equals("address") && TAG_CITY.equals("city")) {
+							} else if (TAG_ADDRESS.equals("address")
+									&& TAG_CITY.equals("city")) {
 								labelAddress.setVisibility(View.GONE);
 								txtAddress.setVisibility(View.GONE);
-							}
-							else {
+							} else {
 								locatieMonument = place.getString(TAG_ADDRESS)
 										+ ", " + place.getString(TAG_CITY);
 							}
-							
+
 							afbeeldingMonument = place.getString(TAG_IMAGE);
 
 							// display place data in TextView
@@ -212,8 +221,6 @@ public class ShowPlaceActivity extends Activity {
 							// place with mid not found
 						}
 
-						ImageView img = (ImageView) findViewById(R.id.afbeelding);
-
 						try {
 							bitmap = BitmapFactory
 									.decodeStream((InputStream) new URL(
@@ -225,8 +232,13 @@ public class ShowPlaceActivity extends Activity {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-
+						ImageView img = (ImageView) findViewById(R.id.afbeelding);
 						img.setImageBitmap(bitmap);
+						Log.d("iets", String.valueOf(bitmap));
+
+						if (String.valueOf(bitmap) == null) {
+							img.setVisibility(View.GONE);
+						}
 
 						final Dialog nagDialog = new Dialog(
 								ShowPlaceActivity.this,
@@ -414,17 +426,28 @@ public class ShowPlaceActivity extends Activity {
 			calIntent.setType("vnd.android.cursor.item/event");
 			calIntent.putExtra("beginTime", cal.getTimeInMillis());
 			calIntent.putExtra("title", titelMonument);
-			calIntent.putExtra("description", beschrijvingMonument);
 			calIntent.putExtra("eventLocation", locatieMonument);
 			startActivity(calIntent);
 
 			break;
+
+		case android.R.id.home:
+			// app icon in action bar clicked; go home
+            Intent intentHome = new Intent(this, AllPlacesActivity.class);
+            intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intentHome);
+            break;
 
 		default:
 			break;
 		}
 
 		return true;
+	}
+
+	@Override
+	public void onBackPressed() {
+		finish();
 	}
 
 	public static void clearBitmap(Bitmap bitmap) {
@@ -435,9 +458,12 @@ public class ShowPlaceActivity extends Activity {
 
 	}
 
+	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		clearBitmap(bitmap);
+		if (bitmap != null) {
+			clearBitmap(bitmap);
+		}
 	}
 
 }

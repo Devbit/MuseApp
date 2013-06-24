@@ -1,4 +1,4 @@
-package com.example.androidhive.map;
+package com.hro.museapp.map;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,9 +15,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.androidhive.PlacesLoader;
 import com.example.androidhive.R;
-import com.example.androidhive.ShowPlaceActivity;
 import com.example.androidhive.R.id;
 import com.example.androidhive.R.layout;
 import com.example.androidhive.R.menu;
@@ -29,6 +27,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.hro.museapp.PlacesLoader;
+import com.hro.museapp.ShowPlaceActivity;
 
 public class MyMapActivity extends Activity {
 	private static final String TAG_MID = "ID";

@@ -1,4 +1,4 @@
-package com.example.androidhive;
+package com.hro.museapp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +9,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.androidhive.ShowPlaceActivity.GetPlaceDetails;
-import com.example.androidhive.map.ClusteringMapActivity;
-import com.example.androidhive.map.MyMapActivity;
+import com.example.androidhive.R;
+import com.hro.museapp.ShowPlaceActivity.GetPlaceDetails;
+import com.hro.museapp.map.ClusteringMapActivity;
+import com.hro.museapp.map.MyMapActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;

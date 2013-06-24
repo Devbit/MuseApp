@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.androidhive.map;
+package com.hro.museapp.map;
 
 import pl.mg6.android.maps.extensions.ClusteringSettings.IconDataProvider;
 import android.content.res.Resources;

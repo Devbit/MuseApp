@@ -1,4 +1,4 @@
-package com.example.androidhive;
+package com.hro.museapp;
 
 import com.example.androidhive.R;
 

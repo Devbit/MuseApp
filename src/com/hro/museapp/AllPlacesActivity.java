@@ -1,4 +1,4 @@
-package com.example.androidhive;
+package com.hro.museapp;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,14 +12,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.androidhive.map.ClusteringMapActivity;
+import com.example.androidhive.R;
+import com.hro.museapp.map.ClusteringMapActivity;
 
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,6 +40,7 @@ import android.widget.SectionIndexer;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class AllPlacesActivity extends ListActivity {
 
 	// Progress Dialog
@@ -62,6 +66,10 @@ public class AllPlacesActivity extends ListActivity {
 
 		// Hashmap for ListView
 		placesList = new ArrayList<HashMap<String, String>>();
+		
+		ActionBar actionBar = getActionBar();
+		actionBar.setHomeButtonEnabled(true);
+		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		// Loading places in Background Thread
 		new LoadAllPlaces().execute();
@@ -130,6 +138,13 @@ public class AllPlacesActivity extends ListActivity {
 			startActivity(i);
 
 			break;
+			
+		case android.R.id.home:
+			// app icon in action bar clicked; go home
+            Intent intentHome = new Intent(this, Start.class);
+            intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intentHome);
+            break;
 
 		default:
 			break;
