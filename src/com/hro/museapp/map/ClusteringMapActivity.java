@@ -319,8 +319,8 @@ public class ClusteringMapActivity extends FragmentActivity {
 
 			pDialog.dismiss();
 			Iterator it = result.entrySet().iterator();
-			LatLng loc = null;
 			boolean getMarkerLoc = (!PlacesLoader.getLastSearch().equals("") || PlacesLoader.hasSingle());
+			boolean firstEntry = true;
 			while (it.hasNext()) {
 				HashMap.Entry pairs = (HashMap.Entry) it.next();
 				// Log.d("Test", pairs.getKey() + " = " + pairs.getValue());
@@ -330,10 +330,12 @@ public class ClusteringMapActivity extends FragmentActivity {
 					continue;
 				}
 				
-				Marker m = map.addMarker(opt);
-				if (getMarkerLoc && loc == null) {
-					loc = m.getPosition();
+				if (getMarkerLoc && firstEntry) {
+					latitude = opt.getPosition().latitude;
+					longitude = opt.getPosition().longitude;
+					firstEntry = false;
 				}
+				Marker m = map.addMarker(opt);
 				m.setData(pairs.getKey());
 				it.remove(); // avoids a ConcurrentModificationException
 			}
@@ -343,8 +345,8 @@ public class ClusteringMapActivity extends FragmentActivity {
 			//Location loc = map.getMyLocation();
 /*			LatLng cameraLatLng = new LatLng(loc.getLatitude(),
 					loc.getLongitude());*/
-			if (loc == null)
-				loc = new LatLng(latitude, longitude);
+			//if (loc == null)
+			LatLng loc = new LatLng(latitude, longitude);
 			Log.d("LAT", String.valueOf(latitude));
 			Log.d("LON", String.valueOf(longitude));
 			Log.d("LATLNG", String.valueOf(loc));
