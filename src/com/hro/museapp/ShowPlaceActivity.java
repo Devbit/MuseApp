@@ -154,131 +154,126 @@ public class ShowPlaceActivity extends Activity {
 		 * Getting place details in background thread
 		 * */
 
-		protected String doInBackground(String... params) {
+		protected String doInBackground(String... params1) {
+			
+			// Check for success tag
+			int success;
+			try {
+				// Building Parameters
+				List<NameValuePair> params = new ArrayList<NameValuePair>();
+				params.add(new BasicNameValuePair("mid", mid));
+
+				// getting place details by making HTTP request
+				// Note that place details url will use GET request
+				JSONObject json = jsonParser.makeHttpRequest(
+						url_place_detials, "GET", params);
+
+				// json success tag
+				success = json.getInt(TAG_SUCCESS);
+				if (success == 1) {
+					// successfully received place details
+					JSONArray placeObj = json.getJSONArray(TAG_PLACE); // JSON
+																		// Array
+
+					// get first place object from JSON Array
+					JSONObject place = placeObj.getJSONObject(0);
+
+					// place with this mid found
+
+					titelMonument = place.getString(TAG_TITLE);
+					idMonument = place.getString(TAG_MID);
+					beschrijvingMonument = Html.fromHtml(
+							place.getString(TAG_INFO)).toString();
+
+					if (TAG_ADDRESS.equals("address")) {
+						locatieMonument = place.getString(TAG_CITY);
+					} else {
+						locatieMonument = place.getString(TAG_ADDRESS)
+								+ ", " + place.getString(TAG_CITY);
+					}
+
+					afbeeldingMonument = place.getString(TAG_IMAGE);
+					
+					try {
+						bitmap = BitmapFactory
+								.decodeStream((InputStream) new URL(
+										afbeeldingMonument).getContent());
+					} catch (MalformedURLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+			catch (JSONException e) {
+				e.printStackTrace();
+			}
 
 			// updating UI from Background Thread
 			runOnUiThread(new Runnable() {
 				public void run() {
-					// Check for success tag
-					int success;
-					try {
-						// Building Parameters
-						List<NameValuePair> params = new ArrayList<NameValuePair>();
-						params.add(new BasicNameValuePair("mid", mid));
-
-						// getting place details by making HTTP request
-						// Note that place details url will use GET request
-						JSONObject json = jsonParser.makeHttpRequest(
-								url_place_detials, "GET", params);
-
-						// check your log for json response
-						Log.d("Single Place Details", json.toString());
-
-						// json success tag
-						success = json.getInt(TAG_SUCCESS);
-						if (success == 1) {
-							// successfully received place details
-							JSONArray placeObj = json.getJSONArray(TAG_PLACE); // JSON
-																				// Array
-
-							// get first place object from JSON Array
-							JSONObject place = placeObj.getJSONObject(0);
-
-							// place with this mid found
-							// Edit Text
-
-							TextView txtTitle = (TextView) findViewById(R.id.inputTitle);
-							TextView labelAddress = (TextView) findViewById(R.id.address);
-							TextView txtAddress = (TextView) findViewById(R.id.inputAddress);
-							TextView txtInfo = (TextView) findViewById(R.id.inputInfo);
-
-							titelMonument = place.getString(TAG_TITLE);
-							idMonument = place.getString(TAG_MID);
-							beschrijvingMonument = Html.fromHtml(
-									place.getString(TAG_INFO)).toString();
-
-							if (TAG_ADDRESS.equals("address")) {
-								locatieMonument = place.getString(TAG_CITY);
-							} else if (TAG_ADDRESS.equals("address")
-									&& TAG_CITY.equals("city")) {
-								labelAddress.setVisibility(View.GONE);
-								txtAddress.setVisibility(View.GONE);
-							} else {
-								locatieMonument = place.getString(TAG_ADDRESS)
-										+ ", " + place.getString(TAG_CITY);
-							}
-
-							afbeeldingMonument = place.getString(TAG_IMAGE);
-
-							// display place data in TextView
-							txtTitle.setText(titelMonument);
-							txtAddress.setText(locatieMonument);
-							txtInfo.setText(beschrijvingMonument);
-
-							setTitle(titelMonument);
-
-						} else {
-							// place with mid not found
-						}
-
-						try {
-							bitmap = BitmapFactory
-									.decodeStream((InputStream) new URL(
-											afbeeldingMonument).getContent());
-						} catch (MalformedURLException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						ImageView img = (ImageView) findViewById(R.id.afbeelding);
-						img.setImageBitmap(bitmap);
-						Log.d("iets", String.valueOf(bitmap));
-
-						if (String.valueOf(bitmap) == null) {
-							img.setVisibility(View.GONE);
-						}
-
-						final Dialog nagDialog = new Dialog(
-								ShowPlaceActivity.this,
-								android.R.style.Theme_Black_NoTitleBar);
-						nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-						nagDialog.setCancelable(false);
-						nagDialog.setContentView(R.layout.preview_image);
-						Button btnClose = (Button) nagDialog
-								.findViewById(R.id.btnClose);
-						ImageView ivPreview = (ImageView) nagDialog
-								.findViewById(R.id.preview_image);
-						ivPreview.setImageBitmap(bitmap);
-
-						img.setOnClickListener(new OnClickListener() {
-							@Override
-							public void onClick(View arg0) {
-
-								nagDialog.show();
-							}
-						});
-
-						btnClose.setOnClickListener(new OnClickListener() {
-							@Override
-							public void onClick(View arg0) {
-
-								nagDialog.dismiss();
-							}
-						});
-
-						ivPreview.setOnClickListener(new OnClickListener() {
-							@Override
-							public void onClick(View arg0) {
-
-								nagDialog.dismiss();
-							}
-						});
-
-					} catch (JSONException e) {
-						e.printStackTrace();
+					TextView txtTitle = (TextView) findViewById(R.id.inputTitle);
+					TextView labelAddress = (TextView) findViewById(R.id.address);
+					TextView txtAddress = (TextView) findViewById(R.id.inputAddress);
+					TextView txtInfo = (TextView) findViewById(R.id.inputInfo);
+					
+					if (TAG_ADDRESS.equals("address")
+							&& TAG_CITY.equals("city")) {
+						labelAddress.setVisibility(View.GONE);
+						txtAddress.setVisibility(View.GONE);
 					}
+
+					// display place data in TextView
+					txtTitle.setText(titelMonument);
+					txtAddress.setText(locatieMonument);
+					txtInfo.setText(beschrijvingMonument);
+
+					setTitle(titelMonument);
+
+					ImageView img = (ImageView) findViewById(R.id.afbeelding);
+					img.setImageBitmap(bitmap);
+
+					if (String.valueOf(bitmap) == null) {
+						img.setVisibility(View.GONE);
+					}
+
+					final Dialog nagDialog = new Dialog(
+							ShowPlaceActivity.this,
+							android.R.style.Theme_Black_NoTitleBar);
+					nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+					nagDialog.setCancelable(false);
+					nagDialog.setContentView(R.layout.preview_image);
+					Button btnClose = (Button) nagDialog
+							.findViewById(R.id.btnClose);
+					ImageView ivPreview = (ImageView) nagDialog
+							.findViewById(R.id.preview_image);
+					ivPreview.setImageBitmap(bitmap);
+
+					img.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View arg0) {
+
+							nagDialog.show();
+						}
+					});
+
+					btnClose.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View arg0) {
+
+							nagDialog.dismiss();
+						}
+					});
+
+					ivPreview.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View arg0) {
+
+							nagDialog.dismiss();
+						}
+					});
 				}
 			});
 
