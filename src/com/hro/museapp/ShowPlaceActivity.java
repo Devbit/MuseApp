@@ -58,6 +58,7 @@ import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -243,10 +244,14 @@ public class ShowPlaceActivity extends Activity {
 					setTitle(titelMonument);
 
 					ImageView img = (ImageView) findViewById(R.id.afbeelding);
+					
+					LinearLayout bg = (LinearLayout) findViewById(R.id.bg);
+					
 					img.setImageBitmap(bitmap);
 
-					if (String.valueOf(bitmap) == null) {
+					if (bitmap == null) {
 						img.setVisibility(View.GONE);
+						bg.setVisibility(View.GONE);
 					}
 
 					final Dialog nagDialog = new Dialog(

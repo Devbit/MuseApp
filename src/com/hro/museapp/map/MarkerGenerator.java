@@ -34,6 +34,7 @@ public class MarkerGenerator {
 	static final String TAG_NAME = "title";
 	private static final String TAG_LAT = "latitude";
 	private static final String TAG_LONG = "longitude";
+	private static final String TAG_CAT = "category";
 	
 	private static JSONArray places;
 	static HashMap<String, MarkerOptions> mapPlaceToId;
@@ -57,6 +58,7 @@ public class MarkerGenerator {
 				String lat = c.getString(TAG_LAT);
 				String lon = c.getString(TAG_LONG);
 				String mid = c.getString(TAG_MID);
+				String cat = c.getString(TAG_CAT);
 				LatLng loc = new LatLng(0, 0);
 				try {
 					loc = new LatLng(Double.parseDouble(lat),
@@ -72,8 +74,16 @@ public class MarkerGenerator {
 								.icon(BitmapDescriptorFactory
 										.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 				m.setData(mid);*/
-				MarkerOptions m = new MarkerOptions().position(loc).title(title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-				mapPlaceToId.put(mid, m);
+				
+				if(cat == "Monument") {
+					MarkerOptions m = new MarkerOptions().position(loc).title(title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+					mapPlaceToId.put(mid, m);
+				}
+				else {
+					MarkerOptions m = new MarkerOptions().position(loc).title(title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+					mapPlaceToId.put(mid, m);
+				}
+				
 			}
 			
 		} catch (Exception e) {

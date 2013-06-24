@@ -43,10 +43,10 @@ public class FavouritesList extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.all_places);
+		setContentView(R.layout.favourites_list);
 
 		preferences = this.getSharedPreferences("myAppPrefs",
-				Context.MODE_PRIVATE);
+				Context.MODE_PRIVATE);		
 
 		favourites = new ArrayList<HashMap<String, String>>();
 

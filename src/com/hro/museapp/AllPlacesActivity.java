@@ -56,6 +56,7 @@ public class AllPlacesActivity extends ListActivity {
 	private static final String TAG_NAME = "title";
 	private static final String TAG_LAT = "latitude";
 	private static final String TAG_LONG = "longitude";
+	private static final String TAG_CAT = "category";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
