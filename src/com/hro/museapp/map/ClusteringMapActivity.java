@@ -76,6 +76,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.LatLngBounds.Builder;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.hro.museapp.AllPlacesActivity;
+import com.hro.museapp.PlacesLoader;
 import com.hro.museapp.ShowPlaceActivity;
 import com.hro.museapp.Start;
 
@@ -342,25 +343,37 @@ public class ClusteringMapActivity extends FragmentActivity {
 
 			pDialog.dismiss();
 			Iterator it = result.entrySet().iterator();
+			LatLng loc = null;
+			boolean search = !PlacesLoader.getLastSearch().equals("");
 			while (it.hasNext()) {
 				HashMap.Entry pairs = (HashMap.Entry) it.next();
 				// Log.d("Test", pairs.getKey() + " = " + pairs.getValue());
-				Marker m = map.addMarker((MarkerOptions) pairs.getValue());
+				
+				MarkerOptions opt = (MarkerOptions) pairs.getValue();
+				if (opt.getPosition().equals(new LatLng(-1.0,-1.0))) {
+					continue;
+				}
+				
+				Marker m = map.addMarker(opt);
+				if (search && loc == null) {
+					loc = m.getPosition();
+				}
 				m.setData(pairs.getKey());
 				it.remove(); // avoids a ConcurrentModificationException
 			}
+
 			float cameraZoom = 16;
 			
 			//Location loc = map.getMyLocation();
 /*			LatLng cameraLatLng = new LatLng(loc.getLatitude(),
 					loc.getLongitude());*/
-			LatLng cameraLatLng = new LatLng(latitude,
-					longitude);
+			if (loc == null)
+				loc = new LatLng(latitude, longitude);
 			Log.d("LAT", String.valueOf(latitude));
 			Log.d("LON", String.valueOf(longitude));
-			Log.d("LATLNG", String.valueOf(cameraLatLng));
+			Log.d("LATLNG", String.valueOf(loc));
 			map.animateCamera(
-					CameraUpdateFactory.newLatLngZoom(cameraLatLng, cameraZoom),
+					CameraUpdateFactory.newLatLngZoom(loc, cameraZoom),
 					2000, null);
 		}
 

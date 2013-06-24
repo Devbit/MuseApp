@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,6 +23,8 @@ public class PlacesLoader {
 	private static JSONArray searches;
 	private static ArrayList<HashMap<String, String>> placesList;
 	private static ArrayList<HashMap<String, String>> searchList;
+	
+	private static String lastSearch = "";
 
 	// JSON Node names
 	private static final String TAG_SUCCESS = "success";
@@ -52,10 +55,30 @@ public class PlacesLoader {
 		//JSONArray searchResult = PlacesLoader.search(query)
 		//om te zoeken, returned hele JSON
 		//PlacesLoader.makeListFromPlaces(searchResult) voor list compatible ArrayList
-		String URL = "http://jsonapp.tk/search.php?s=%s";
-		URL = String.format(URL, input);
-		JSONArray result = getData(URL, TAG_PLACES);
+		/*String URL = "http://jsonapp.tk/search.php?s=%s";
+		URL = String.format(URL, input);*/
+		String URL = "http://jsonapp.tk/search.php";
+		JSONArray result = getData(URL, TAG_PLACES, input);
+		lastSearch = input;
+		searches = result;
 		return result;
+	}
+	
+	public static String getLastSearch() {
+		return lastSearch;
+	}
+	
+	public static void clearLastSearch() {
+		lastSearch = "";
+	}
+	
+	public static void clearSearches() {
+		searches = null;
+		searchList = null;
+	}
+	
+	public static JSONArray getSearchResults() {
+		return searches;
 	}
 
 	public static ArrayList<HashMap<String, String>> makeListFromPlaces(JSONArray places) {
@@ -89,6 +112,7 @@ public class PlacesLoader {
 	private static JSONArray getData(String url, String tag, String... args) {
 		// Building Parameters
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("s", args[0]));
 		// getting JSON string from URL
 		JSONObject json = jParser.makeHttpRequest(url, "GET", params);
 		JSONArray result = new JSONArray();

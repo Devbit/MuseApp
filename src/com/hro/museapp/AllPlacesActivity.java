@@ -4,16 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
-
-import org.apache.http.NameValuePair;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.example.androidhive.R;
-import com.hro.museapp.map.ClusteringMapActivity;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar;
@@ -21,6 +12,7 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,22 +21,31 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MenuItem.OnActionExpandListener;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.SearchView.OnCloseListener;
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.SectionIndexer;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+
+import com.example.androidhive.R;
+import com.hro.museapp.map.ClusteringMapActivity;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class AllPlacesActivity extends ListActivity {
 
 	// Progress Dialog
 	private ProgressDialog pDialog;
+	private boolean isExecuting = false;
 
 	ArrayList<HashMap<String, String>> placesList;
 
@@ -120,6 +121,58 @@ public class AllPlacesActivity extends ListActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.all_places_menu, menu);
+		
+		final MenuItem searchItem = (MenuItem) menu.findItem(R.id.menu_search);
+		SearchView searchView = (SearchView) searchItem.getActionView();
+		searchView.setSubmitButtonEnabled(true);
+		
+		searchItem.setOnActionExpandListener(new OnActionExpandListener() {
+			
+			@Override
+			public boolean onMenuItemActionExpand(MenuItem item) {
+				setListAdapter(null);
+				return true;
+			}
+			
+			@Override
+			public boolean onMenuItemActionCollapse(MenuItem item) {
+				PlacesLoader.clearLastSearch();
+				new LoadAllPlaces().execute();
+				return true;
+			}
+		});
+		
+		searchView.setOnQueryTextListener(new OnQueryTextListener() {
+			
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				new SearchPlaces(query).execute();
+				return true;
+			}
+
+			@Override
+			public boolean onQueryTextChange(String newText) {
+				if (newText.equals("")){
+					PlacesLoader.clearLastSearch();
+				}
+				return false;
+			}
+			
+		});
+		
+		searchView.setOnQueryTextFocusChangeListener(new OnFocusChangeListener() {
+			
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				SearchView searchView = (SearchView) v;
+				if (!hasFocus && searchView.getQuery().length() == 0) {
+					PlacesLoader.clearLastSearch();
+					searchItem.collapseActionView();
+					new LoadAllPlaces().execute();
+				}
+			}
+		});
+		
 		return true;
 	}
 
@@ -142,16 +195,55 @@ public class AllPlacesActivity extends ListActivity {
             intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intentHome);
             break;
-            
-		case R.id.menu_search:
-			//hier search dingen doen
-			break;
 
 		default:
 			break;
 		}
 
 		return true;
+	}
+	
+	class SearchPlaces extends AsyncTask<String, String, ArrayList<HashMap<String, String>>> {
+		
+		private String query;
+
+		public SearchPlaces(String query) {
+			this.query = query;
+		}
+
+		@Override
+		protected ArrayList<HashMap<String, String>> doInBackground(String... params) {
+			ArrayList<HashMap<String, String>> results = PlacesLoader.makeListFromPlaces(PlacesLoader.search(query));
+			return results;
+		}
+		
+		@Override
+		protected void onPostExecute(final ArrayList<HashMap<String, String>> result) {
+			runOnUiThread(new Runnable() {
+				public void run() {
+					/**
+					 * Updating parsed JSON data into ListView
+					 * */
+					ListAdapter adapter = new SimpleAdapter(
+							AllPlacesActivity.this, result,
+							R.layout.list_item, new String[] { TAG_MID,
+									TAG_NAME },
+							new int[] { R.id.mid, R.id.name });
+					// updating listview
+					setListAdapter(adapter);
+					
+					LinkedList<String> mLinked = new LinkedList<String>();
+					
+					for (int i = 0; i < result.size(); i++) {
+						HashMap<String, String> map = result.get(i);
+						mLinked.add((String) map.get(TAG_NAME));
+					}
+
+					setListAdapter(new MyListAdaptor(AllPlacesActivity.this, mLinked, result));
+				}
+			});
+		}
+		
 	}
 
 	/**
@@ -165,10 +257,15 @@ public class AllPlacesActivity extends ListActivity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
+			if (isExecuting) {
+				cancel(true);
+				return;
+			}
+			isExecuting = true;
 			pDialog = new ProgressDialog(AllPlacesActivity.this);
 			pDialog.setMessage("Loading places. Please wait...");
 			pDialog.setIndeterminate(false);
-			pDialog.setCancelable(false);
+			pDialog.setCancelable(true);
 			pDialog.show();
 		}
 
@@ -210,7 +307,7 @@ public class AllPlacesActivity extends ListActivity {
 					setListAdapter(new MyListAdaptor(AllPlacesActivity.this, mLinked, placesList));
 				}
 			});
-
+			isExecuting = false;
 		}
 
 	}
