@@ -54,6 +54,8 @@ public class AllPlacesActivity extends ListActivity {
 	private static final String TAG_LAT = "latitude";
 	private static final String TAG_LONG = "longitude";
 	private static final String TAG_CAT = "category";
+	private static final String TAG_PHONE = "phone";
+	private static final String TAG_WEB = "website";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -261,9 +263,9 @@ public class AllPlacesActivity extends ListActivity {
 			}
 			isExecuting = true;
 			pDialog = new ProgressDialog(AllPlacesActivity.this);
-			pDialog.setMessage("Loading places. Please wait...");
+			pDialog.setMessage(getString(R.string.loadingPlaces));
 			pDialog.setIndeterminate(false);
-			pDialog.setCancelable(true);
+			pDialog.setCancelable(false);
 			pDialog.show();
 		}
 

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Share</string>
+    <string name="app_name">MuseApp</string>
+    <string name="start_menu">Start</string>
+    <string name="adres">Address</string>
+    <string name="titel">Title</string>
+    <string name="stad">City</string>
+    <string name="beschrijving">Description</string>
+    <string name="list">List view</string>
+    <string name="share">Share</string>
+    <string name="map">Map view</string>
+    <string name="update_check">Checking for updates</string>
+    <string name="favourite">Favourite</string>
+    <string name="calender">Add to calender</string>
+    <string name="all_places">List view</string>
+    <string name="details">Details</string>
+    <string name="favourites">Favourites</string>
+    <string name="map_view">Map view</string>
+    <string name="menu_search">Search</string>
+    <string name="phone">Phone</string>
+    <string name="website">Website</string>
+    <string name="loadingPlaces">Loading places. Please wait&#8230;</string>
+    <string name="loadingDetails">Loading details. Please wait&#8230;</string>
+    <string name="update">Checking for updates&#8230;</string>
+    <string name="onmap">Map</string>
+    <string name="nav">Navigation</string>
+    <string name="call">Call</string>
+
+</resources>

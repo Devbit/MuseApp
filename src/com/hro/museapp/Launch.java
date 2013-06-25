@@ -27,7 +27,7 @@ public class Launch extends Activity {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			pDialog = new ProgressDialog(Launch.this);
-			pDialog.setMessage("Checking for updates...");
+			pDialog.setMessage(getString(R.string.update));
 			pDialog.setIndeterminate(false);
 			pDialog.setCancelable(false);
 			pDialog.show();

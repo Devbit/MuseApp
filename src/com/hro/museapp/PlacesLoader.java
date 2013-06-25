@@ -31,6 +31,8 @@ public class PlacesLoader {
 	private static final String TAG_NAME = "title";
 	private static final String TAG_LAT = "latitude";
 	private static final String TAG_LONG = "longitude";
+	//private static final String TAG_PHONE = "phone";
+	//private static final String TAG_WEB = "website";
 	//private static final String TAG_CAT = "category";
 	
 	public static void setCache(JSONArray cache) {

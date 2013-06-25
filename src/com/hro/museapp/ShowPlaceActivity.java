@@ -29,6 +29,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -90,14 +91,18 @@ public class ShowPlaceActivity extends Activity {
 	private static final String TAG_IMAGE = "thumb";
 	private static final String TAG_LAT = "latitude";
 	private static final String TAG_LON = "longitude";
+	private static final String TAG_PHONE = "phone";
+	private static final String TAG_WEB = "website";
 
-	public String titelMonument;
-	public String idMonument;
-	public String beschrijvingMonument;
-	public String locatieMonument;
-	public String afbeeldingMonument;
-	public String longMonument;
-	public String latMonument;
+	private static String titelMonument;
+	private static String idMonument;
+	private static String beschrijvingMonument;
+	private static String locatieMonument;
+	private static String afbeeldingMonument;
+	private static String longMonument;
+	private static String latMonument;
+	private static String websiteMonument;
+	private static String telefoonMonument;
 
 	Bitmap bitmap = null;
 
@@ -137,9 +142,9 @@ public class ShowPlaceActivity extends Activity {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			pDialog = new ProgressDialog(ShowPlaceActivity.this);
-			pDialog.setMessage("Loading place details. Please wait...");
+			pDialog.setMessage(getString(R.string.loadingDetails));
 			pDialog.setIndeterminate(false);
-			pDialog.setCancelable(true);
+			pDialog.setCancelable(false);
 			pDialog.show();
 		}
 
@@ -148,7 +153,7 @@ public class ShowPlaceActivity extends Activity {
 		 * */
 
 		protected String doInBackground(String... params1) {
-			
+
 			// Check for success tag
 			int success;
 			try {
@@ -158,8 +163,8 @@ public class ShowPlaceActivity extends Activity {
 
 				// getting place details by making HTTP request
 				// Note that place details url will use GET request
-				JSONObject json = jsonParser.makeHttpRequest(
-						url_place_detials, "GET", params);
+				JSONObject json = jsonParser.makeHttpRequest(url_place_detials,
+						"GET", params);
 
 				// json success tag
 				success = json.getInt(TAG_SUCCESS);
@@ -184,12 +189,14 @@ public class ShowPlaceActivity extends Activity {
 					if (TAG_ADDRESS.equals("address")) {
 						locatieMonument = place.getString(TAG_CITY);
 					} else {
-						locatieMonument = place.getString(TAG_ADDRESS)
-								+ ", " + place.getString(TAG_CITY);
+						locatieMonument = place.getString(TAG_ADDRESS) + ", "
+								+ place.getString(TAG_CITY);
 					}
+					websiteMonument = place.getString(TAG_WEB);
+					telefoonMonument = place.getString(TAG_PHONE);
 
 					afbeeldingMonument = place.getString(TAG_IMAGE);
-					
+
 					try {
 						bitmap = BitmapFactory
 								.decodeStream((InputStream) new URL(
@@ -202,8 +209,7 @@ public class ShowPlaceActivity extends Activity {
 						e.printStackTrace();
 					}
 				}
-			}
-			catch (JSONException e) {
+			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 
@@ -214,28 +220,46 @@ public class ShowPlaceActivity extends Activity {
 					TextView labelAddress = (TextView) findViewById(R.id.address);
 					TextView txtAddress = (TextView) findViewById(R.id.inputAddress);
 					TextView txtInfo = (TextView) findViewById(R.id.inputInfo);
-					
+					TextView txtWebsite = (Button) findViewById(R.id.inputWebsite);
+					TextView labelWebsite = (TextView) findViewById(R.id.labelWebsite);
+					TextView txtPhone = (Button) findViewById(R.id.inputPhone);
+					TextView labelPhone = (TextView) findViewById(R.id.labelPhone);
+
 					Button mapButton = (Button) findViewById(R.id.mapBtn);
 					Button navButton = (Button) findViewById(R.id.navBtn);
 					Button callButton = (Button) findViewById(R.id.callBtn);
-					
+
 					if (TAG_ADDRESS.equals("address")
 							&& TAG_CITY.equals("city")) {
 						labelAddress.setVisibility(View.GONE);
 						txtAddress.setVisibility(View.GONE);
 					}
 
+					if (TAG_WEB.equals("website")) {
+						txtWebsite.setVisibility(View.GONE);
+						labelWebsite.setVisibility(View.GONE);
+					}
+
+					if (TAG_PHONE.equals("phone")) {						
+						txtPhone.setVisibility(View.GONE);
+						labelPhone.setVisibility(View.GONE);
+						callButton.setBackgroundColor(Color.GRAY);
+						callButton.setEnabled(false);
+					}
+
 					// display place data in TextView
 					txtTitle.setText(titelMonument);
 					txtAddress.setText(locatieMonument);
 					txtInfo.setText(beschrijvingMonument);
+					txtPhone.setText(telefoonMonument);
+					txtWebsite.setText(websiteMonument);
 
 					setTitle(titelMonument);
 
 					ImageView img = (ImageView) findViewById(R.id.afbeelding);
-					
+
 					LinearLayout bg = (LinearLayout) findViewById(R.id.bg);
-					
+
 					img.setImageBitmap(bitmap);
 
 					if (bitmap == null) {
@@ -243,14 +267,11 @@ public class ShowPlaceActivity extends Activity {
 						bg.setVisibility(View.GONE);
 					}
 
-					final Dialog nagDialog = new Dialog(
-							ShowPlaceActivity.this,
-							android.R.style.Theme_Black_NoTitleBar);
+					final Dialog nagDialog = new Dialog(ShowPlaceActivity.this,
+							android.R.style.Theme_Holo_Light_DarkActionBar);
 					nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-					nagDialog.setCancelable(false);
+					nagDialog.setCancelable(true);
 					nagDialog.setContentView(R.layout.preview_image);
-					Button btnClose = (Button) nagDialog
-							.findViewById(R.id.btnClose);
 					ImageView ivPreview = (ImageView) nagDialog
 							.findViewById(R.id.preview_image);
 					ivPreview.setImageBitmap(bitmap);
@@ -263,14 +284,6 @@ public class ShowPlaceActivity extends Activity {
 						}
 					});
 
-					btnClose.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View arg0) {
-
-							nagDialog.dismiss();
-						}
-					});
-
 					ivPreview.setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View arg0) {
@@ -278,9 +291,9 @@ public class ShowPlaceActivity extends Activity {
 							nagDialog.dismiss();
 						}
 					});
-					
+
 					mapButton.setOnClickListener(new OnClickListener() {
-						
+
 						@Override
 						public void onClick(View v) {
 							Intent i = new Intent(getApplicationContext(),
@@ -289,9 +302,9 @@ public class ShowPlaceActivity extends Activity {
 							startActivity(i);
 						}
 					});
-					
+
 					navButton.setOnClickListener(new OnClickListener() {
-						
+
 						@Override
 						public void onClick(View v) {
 							gps = new GPSTracker(ShowPlaceActivity.this);
@@ -303,7 +316,7 @@ public class ShowPlaceActivity extends Activity {
 
 								double latitude1 = gps.getLatitude();
 								double longitude1 = gps.getLongitude();
-								
+
 								latitude = latitude1;
 								longitude = longitude1;
 
@@ -313,10 +326,25 @@ public class ShowPlaceActivity extends Activity {
 								// Ask user to enable GPS/network in settings
 								gps.showSettingsAlert();
 							}
-							
-							Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse("http://maps.google.com/maps?" + "saddr="+ latitude + "," + longitude + "&daddr=" + latMonument + "," + longMonument));
-						    intent.setClassName("com.google.android.apps.maps","com.google.android.maps.MapsActivity");
-						                        startActivity(intent);
+
+							Intent intent = new Intent(Intent.ACTION_VIEW, Uri
+									.parse("http://maps.google.com/maps?"
+											+ "saddr=" + latitude + ","
+											+ longitude + "&daddr="
+											+ latMonument + "," + longMonument));
+							intent.setClassName("com.google.android.apps.maps",
+									"com.google.android.maps.MapsActivity");
+							startActivity(intent);
+						}
+					});
+
+					callButton.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							Intent callIntent = new Intent(Intent.ACTION_CALL);
+						    callIntent.setData(Uri.parse("tel:" + telefoonMonument));
+						    startActivity(callIntent);
 						}
 					});
 				}
@@ -386,7 +414,7 @@ public class ShowPlaceActivity extends Activity {
 
 				chooserIntent = Intent.createChooser(targetedShareIntents
 						.remove(targetedShareIntents.size() - 1),
-						getString(R.string.hello));
+						getString(R.string.share));
 				chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS,
 						targetedShareIntents.toArray(new Parcelable[] {}));
 				return chooserIntent;
@@ -473,10 +501,10 @@ public class ShowPlaceActivity extends Activity {
 
 		case android.R.id.home:
 			// app icon in action bar clicked; go home
-            Intent intentHome = new Intent(this, AllPlacesActivity.class);
-            intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intentHome);
-            break;
+			Intent intentHome = new Intent(this, AllPlacesActivity.class);
+			intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intentHome);
+			break;
 
 		default:
 			break;

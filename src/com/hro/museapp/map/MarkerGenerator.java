@@ -73,15 +73,15 @@ public class MarkerGenerator {
 										.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 				m.setData(mid);*/
 				
-				if(cat == "Monument") {
-					MarkerOptions m = new MarkerOptions().position(loc).title(title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-					mapPlaceToId.put(mid, m);
+				MarkerOptions m = new MarkerOptions().position(loc).title(title);
+				
+				if(cat.equals("Monument")) {
+					m.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
 				}
 				else {
-					MarkerOptions m = new MarkerOptions().position(loc).title(title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-					mapPlaceToId.put(mid, m);
+					m.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
 				}
-				
+				mapPlaceToId.put(mid, m);
 			}
 			
 		} catch (Exception e) {
