@@ -268,7 +268,7 @@ public class ShowPlaceActivity extends Activity {
 					}
 
 					final Dialog nagDialog = new Dialog(ShowPlaceActivity.this,
-							android.R.style.Theme_Holo_Light_DarkActionBar);
+							android.R.style.Theme_Black_NoTitleBar_Fullscreen);
 					nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 					nagDialog.setCancelable(true);
 					nagDialog.setContentView(R.layout.preview_image);
