@@ -29,5 +29,9 @@
     <string name="call">Call</string>
     <string name="all_places_view">Show all locations</string>
     <string name="nearby_places_view">Show closest locations</string>
+    <string name="error">Error</string>
+    <string name="no_results">No search results</string>
+    <string name="search">Searching&#8230;</string>
+    <string name="loading_places_map">Loading places&#8230;</string>
 
 </resources>

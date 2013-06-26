@@ -8,6 +8,7 @@ import java.util.Set;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -15,6 +16,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -290,7 +292,7 @@ public class AllPlacesActivity extends ListActivity {
 			}
 			isExecuting = true;
 			pDialog = new ProgressDialog(AllPlacesActivity.this);
-			pDialog.setMessage("Zoeken");
+			pDialog.setMessage(getString(R.string.search));
 			pDialog.setIndeterminate(false);
 			pDialog.setCancelable(false);
 			pDialog.show();
@@ -308,9 +310,17 @@ public class AllPlacesActivity extends ListActivity {
 			runOnUiThread(new Runnable() {
 				public void run() {
 					if (result.size() == 0) {
-						Toast noResults = Toast.makeText(AllPlacesActivity.this, "Geen zoekresultaten",
-								2000);
-						noResults.show();
+//						Toast noResults = Toast.makeText(AllPlacesActivity.this, "Geen zoekresultaten",
+//								2000);
+//						noResults.show();
+						AlertDialog.Builder builder = new AlertDialog.Builder(AllPlacesActivity.this);
+						
+						builder.setTitle(getString(R.string.error));
+						builder.setMessage(getString(R.string.no_results));
+						Message msg = null;
+						//alert.setButton(1, "OK", msg);
+						builder.setPositiveButton("OK", null);
+						builder.create().show();
 					}
 					LinkedList<String> mLinked = new LinkedList<String>();
 					
