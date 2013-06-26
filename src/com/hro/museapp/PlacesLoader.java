@@ -10,6 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import com.hro.museapp.map.ClusteringMapActivity;
 import com.hro.museapp.map.GPSTracker;
 
@@ -17,8 +19,10 @@ public class PlacesLoader {
 
 	// Creating JSON Parser object
 	private static JSONParser jParser = new JSONParser();
+	private static GPSTracker tracker;
 
 	private static JSONArray places;
+	private static JSONArray charities;
 	private static JSONArray searches;
 	private static JSONArray nearbyPlaces;
 	private static JSONArray singlePlace;
@@ -45,8 +49,19 @@ public class PlacesLoader {
 	//private static final String TAG_CAT = "category";
 	
 	
-	public static void setCache(JSONArray cache) {
-		places = cache;
+	public static void setCache(int type, JSONArray cache) {
+		if (type == CacheHandler.PLACES_CACHE)
+			places = cache;
+		else if (type == CacheHandler.CHARITY_CACHE)
+			charities = cache;
+	}
+	
+	public static void setGPS(GPSTracker gps) {
+		tracker = gps;
+	}
+	
+	public static GPSTracker getGPS() {
+		return tracker;
 	}
 
 	public static ArrayList<HashMap<String, String>> loadPlacesList() {
@@ -57,21 +72,25 @@ public class PlacesLoader {
 	public static JSONArray getPlaces() {
 		return places;
 	}
+	
+	public static JSONArray getCharities() {
+		return charities;
+	}
 
 	public static ArrayList<HashMap<String, String>> getPlacesList() {
 		return placesList;
 	}
 	
-	public static JSONArray getNearby(int max, GPSTracker gps) {
+	public static JSONArray getNearby(int max) {
 		String URL = "http://jsonapp.tk/get_places_nearby.php";
 		double lat = 0;
 		double lon = 0;
 		
 		// check if GPS enabled
-		if (gps.canGetLocation()) {
+		if (tracker.canGetLocation()) {
 
-			double latitude1 = gps.getLatitude();
-			double longitude1 = gps.getLongitude();
+			double latitude1 = tracker.getLatitude();
+			double longitude1 = tracker.getLongitude();
 			
 			lat = latitude1;
 			lon = longitude1;
@@ -80,7 +99,7 @@ public class PlacesLoader {
 			// can't get location
 			// GPS or Network is not enabled
 			// Ask user to enable GPS/network in settings
-			gps.showSettingsAlert();
+			tracker.showSettingsAlert();
 		}
 		
 		String[] args;

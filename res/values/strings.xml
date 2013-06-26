@@ -23,9 +23,11 @@
     <string name="website">Website</string>
     <string name="loadingPlaces">Musea en monumenten inladen&#8230;</string>
     <string name="loadingDetails">Details downloaden&#8230;</string>
-    <string name="update">Controleren op updates&#8230;</string>
+    <string name="update">Update downloaden&#8230;</string>
     <string name="onmap">Kaart</string>
     <string name="nav">Navigatie</string>
     <string name="call">Bellen</string>
+    <string name="all_places_view">Alle locaties weergeven</string>
+    <string name="nearby_places_view">Dichstbijzijnde locaties</string>
 
 </resources>

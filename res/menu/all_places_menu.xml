@@ -14,5 +14,17 @@
           android:icon="@drawable/ic_search"
           android:showAsAction="ifRoom|collapseActionView"
           android:actionViewClass="android.widget.SearchView" />
+    
+    <item
+        android:id="@+id/all_places_view"
+        android:showAsAction="never"
+        android:icon="@drawable/ic_action_map"
+        android:title="@string/all_places_view" />
+    
+    <item
+        android:id="@+id/nearby_places_view"
+        android:showAsAction="never"
+        android:icon="@drawable/ic_action_map"
+        android:title="@string/nearby_places_view" />
 
 </menu>

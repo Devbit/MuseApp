@@ -66,12 +66,15 @@ public class AllPlacesActivity extends ListActivity {
 		// Hashmap for ListView
 		placesList = new ArrayList<HashMap<String, String>>();
 		
+		PlacesLoader.setGPS(new GPSTracker(AllPlacesActivity.this));
+		
 		ActionBar actionBar = getActionBar();
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		// Loading places in Background Thread
-		new LoadAllPlaces().execute();
+		//new LoadAllPlaces().execute();
+		new NearbyPlaces().execute();
 
 		// Get listview
 		ListView lv = getListView();
@@ -197,6 +200,12 @@ public class AllPlacesActivity extends ListActivity {
             startActivity(intentHome);
             break;
 
+		case R.id.all_places_view:
+			new LoadAllPlaces().execute();
+			break;
+		case R.id.nearby_places_view:
+			new NearbyPlaces().execute();
+			break;
 		default:
 			break;
 		}
@@ -235,8 +244,7 @@ public class AllPlacesActivity extends ListActivity {
 		@Override
 		protected ArrayList<HashMap<String, String>> doInBackground(
 				String... params) {
-			GPSTracker gps = new GPSTracker(AllPlacesActivity.this);
-			ArrayList<HashMap<String, String>> results = PlacesLoader.makeListFromPlaces(PlacesLoader.getNearby(max, gps));
+			ArrayList<HashMap<String, String>> results = PlacesLoader.makeListFromPlaces(PlacesLoader.getNearby(max));
 			return results;
 		}
 		

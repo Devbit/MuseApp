@@ -186,7 +186,7 @@ public class ShowPlaceActivity extends Activity {
 					beschrijvingMonument = Html.fromHtml(
 							place.getString(TAG_INFO)).toString();
 
-					if (TAG_ADDRESS.equals("address")) {
+					if (place.getString(TAG_ADDRESS).equals("")) {
 						locatieMonument = place.getString(TAG_CITY);
 					} else {
 						locatieMonument = place.getString(TAG_ADDRESS) + ", "
@@ -229,18 +229,17 @@ public class ShowPlaceActivity extends Activity {
 					Button navButton = (Button) findViewById(R.id.navBtn);
 					Button callButton = (Button) findViewById(R.id.callBtn);
 
-					if (TAG_ADDRESS.equals("address")
-							&& TAG_CITY.equals("city")) {
+					if (locatieMonument.equals("")) {
 						labelAddress.setVisibility(View.GONE);
 						txtAddress.setVisibility(View.GONE);
 					}
 
-					if (TAG_WEB.equals("website")) {
+					if (websiteMonument.equals("")) {
 						txtWebsite.setVisibility(View.GONE);
 						labelWebsite.setVisibility(View.GONE);
 					}
 
-					if (TAG_PHONE.equals("phone")) {						
+					if (telefoonMonument.equals("")) {						
 						txtPhone.setVisibility(View.GONE);
 						labelPhone.setVisibility(View.GONE);
 						callButton.setBackgroundColor(Color.GRAY);
@@ -345,6 +344,26 @@ public class ShowPlaceActivity extends Activity {
 							Intent callIntent = new Intent(Intent.ACTION_CALL);
 						    callIntent.setData(Uri.parse("tel:" + telefoonMonument));
 						    startActivity(callIntent);
+						}
+					});
+					
+					txtPhone.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							Intent callIntent = new Intent(Intent.ACTION_CALL);
+						    callIntent.setData(Uri.parse("tel:" + telefoonMonument));
+						    startActivity(callIntent);
+						}
+					});
+					
+					txtWebsite.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							Intent i = new Intent(Intent.ACTION_VIEW);
+							i.setData(Uri.parse(websiteMonument));
+							startActivity(i);
 						}
 					});
 				}

@@ -83,6 +83,7 @@ public class ClusteringMapActivity extends FragmentActivity {
 		map = f.getExtendedMap();
 		
 		gps = new GPSTracker(ClusteringMapActivity.this);
+		//gps = PlacesLoader.getGPS();
 
 		// mapView = (MapView) this.findViewById(R.id.map);
 

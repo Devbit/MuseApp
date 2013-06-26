@@ -23,9 +23,11 @@
     <string name="website">Website</string>
     <string name="loadingPlaces">Loading places. Please wait&#8230;</string>
     <string name="loadingDetails">Loading details. Please wait&#8230;</string>
-    <string name="update">Checking for updates&#8230;</string>
+    <string name="update">Downloading update&#8230;</string>
     <string name="onmap">Map</string>
     <string name="nav">Navigation</string>
     <string name="call">Call</string>
+    <string name="all_places_view">Show all locations</string>
+    <string name="nearby_places_view">Show closest locations</string>
 
 </resources>

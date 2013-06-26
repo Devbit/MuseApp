@@ -33,20 +33,29 @@ public class CacheHandler {
 	
 	private static final String version = "version.txt";
 	private static final String cache = "cache.txt";
+	private static final String charityCache = "charity_cache.txt";
 	private static final boolean FAIL = false;
 	private static final boolean SUCCESS = true;
 	
 	private static final String URL_DATABASE = "http://jsonapp.tk/get_all_places.php";
 	private static final String URL_VERSION = "http://jsonapp.tk/get_version.php";
+	private static final String URL_CHARITY = "http://jsonapp.tk/get_all_charities.php";
+	
+	public static final int PLACES_CACHE = 0;
+	public static final int CHARITY_CACHE = 1;
 	
 	public CacheHandler(Context con) {
 		context = con;
 	}
 	
 	public boolean check() {
+		Log.d("CACHEHANDLER", "Checking cache...");
 		if (isOnline()) {
 			getRemoteVersion();
 			getLocalVersion();
+			if (localVersion.equals("")) {
+				return true;
+			}
 			double local = Double.parseDouble(localVersion);
 			double remote = Double.parseDouble(remoteVersion);
 			
@@ -81,7 +90,7 @@ public class CacheHandler {
 		Log.d("CACHEHANDLER", "Local version:");
 		Log.d("CACHEHANDLER", localVersion);
 		if (localVersion.equals("")) {
-			update();
+			//update();
 		}
 		return localVersion;
 	}
@@ -98,8 +107,14 @@ public class CacheHandler {
 		return remoteVersion;
 	}
 	
-	public JSONArray getCache() {
-		String result = readFile(cache);
+	public JSONArray getCache(int type) {
+		String file = cache;
+		if (type == PLACES_CACHE) {
+			file = cache;
+		} else if (type == CHARITY_CACHE) {
+			file = charityCache;
+		}
+		String result = readFile(file);
 		JSONArray places = new JSONArray();
 		try {
 			places = new JSONArray(result);
@@ -113,6 +128,11 @@ public class CacheHandler {
 	private void downloadLatest() {
 		String result = getData(URL_DATABASE, TAG_PLACES).toString();
 		boolean saveResult = saveFile(cache, result);
+		if (saveResult == FAIL) {
+			//Error handling
+		}
+		result = getData(URL_CHARITY, TAG_PLACES).toString();
+		saveResult = saveFile(charityCache, result);
 		if (saveResult == FAIL) {
 			//Error handling
 		}

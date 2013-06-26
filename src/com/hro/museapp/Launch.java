@@ -1,5 +1,7 @@
 package com.hro.museapp;
 
+import com.hro.museapp.map.GPSTracker;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -27,7 +29,7 @@ public class Launch extends Activity {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			pDialog = new ProgressDialog(Launch.this);
-			pDialog.setMessage(getString(R.string.update));
+			pDialog.setMessage(getString(R.string.update_check));
 			pDialog.setIndeterminate(false);
 			pDialog.setCancelable(false);
 			pDialog.show();
@@ -38,12 +40,21 @@ public class Launch extends Activity {
 		 * */
 		protected String doInBackground(String... args) {
 			CacheHandler cache = new CacheHandler(getApplicationContext());
+//			GPSTracker gps = new GPSTracker(Launch.this);
+//			PlacesLoader.setGPS(gps);
 			boolean update = cache.check();
 			if (update) {
+				publishProgress();
 				cache.update();
 			}
-			PlacesLoader.setCache(cache.getCache());
+			PlacesLoader.setCache(CacheHandler.PLACES_CACHE, cache.getCache(CacheHandler.PLACES_CACHE));
+			PlacesLoader.setCache(CacheHandler.CHARITY_CACHE, cache.getCache(CacheHandler.CHARITY_CACHE));
 			return null;
+		}
+		
+		@Override
+		protected void onProgressUpdate(String... values) {
+			pDialog.setMessage(getString(R.string.update));
 		}
 
 		/**
