@@ -37,15 +37,20 @@ public class MarkerGenerator {
 	private static JSONArray places;
 	static HashMap<String, MarkerOptions> mapPlaceToId;
 	
-	public static HashMap<String, MarkerOptions> addMarkers(GoogleMap map) {
-		if (PlacesLoader.hasSingle()) {
-			places = PlacesLoader.getSinglePlace();
-		} else {
-			if (PlacesLoader.getLastSearch().equals("")) {
+	public static HashMap<String, MarkerOptions> addMarkers(int type) {
+		switch (type) {
+			case PlacesLoader.TYPE_ALL:
 				places = PlacesLoader.getPlaces();
-			} else {
+				break;
+			case PlacesLoader.TYPE_SEARCH:
 				places = PlacesLoader.getSearchResults();
-			}
+				break;
+			case PlacesLoader.TYPE_NEARBY:
+				places = PlacesLoader.getNearbyResults();
+				break;
+			case PlacesLoader.TYPE_SINGLE:
+				places = PlacesLoader.getSinglePlace();
+				break;
 		}
 		
 		mapPlaceToId = new HashMap<String, MarkerOptions>();

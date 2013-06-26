@@ -40,6 +40,11 @@ public class PlacesLoader {
 	private static final String TAG_NAME = "title";
 	private static final String TAG_LAT = "latitude";
 	private static final String TAG_LONG = "longitude";
+	
+	public static final int TYPE_ALL = 0;
+	public static final int TYPE_SEARCH = 1;
+	public static final int TYPE_NEARBY = 2;
+	public static final int TYPE_SINGLE = 3;
 
 	private static final int NEARBY = 0;
 	private static final int SEARCH = 1;
@@ -107,6 +112,10 @@ public class PlacesLoader {
 		JSONArray result = getData(URL, TAG_PLACES, NEARBY, String.valueOf(lat), String.valueOf(lon), String.valueOf(max));
 		nearbyPlaces = result;
 		return result;
+	}
+	
+	public static JSONArray getNearbyResults() {
+		return nearbyPlaces;
 	}
 	
 	public static JSONArray search(String input) {

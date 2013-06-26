@@ -34,6 +34,7 @@ import android.widget.SearchView.OnQueryTextListener;
 import android.widget.SectionIndexer;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hro.museapp.map.ClusteringMapActivity;
 import com.hro.museapp.map.GPSTracker;
@@ -46,6 +47,8 @@ public class AllPlacesActivity extends ListActivity {
 	private boolean isExecuting = false;
 
 	ArrayList<HashMap<String, String>> placesList;
+	
+	private int listType;
 
 	// JSON Node names
 	private static final String TAG_SUCCESS = "success";
@@ -90,7 +93,6 @@ public class AllPlacesActivity extends ListActivity {
 				// getting values from selected ListItem
 				String mid = ((TextView) view.findViewById(R.id.mid)).getText()
 						.toString();
-				Log.d("Test", mid);
 
 				// Starting new intent
 				Intent in = new Intent(getApplicationContext(),
@@ -189,6 +191,7 @@ public class AllPlacesActivity extends ListActivity {
 			Intent i = new Intent(getApplicationContext(),
 					ClusteringMapActivity.class);
 			i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+			i.putExtra("type", listType);
 			startActivity(i);
 
 			break;
@@ -265,6 +268,7 @@ public class AllPlacesActivity extends ListActivity {
 				}
 			});
 			isExecuting = false;
+			listType = PlacesLoader.TYPE_NEARBY;
 		}
 		
 	}
@@ -285,6 +289,11 @@ public class AllPlacesActivity extends ListActivity {
 				return;
 			}
 			isExecuting = true;
+			pDialog = new ProgressDialog(AllPlacesActivity.this);
+			pDialog.setMessage("Zoeken");
+			pDialog.setIndeterminate(false);
+			pDialog.setCancelable(false);
+			pDialog.show();
 		}
 
 		@Override
@@ -295,8 +304,14 @@ public class AllPlacesActivity extends ListActivity {
 		
 		@Override
 		protected void onPostExecute(final ArrayList<HashMap<String, String>> result) {
+			pDialog.dismiss();
 			runOnUiThread(new Runnable() {
 				public void run() {
+					if (result.size() == 0) {
+						Toast noResults = Toast.makeText(AllPlacesActivity.this, "Geen zoekresultaten",
+								2000);
+						noResults.show();
+					}
 					LinkedList<String> mLinked = new LinkedList<String>();
 					
 					for (int i = 0; i < result.size(); i++) {
@@ -308,6 +323,7 @@ public class AllPlacesActivity extends ListActivity {
 				}
 			});
 			isExecuting = false;
+			listType = PlacesLoader.TYPE_SEARCH;
 		}
 		
 	}
@@ -363,6 +379,7 @@ public class AllPlacesActivity extends ListActivity {
 				}
 			});
 			isExecuting = false;
+			listType = PlacesLoader.TYPE_ALL;
 		}
 
 	}

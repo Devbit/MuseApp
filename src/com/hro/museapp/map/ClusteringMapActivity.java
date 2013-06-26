@@ -65,6 +65,12 @@ public class ClusteringMapActivity extends FragmentActivity {
 	private GoogleMap map;
 	private View mapView;
 	private ProgressDialog pDialog;
+	
+	private int listType;
+	private static final int TYPE_ALL = 0;
+	private static final int TYPE_SEARCH = 1;
+	private static final int TYPE_NEARBY = 2;
+	private static final int TYPE_SINGLE = 3;
 
 	GPSTracker gps;
 
@@ -72,6 +78,8 @@ public class ClusteringMapActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.cluster_map);
+		
+		listType = getIntent().getIntExtra("type", TYPE_ALL);
 		
 		ActionBar actionBar = getActionBar();
 		actionBar.setHomeButtonEnabled(true);
@@ -293,7 +301,7 @@ public class ClusteringMapActivity extends FragmentActivity {
 		protected HashMap<String, MarkerOptions> doInBackground(String... args) {
 			Log.d("MarkerGenerator", "Started");
 			HashMap<String, MarkerOptions> markers = MarkerGenerator
-					.addMarkers(map);
+					.addMarkers(listType);
 			Log.d("MarkerGenerator", "Done");
 			return markers;
 		}

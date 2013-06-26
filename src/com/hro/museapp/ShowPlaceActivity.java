@@ -298,6 +298,7 @@ public class ShowPlaceActivity extends Activity {
 							Intent i = new Intent(getApplicationContext(),
 									ClusteringMapActivity.class);
 							i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+							i.putExtra("type", PlacesLoader.TYPE_SINGLE);
 							startActivity(i);
 						}
 					});
