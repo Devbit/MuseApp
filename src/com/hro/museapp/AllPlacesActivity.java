@@ -36,6 +36,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.hro.museapp.map.ClusteringMapActivity;
+import com.hro.museapp.map.GPSTracker;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class AllPlacesActivity extends ListActivity {
@@ -203,12 +204,79 @@ public class AllPlacesActivity extends ListActivity {
 		return true;
 	}
 	
+	class NearbyPlaces extends AsyncTask<String, String, ArrayList<HashMap<String, String>>> {
+		
+		private static final int DEFAULT_MAX = 50;
+		private int max;
+		
+		public NearbyPlaces(int max) {
+			this.max = max;
+		}
+		
+		public NearbyPlaces() {
+			this.max = DEFAULT_MAX;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			if (isExecuting) {
+				cancel(true);
+				return;
+			}
+			isExecuting = true;
+			pDialog = new ProgressDialog(AllPlacesActivity.this);
+			pDialog.setMessage(getString(R.string.loadingPlaces));
+			pDialog.setIndeterminate(false);
+			pDialog.setCancelable(false);
+			pDialog.show();
+		}
+		
+		@Override
+		protected ArrayList<HashMap<String, String>> doInBackground(
+				String... params) {
+			GPSTracker gps = new GPSTracker(AllPlacesActivity.this);
+			ArrayList<HashMap<String, String>> results = PlacesLoader.makeListFromPlaces(PlacesLoader.getNearby(max, gps));
+			return results;
+		}
+		
+		@Override
+		protected void onPostExecute(final ArrayList<HashMap<String, String>> result) {
+			pDialog.dismiss();
+			// updating UI from Background Thread
+			runOnUiThread(new Runnable() {
+				public void run() {
+					LinkedList<String> mLinked = new LinkedList<String>();
+					
+					for (int i = 0; i < result.size(); i++) {
+						HashMap<String, String> map = result.get(i);
+						mLinked.add((String) map.get(TAG_NAME));
+					}
+
+					setListAdapter(new MyListAdaptor(AllPlacesActivity.this, mLinked, result));
+				}
+			});
+			isExecuting = false;
+		}
+		
+	}
+	
 	class SearchPlaces extends AsyncTask<String, String, ArrayList<HashMap<String, String>>> {
 		
 		private String query;
 
 		public SearchPlaces(String query) {
 			this.query = query;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			if (isExecuting) {
+				cancel(true);
+				return;
+			}
+			isExecuting = true;
 		}
 
 		@Override
@@ -221,17 +289,6 @@ public class AllPlacesActivity extends ListActivity {
 		protected void onPostExecute(final ArrayList<HashMap<String, String>> result) {
 			runOnUiThread(new Runnable() {
 				public void run() {
-					/**
-					 * Updating parsed JSON data into ListView
-					 * */
-					ListAdapter adapter = new SimpleAdapter(
-							AllPlacesActivity.this, result,
-							R.layout.list_item, new String[] { TAG_MID,
-									TAG_NAME },
-							new int[] { R.id.mid, R.id.name });
-					// updating listview
-					setListAdapter(adapter);
-					
 					LinkedList<String> mLinked = new LinkedList<String>();
 					
 					for (int i = 0; i < result.size(); i++) {
@@ -242,6 +299,7 @@ public class AllPlacesActivity extends ListActivity {
 					setListAdapter(new MyListAdaptor(AllPlacesActivity.this, mLinked, result));
 				}
 			});
+			isExecuting = false;
 		}
 		
 	}
@@ -286,17 +344,6 @@ public class AllPlacesActivity extends ListActivity {
 			// updating UI from Background Thread
 			runOnUiThread(new Runnable() {
 				public void run() {
-					/**
-					 * Updating parsed JSON data into ListView
-					 * */
-					ListAdapter adapter = new SimpleAdapter(
-							AllPlacesActivity.this, placesList,
-							R.layout.list_item, new String[] { TAG_MID,
-									TAG_NAME },
-							new int[] { R.id.mid, R.id.name });
-					// updating listview
-					setListAdapter(adapter);
-					
 					LinkedList<String> mLinked = new LinkedList<String>();
 					
 					for (int i = 0; i < placesList.size(); i++) {

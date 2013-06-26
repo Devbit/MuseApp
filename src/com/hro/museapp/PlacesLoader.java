@@ -10,6 +10,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.hro.museapp.map.ClusteringMapActivity;
+import com.hro.museapp.map.GPSTracker;
+
 public class PlacesLoader {
 
 	// Creating JSON Parser object
@@ -17,9 +20,11 @@ public class PlacesLoader {
 
 	private static JSONArray places;
 	private static JSONArray searches;
+	private static JSONArray nearbyPlaces;
 	private static JSONArray singlePlace;
 	private static ArrayList<HashMap<String, String>> placesList;
 	private static ArrayList<HashMap<String, String>> searchList;
+	private static ArrayList<HashMap<String, String>> nearbyList;
 	
 	private static String lastSearch = "";
 	private static boolean hasSingle = false;
@@ -31,9 +36,14 @@ public class PlacesLoader {
 	private static final String TAG_NAME = "title";
 	private static final String TAG_LAT = "latitude";
 	private static final String TAG_LONG = "longitude";
+
+	private static final int NEARBY = 0;
+	private static final int SEARCH = 1;
+	
 	//private static final String TAG_PHONE = "phone";
 	//private static final String TAG_WEB = "website";
 	//private static final String TAG_CAT = "category";
+	
 	
 	public static void setCache(JSONArray cache) {
 		places = cache;
@@ -52,6 +62,34 @@ public class PlacesLoader {
 		return placesList;
 	}
 	
+	public static JSONArray getNearby(int max, GPSTracker gps) {
+		String URL = "http://jsonapp.tk/get_places_nearby.php";
+		double lat = 0;
+		double lon = 0;
+		
+		// check if GPS enabled
+		if (gps.canGetLocation()) {
+
+			double latitude1 = gps.getLatitude();
+			double longitude1 = gps.getLongitude();
+			
+			lat = latitude1;
+			lon = longitude1;
+
+		} else {
+			// can't get location
+			// GPS or Network is not enabled
+			// Ask user to enable GPS/network in settings
+			gps.showSettingsAlert();
+		}
+		
+		String[] args;
+		
+		JSONArray result = getData(URL, TAG_PLACES, NEARBY, String.valueOf(lat), String.valueOf(lon), String.valueOf(max));
+		nearbyPlaces = result;
+		return result;
+	}
+	
 	public static JSONArray search(String input) {
 		//JSONArray searchResult = PlacesLoader.search(query)
 		//om te zoeken, returned hele JSON
@@ -59,7 +97,7 @@ public class PlacesLoader {
 		/*String URL = "http://jsonapp.tk/search.php?s=%s";
 		URL = String.format(URL, input);*/
 		String URL = "http://jsonapp.tk/search.php";
-		JSONArray result = getData(URL, TAG_PLACES, input);
+		JSONArray result = getData(URL, TAG_PLACES, SEARCH, input);
 		lastSearch = input;
 		searches = result;
 		return result;
@@ -128,10 +166,16 @@ public class PlacesLoader {
 		return result;
 	}
 	
-	private static JSONArray getData(String url, String tag, String... args) {
+	private static JSONArray getData(String url, String tag, int type, String... args) {
 		// Building Parameters
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("s", args[0]));
+		if (type == SEARCH) {
+			params.add(new BasicNameValuePair("s", args[0]));
+		} else if (type == NEARBY) {
+			params.add(new BasicNameValuePair("lat", args[0]));
+			params.add(new BasicNameValuePair("lng", args[1]));
+			params.add(new BasicNameValuePair("dist", args[2]));
+		}
 		// getting JSON string from URL
 		JSONObject json = jParser.makeHttpRequest(url, "GET", params);
 		JSONArray result = new JSONArray();
