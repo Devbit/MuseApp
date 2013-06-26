@@ -40,8 +40,7 @@ public class Launch extends Activity {
 		 * */
 		protected String doInBackground(String... args) {
 			CacheHandler cache = new CacheHandler(getApplicationContext());
-//			GPSTracker gps = new GPSTracker(Launch.this);
-//			PlacesLoader.setGPS(gps);
+			GPSTracker gps = new GPSTracker(Launch.this);
 			boolean update = cache.check();
 			if (update) {
 				publishProgress();

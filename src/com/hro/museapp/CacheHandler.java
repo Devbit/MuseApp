@@ -44,11 +44,25 @@ public class CacheHandler {
 	public static final int PLACES_CACHE = 0;
 	public static final int CHARITY_CACHE = 1;
 	
+	/*
+	 * CacheHandler class
+	 * 
+	 * We use a simple caching system for our database.
+	 * Since it's pretty large, downloading it every time would take too long
+	 * So we save the database locally, and only download if the online database gets updated
+	 * 
+	 */
+	
 	public CacheHandler(Context con) {
+		//We need the application context for reading and writing files
 		context = con;
 	}
 	
 	public boolean check() {
+		//Simple check function
+		//First checks if we have an internet connection
+		//Then fetches local and remote version, and compares them
+		//Also check if cachefile exists
 		Log.d("CACHEHANDLER", "Checking cache...");
 		if (isOnline()) {
 			getRemoteVersion();
@@ -76,8 +90,12 @@ public class CacheHandler {
 	}
 	
 	public void update() {
+		//Check function, update local version, download new database and save version
 		Log.d("CACHEHANDLER", "Updating cache...");
-		localVersion = getRemoteVersion();
+		if (remoteVersion == null)
+			localVersion = getRemoteVersion();
+		else
+			localVersion = remoteVersion;
 		downloadLatest();
 		boolean saveResult = saveFile(version, localVersion);
 		if (saveResult == FAIL) {
@@ -86,6 +104,7 @@ public class CacheHandler {
 	}
 	
 	public String getLocalVersion() {
+		//Read the version from the version file
 		localVersion = readFile(version);
 		Log.d("CACHEHANDLER", "Local version:");
 		Log.d("CACHEHANDLER", localVersion);
@@ -96,6 +115,7 @@ public class CacheHandler {
 	}
 	
 	public String getRemoteVersion() {
+		//Fetch the remote version from the server
 		JSONArray result = getData(URL_VERSION, TAG_VERSION);
 		try {
 			remoteVersion = result.getJSONObject(0).getString(TAG_VERSION);
@@ -108,6 +128,7 @@ public class CacheHandler {
 	}
 	
 	public JSONArray getCache(int type) {
+		//Read the cache from the file
 		String file = cache;
 		if (type == PLACES_CACHE) {
 			file = cache;
@@ -126,11 +147,13 @@ public class CacheHandler {
 	}
 	
 	private void downloadLatest() {
+		//Download latest database
 		String result = getData(URL_DATABASE, TAG_PLACES).toString();
 		boolean saveResult = saveFile(cache, result);
 		if (saveResult == FAIL) {
 			//Error handling
 		}
+		//Download latest charities
 		result = getData(URL_CHARITY, TAG_PLACES).toString();
 		saveResult = saveFile(charityCache, result);
 		if (saveResult == FAIL) {
@@ -139,6 +162,7 @@ public class CacheHandler {
 	}
 	
 	private JSONArray getData(String url, String tag, String... args) {
+		//Function to handle the downloading and parsing of data
 		// Building Parameters
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		// getting JSON string from URL
@@ -159,6 +183,7 @@ public class CacheHandler {
 	}
 	
 	private String readFile(String file) {
+		//Helper function to read files
 		StringBuilder text = new StringBuilder();
 
 		try {
@@ -180,6 +205,7 @@ public class CacheHandler {
 	}
 	
 	private boolean saveFile(String file, String str) {
+		//Helper function to save files
 		try {
 			FileOutputStream fileToWrite = context.openFileOutput(file, context.MODE_PRIVATE);
 			fileToWrite.write(str.getBytes());
@@ -192,6 +218,7 @@ public class CacheHandler {
 	}
 	
 	public boolean isOnline() {
+		//Helper function to determine if we have an internet connection
 	    ConnectivityManager cm =
 	        (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 	    NetworkInfo netInfo = cm.getActiveNetworkInfo();

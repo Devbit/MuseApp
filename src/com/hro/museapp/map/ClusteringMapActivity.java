@@ -287,7 +287,7 @@ public class ClusteringMapActivity extends FragmentActivity {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			pDialog = new ProgressDialog(ClusteringMapActivity.this);
-			pDialog.setMessage("Adding places...");
+			pDialog.setMessage(getString(R.string.loading_places_map));
 			pDialog.setIndeterminate(false);
 			pDialog.setCancelable(false);
 			pDialog.show();

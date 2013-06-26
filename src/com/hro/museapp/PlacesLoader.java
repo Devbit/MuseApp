@@ -49,11 +49,16 @@ public class PlacesLoader {
 	private static final int NEARBY = 0;
 	private static final int SEARCH = 1;
 	
-	//private static final String TAG_PHONE = "phone";
-	//private static final String TAG_WEB = "website";
-	//private static final String TAG_CAT = "category";
+	/*
+	 * PlacesLoader class
+	 * 
+	 * Static class used to be able to share lists of places easily inbetween activities
+	 * Saves all the created lists, so when a search is made, the results are saved
+	 * This is so that the map activity can easily retrieve those results
+	 * 
+	 */
 	
-	
+	//Sets the places from cache
 	public static void setCache(int type, JSONArray cache) {
 		if (type == CacheHandler.PLACES_CACHE)
 			places = cache;
@@ -61,31 +66,38 @@ public class PlacesLoader {
 			charities = cache;
 	}
 	
+	//Set GPSTracker, only needed for nearby places
 	public static void setGPS(GPSTracker gps) {
 		tracker = gps;
 	}
 	
+	//Get the GPSTracker
 	public static GPSTracker getGPS() {
 		return tracker;
 	}
-
+	
+	//Function to get a listview ready arraylist of all places
 	public static ArrayList<HashMap<String, String>> loadPlacesList() {
 		placesList = makeListFromPlaces(places);
 		return placesList;
 	}
-
+	
+	//Return all places
 	public static JSONArray getPlaces() {
 		return places;
 	}
 	
+	//Return all charities
 	public static JSONArray getCharities() {
 		return charities;
 	}
-
+	
+	//Return listview ready list arraylist of all places
 	public static ArrayList<HashMap<String, String>> getPlacesList() {
 		return placesList;
 	}
 	
+	//Get the nearby places, optional limit argument
 	public static JSONArray getNearby(int max) {
 		String URL = "http://jsonapp.tk/get_places_nearby.php";
 		double lat = 0;
@@ -114,10 +126,12 @@ public class PlacesLoader {
 		return result;
 	}
 	
+	//Get the results of the getNearby function
 	public static JSONArray getNearbyResults() {
 		return nearbyPlaces;
 	}
 	
+	//Search function. Saves and returns search input
 	public static JSONArray search(String input) {
 		//JSONArray searchResult = PlacesLoader.search(query)
 		//om te zoeken, returned hele JSON
@@ -131,41 +145,50 @@ public class PlacesLoader {
 		return result;
 	}
 	
+	//Return last search query
 	public static String getLastSearch() {
 		return lastSearch;
 	}
 	
+	//Clear last search query
 	public static void clearLastSearch() {
 		lastSearch = "";
 	}
 	
+	//Clear all searchresults
 	public static void clearSearches() {
 		searches = null;
 		searchList = null;
 	}
 	
+	//Return searchresults
 	public static JSONArray getSearchResults() {
 		return searches;
 	}
 	
+	//Save a single place
 	public static void setSinglePlace(JSONArray place) {
 		singlePlace = place;
 		hasSingle = true;
 	}
 	
+	//Return the saved single place
 	public static JSONArray getSinglePlace() {
 		return singlePlace;
 	}
 	
+	//Clear single places
 	public static void clearSinglePlace() {
 		hasSingle = false;
 		singlePlace = null;
 	}
 	
+	//Returns whether a single places has been saved or not
 	public static boolean hasSingle() {
 		return hasSingle;
 	}
-
+	
+	//Make a listview ready arraylist from a JSONArray of places
 	public static ArrayList<HashMap<String, String>> makeListFromPlaces(JSONArray places) {
 		ArrayList<HashMap<String, String>> result = new ArrayList<HashMap<String, String>>();
 		try {
@@ -194,6 +217,7 @@ public class PlacesLoader {
 		return result;
 	}
 	
+	//Helper function to download data. Used in search and nearby places
 	private static JSONArray getData(String url, String tag, int type, String... args) {
 		// Building Parameters
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
