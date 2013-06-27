@@ -1,94 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+     android:background="@color/blue" >
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="1" >
-	    
-	    <Button
-		    android:id="@+id/button1"
-		    android:layout_width="fill_parent"
-		    android:layout_height="fill_parent"
-		    android:background="@drawable/button1_unpressed"
-		    android:layout_weight="1"
-		    android:layout_marginRight="6dp"
-	        android:layout_marginLeft="6dp"
-	        android:layout_marginBottom="3dp"
-	        android:layout_marginTop="6dp"
-		/>
-	    
-	</LinearLayout>
+        android:id="@+id/bg"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4.50"
+        
+        android:orientation="vertical" >
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="1" >
-
-	        <Button
-		        android:id="@+id/button2"
-		        android:layout_width="fill_parent"
-		        android:layout_height="fill_parent"
-		        android:background="@drawable/button2_unpressed"
-		        android:layout_weight="2"
-		        android:layout_marginRight="3dp"
-        		android:layout_marginLeft="6dp"
-        		android:layout_marginBottom="3dp"
-        		android:layout_marginTop="3dp"
-			/>
-	  
-	    	<Button
-	    	    android:id="@+id/button3"
-	    	    android:layout_width="fill_parent"
-	    	    android:layout_height="fill_parent"
-	    	    android:layout_weight="2"
-	    	    android:background="@drawable/button4_unpressed"
-	    	    android:layout_marginRight="6dp"
-        		android:layout_marginLeft="3dp"
-        		android:layout_marginBottom="3dp"
-        		android:layout_marginTop="3dp" />
-
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical"
+            android:scaleType="centerCrop"
+            android:src="@drawable/museum_louvre" />
     </LinearLayout>
-    
+
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="1" >
+       
+        android:orientation="vertical"
+        android:layout_margin="5dp" >
 
-	        <Button
-		        android:id="@+id/button4"
-		        android:layout_width="fill_parent"
-		        android:layout_height="fill_parent"
-		        android:background="@drawable/white"
-		        android:layout_weight="2"
-		        android:layout_marginRight="3dp"
-        		android:layout_marginLeft="6dp"
-        		android:layout_marginBottom="6dp"
-        		android:layout_marginTop="3dp"
-			/>
-  
-    
-	    	<Button
-		        android:id="@+id/button5"
-		        android:layout_width="fill_parent"
-		        android:layout_height="fill_parent"
-		        android:background="@drawable/white"
-		        android:layout_weight="2"
-		        android:layout_marginRight="6dp"
-        		android:layout_marginLeft="3dp"
-        		android:layout_marginBottom="6dp"
-        		android:layout_marginTop="3dp"
-			/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+             >
 
+            <Button
+                android:id="@+id/button1"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="2.5dp"
+                android:layout_weight=".33"
+                android:background="@drawable/button_custom"
+                android:drawableTop="@drawable/ic_action_place"
+                android:padding="5dip"
+                android:text="@string/locations"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/button2"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="2.5dp"
+                android:layout_weight=".33"
+                android:background="@drawable/button_custom"
+                android:drawableTop="@drawable/ic_action_direction"
+                android:padding="5dip"
+                android:text="@string/spotlight"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/button3"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="2.5dp"
+                android:layout_weight=".33"
+                android:background="@drawable/button_custom"
+                android:drawableTop="@drawable/ic_action_important_normal"
+                android:padding="5dip"
+                android:text="@string/favourites"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/button4"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="2.5dp"
+                android:layout_weight=".33"
+                android:background="@drawable/button_custom"
+                android:drawableTop="@drawable/ic_action_direction"
+                android:padding="5dip"
+                android:text="@string/charities"
+                android:textColor="@color/white" />
+        </LinearLayout>
     </LinearLayout>
+
 </LinearLayout>
-
-

@@ -32,6 +32,11 @@
     <string name="error">Fout</string>
     <string name="no_results">Geen zoekresultaten</string>
     <string name="search">Zoeken&#8230;</string>
-    <string name="loading_places_map">Plaatsen inladen&#8230;</string>
+    <string name="loading_places_map">Locaties inladen&#8230;</string>
+    <string name="locations">Locaties</string>
+    <string name="spotlight">Uitgelicht</string>
+    <string name="charities">Goede doelen</string>
+    <string name="discover">Ontdek</string>
+    <string name="discoverAmsterdam">Ontdek Amsterdam</string>
 
 </resources>

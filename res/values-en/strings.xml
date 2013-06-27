@@ -33,5 +33,10 @@
     <string name="no_results">No search results</string>
     <string name="search">Searching&#8230;</string>
     <string name="loading_places_map">Loading places&#8230;</string>
+    <string name="locations">Places</string>
+    <string name="spotlight">Spotlight</string>
+    <string name="charities">Charities</string>
+    <string name="discover">Discover</string>
+    <string name="discoverAmsterdam">Discover Amsterdam</string>
 
 </resources>
