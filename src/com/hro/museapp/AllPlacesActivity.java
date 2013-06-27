@@ -213,10 +213,12 @@ public class AllPlacesActivity extends ListActivity {
 
 		case R.id.all_places_view:
 			titleActionBar = getString(R.string.all_places_title);
+			setTitle(titleActionBar);
 			new LoadAllPlaces().execute();
 			break;
 		case R.id.nearby_places_view:
 			titleActionBar = getString(R.string.nearby_places_title);
+			setTitle(titleActionBar);
 			new NearbyPlaces().execute();
 			break;
 		default:

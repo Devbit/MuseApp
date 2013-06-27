@@ -38,10 +38,6 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hro.museapp.AllPlacesActivity.NearbyPlaces;
-import com.hro.museapp.map.ClusteringMapActivity;
-import com.hro.museapp.map.GPSTracker;
-
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class AllCharitiesActivity extends ListActivity {
 
