@@ -43,7 +43,7 @@ public class Start extends Activity
 			@Override
 			public void onClick(View view) {
 				// Launching All places Activity
-				Intent i = new Intent(getApplicationContext(), FavouritesList.class);
+				Intent i = new Intent(getApplicationContext(), AllCharitiesActivity.class);
 				startActivity(i);
 				
 			}});
@@ -52,7 +52,7 @@ public class Start extends Activity
 			@Override
 			public void onClick(View view) {
 				// Launching All places Activity
-				Intent i = new Intent(getApplicationContext(), AllCharitiesActivity.class);
+				Intent i = new Intent(getApplicationContext(), AboutAppActivity.class);
 				startActivity(i);
 				
 			}});

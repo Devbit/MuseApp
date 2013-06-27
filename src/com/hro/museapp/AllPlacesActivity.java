@@ -62,11 +62,17 @@ public class AllPlacesActivity extends ListActivity {
 	private static final String TAG_CAT = "category";
 	private static final String TAG_PHONE = "phone";
 	private static final String TAG_WEB = "website";
+	
+	private static String titleActionBar;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.all_places);
+		
+		titleActionBar = getString(R.string.nearby_places_title);
+		
+		setTitle(titleActionBar);
 
 		// Hashmap for ListView
 		placesList = new ArrayList<HashMap<String, String>>();
@@ -206,9 +212,11 @@ public class AllPlacesActivity extends ListActivity {
             break;
 
 		case R.id.all_places_view:
+			titleActionBar = getString(R.string.all_places_title);
 			new LoadAllPlaces().execute();
 			break;
 		case R.id.nearby_places_view:
+			titleActionBar = getString(R.string.nearby_places_title);
 			new NearbyPlaces().execute();
 			break;
 		default:

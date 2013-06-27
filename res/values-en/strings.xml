@@ -15,6 +15,7 @@
     <string name="favourite">Favourite</string>
     <string name="calender">Add to calender</string>
     <string name="all_places">List view</string>
+    <string name="all_places_title">All places</string>
     <string name="details">Details</string>
     <string name="favourites">Favourites</string>
     <string name="map_view">Map view</string>
@@ -28,7 +29,8 @@
     <string name="nav">Navigation</string>
     <string name="call">Call</string>
     <string name="all_places_view">Show all locations</string>
-    <string name="nearby_places_view">Show closest locations</string>
+    <string name="nearby_places_view">Show nearest locations</string>
+    <string name="nearby_places_title">Nearest locations</string>
     <string name="error">Error</string>
     <string name="no_results">No search results</string>
     <string name="search">Searching&#8230;</string>
@@ -38,5 +40,7 @@
     <string name="charities">Charities</string>
     <string name="discover">Discover</string>
     <string name="discoverAmsterdam">Discover Amsterdam</string>
+    <string name="about">MuseApp is developed by Not Even Entertaining, a company started by five students of the Rotterdam University of Applied Sciences. \n\Developers:\nCasper van Dorp \nGiovanni Paul \nErik Schamper \nTimon van Spronsen \nBart Vollebregt</string>
+	<string name="aboutus">About us</string>
 
 </resources>

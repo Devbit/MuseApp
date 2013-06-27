@@ -57,9 +57,9 @@
                 android:layout_margin="2.5dp"
                 android:layout_weight=".33"
                 android:background="@drawable/button_custom"
-                android:drawableTop="@drawable/ic_action_direction"
+                android:drawableTop="@drawable/ic_action_important_normal"
                 android:padding="5dip"
-                android:text="@string/spotlight"
+                android:text="@string/favourites"
                 android:textColor="@color/white" />
         </LinearLayout>
 
@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             
             android:orientation="horizontal" >
-
+            
             <Button
                 android:id="@+id/button3"
                 style="?android:attr/borderlessButtonStyle"
@@ -77,9 +77,9 @@
                 android:layout_margin="2.5dp"
                 android:layout_weight=".33"
                 android:background="@drawable/button_custom"
-                android:drawableTop="@drawable/ic_action_important_normal"
+                android:drawableTop="@drawable/ic_action_favourite"
                 android:padding="5dip"
-                android:text="@string/favourites"
+                android:text="@string/charities"
                 android:textColor="@color/white" />
 
             <Button
@@ -90,10 +90,11 @@
                 android:layout_margin="2.5dp"
                 android:layout_weight=".33"
                 android:background="@drawable/button_custom"
-                android:drawableTop="@drawable/ic_action_direction"
+                android:drawableTop="@drawable/ic_action_help"
                 android:padding="5dip"
-                android:text="@string/charities"
+                android:text="@string/aboutus"
                 android:textColor="@color/white" />
+
         </LinearLayout>
     </LinearLayout>
 
