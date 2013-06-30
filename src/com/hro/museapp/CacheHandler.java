@@ -26,43 +26,42 @@ public class CacheHandler {
 	private String localVersion;
 	private String remoteVersion;
 	private JSONArray places;
-	
+
 	private static final String TAG_SUCCESS = "success";
 	private static final String TAG_VERSION = "version";
 	private static final String TAG_PLACES = "places";
-	
+
 	private static final String version = "version.txt";
 	private static final String cache = "cache.txt";
 	private static final String charityCache = "charity_cache.txt";
 	private static final boolean FAIL = false;
 	private static final boolean SUCCESS = true;
-	
+
 	private static final String URL_DATABASE = "http://jsonapp.tk/get_all_places.php";
 	private static final String URL_VERSION = "http://jsonapp.tk/get_version.php";
 	private static final String URL_CHARITY = "http://jsonapp.tk/get_all_charities.php";
-	
+
 	public static final int PLACES_CACHE = 0;
 	public static final int CHARITY_CACHE = 1;
-	
+
 	/*
 	 * CacheHandler class
 	 * 
-	 * We use a simple caching system for our database.
-	 * Since it's pretty large, downloading it every time would take too long
-	 * So we save the database locally, and only download if the online database gets updated
-	 * 
+	 * We use a simple caching system for our database. Since it's pretty large,
+	 * downloading it every time would take too long So we save the database
+	 * locally, and only download if the online database gets updated
 	 */
-	
+
 	public CacheHandler(Context con) {
-		//We need the application context for reading and writing files
+		// We need the application context for reading and writing files
 		context = con;
 	}
-	
+
 	public boolean check() {
-		//Simple check function
-		//First checks if we have an internet connection
-		//Then fetches local and remote version, and compares them
-		//Also check if cachefile exists
+		// Simple check function
+		// First checks if we have an internet connection
+		// Then fetches local and remote version, and compares them
+		// Also check if cachefile exists
 		Log.d("CACHEHANDLER", "Checking cache...");
 		if (isOnline()) {
 			getRemoteVersion();
@@ -72,25 +71,33 @@ public class CacheHandler {
 			}
 			double local = Double.parseDouble(localVersion);
 			double remote = Double.parseDouble(remoteVersion);
-			
-			//Check cache file
+
+			// Check cache file
 			File cacheFile = context.getFileStreamPath(cache);
+			File cacheFileCharity = context.getFileStreamPath(charityCache);
 			if (!cacheFile.isFile()) {
 				return true;
 			} else if (cacheFile.length() == 0) {
 				return true;
 			}
-			
-			if (local < remote){
-				//update();
+
+			if (!cacheFileCharity.isFile()) {
+				return true;
+			} else if (cacheFile.length() == 0) {
+				return true;
+			}
+
+			if (local < remote) {
+				// update();
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	public void update() {
-		//Check function, update local version, download new database and save version
+		// Check function, update local version, download new database and save
+		// version
 		Log.d("CACHEHANDLER", "Updating cache...");
 		if (remoteVersion == null)
 			localVersion = getRemoteVersion();
@@ -99,23 +106,23 @@ public class CacheHandler {
 		downloadLatest();
 		boolean saveResult = saveFile(version, localVersion);
 		if (saveResult == FAIL) {
-			//Error handling
+			// Error handling
 		}
 	}
-	
+
 	public String getLocalVersion() {
-		//Read the version from the version file
+		// Read the version from the version file
 		localVersion = readFile(version);
 		Log.d("CACHEHANDLER", "Local version:");
 		Log.d("CACHEHANDLER", localVersion);
 		if (localVersion.equals("")) {
-			//update();
+			// update();
 		}
 		return localVersion;
 	}
-	
+
 	public String getRemoteVersion() {
-		//Fetch the remote version from the server
+		// Fetch the remote version from the server
 		JSONArray result = getData(URL_VERSION, TAG_VERSION);
 		try {
 			remoteVersion = result.getJSONObject(0).getString(TAG_VERSION);
@@ -126,15 +133,22 @@ public class CacheHandler {
 		Log.d("CACHEHANDLER", remoteVersion);
 		return remoteVersion;
 	}
-	
+
 	public JSONArray getCache(int type) {
 		//Read the cache from the file
-		String file = cache;
-		if (type == PLACES_CACHE) {
+		String file = null;
+		
+		switch(type) {
+			case PLACES_CACHE:
+				file = cache;
+		break;
+			case CHARITY_CACHE:
+				file = charityCache;
+		break;
+		default:
 			file = cache;
-		} else if (type == CHARITY_CACHE) {
-			file = charityCache;
 		}
+
 		String result = readFile(file);
 		JSONArray places = new JSONArray();
 		try {
@@ -143,26 +157,28 @@ public class CacheHandler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		Log.d("TEST", places.toString());
+		Log.d("FILE", file);
 		return places;
 	}
-	
+
 	private void downloadLatest() {
-		//Download latest database
+		// Download latest database
 		String result = getData(URL_DATABASE, TAG_PLACES).toString();
 		boolean saveResult = saveFile(cache, result);
 		if (saveResult == FAIL) {
-			//Error handling
+			// Error handling
 		}
-		//Download latest charities
+		// Download latest charities
 		result = getData(URL_CHARITY, TAG_PLACES).toString();
 		saveResult = saveFile(charityCache, result);
 		if (saveResult == FAIL) {
-			//Error handling
+			// Error handling
 		}
 	}
-	
+
 	private JSONArray getData(String url, String tag, String... args) {
-		//Function to handle the downloading and parsing of data
+		// Function to handle the downloading and parsing of data
 		// Building Parameters
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		// getting JSON string from URL
@@ -181,33 +197,34 @@ public class CacheHandler {
 		}
 		return result;
 	}
-	
+
 	private String readFile(String file) {
-		//Helper function to read files
+		// Helper function to read files
 		StringBuilder text = new StringBuilder();
 
 		try {
 			FileInputStream fileToRead = context.openFileInput(file);
-			InputStreamReader inputStreamReader = new InputStreamReader(fileToRead);
-		    BufferedReader br = new BufferedReader(inputStreamReader);
-		    String line;
+			InputStreamReader inputStreamReader = new InputStreamReader(
+					fileToRead);
+			BufferedReader br = new BufferedReader(inputStreamReader);
+			String line;
 
-		    while ((line = br.readLine()) != null) {
-		        text.append(line);
-		        //text.append('\n');
-		    }
-		}
-		catch (IOException e) {
+			while ((line = br.readLine()) != null) {
+				text.append(line);
+				// text.append('\n');
+			}
+		} catch (IOException e) {
 			e.printStackTrace();
-		    return "";
+			return "";
 		}
 		return text.toString();
 	}
-	
+
 	private boolean saveFile(String file, String str) {
-		//Helper function to save files
+		// Helper function to save files
 		try {
-			FileOutputStream fileToWrite = context.openFileOutput(file, context.MODE_PRIVATE);
+			FileOutputStream fileToWrite = context.openFileOutput(file,
+					context.MODE_PRIVATE);
 			fileToWrite.write(str.getBytes());
 			fileToWrite.close();
 		} catch (IOException e) {
@@ -216,15 +233,15 @@ public class CacheHandler {
 		}
 		return SUCCESS;
 	}
-	
+
 	public boolean isOnline() {
-		//Helper function to determine if we have an internet connection
-	    ConnectivityManager cm =
-	        (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-	    NetworkInfo netInfo = cm.getActiveNetworkInfo();
-	    if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-	        return true;
-	    }
-	    return false;
+		// Helper function to determine if we have an internet connection
+		ConnectivityManager cm = (ConnectivityManager) context
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo netInfo = cm.getActiveNetworkInfo();
+		if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+			return true;
+		}
+		return false;
 	}
 }

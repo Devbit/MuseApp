@@ -129,6 +129,7 @@
         <activity android:name="GPSTracker"></activity>
         <activity android:name="AllCharitiesActivity"></activity>
         <activity android:name="AboutAppActivity"></activity>
+        <activity android:name="ShowCharityActivity"></activity>
     </application>
 
 </manifest>

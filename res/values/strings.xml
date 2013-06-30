@@ -42,4 +42,6 @@
     <string name="discoverAmsterdam">Amsterdam</string>
     <string name="about">MuseApp is ontwikkeld door Not Even Entertaining, een bedrijf opgestart door vijf HBO studenten. \n\nOntwikkelaars:\nCasper van Dorp \nGiovanni Paul \nErik Schamper \nTimon van Spronsen \nBart Vollebregt  </string>
 	<string name="aboutus">Over ons</string>
+	<string name="loadingCharities">Goede doelen inladen&#8230;</string>
+	
 </resources>

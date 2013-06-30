@@ -91,7 +91,7 @@ public class AllCharitiesActivity extends ListActivity {
 
 				// Starting new intent
 				Intent in = new Intent(getApplicationContext(),
-						ShowPlaceActivity.class);
+						ShowCharityActivity.class);
 				// sending mid to next activity
 				in.putExtra(TAG_MID, mid);
 
@@ -154,7 +154,7 @@ public class AllCharitiesActivity extends ListActivity {
 			}
 			isExecuting = true;
 			pDialog = new ProgressDialog(AllCharitiesActivity.this);
-			pDialog.setMessage(getString(R.string.loadingPlaces));
+			pDialog.setMessage(getString(R.string.loadingCharities));
 			pDialog.setIndeterminate(false);
 			pDialog.setCancelable(false);
 			pDialog.show();
