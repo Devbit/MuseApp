@@ -40,6 +40,7 @@
     <!-- Allows app to use callIntent : -->
     <uses-permission android:name="android.permission.CALL_PHONE" >
     </uses-permission>
+    <uses-feature android:name="android.hardware.telephony" android:required="false" />
 
     <!-- Version 2 of the Google Maps Android API requires OpenGL ES version 2 -->
     <!-- This notifies external services of the requirement. In particular, it has the effect of preventing Google Play Store from displaying your app on devices that don't support OpenGL ES version 2. -->
