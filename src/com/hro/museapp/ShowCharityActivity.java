@@ -77,7 +77,7 @@ public class ShowCharityActivity extends Activity {
 	GPSTracker gps;
 
 	// single place url
-	private static final String url_place_detials = "http://jsonapp.tk/get_all_charities.php";
+	private static final String url_place_detials = "http://jsonapp.tk/get_charity_details.php";
 
 	// JSON Node names
 	private static final String TAG_SUCCESS = "success";
