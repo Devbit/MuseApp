@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.app.ActionBar;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -12,6 +13,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -38,6 +40,10 @@ public class FavouritesList extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.favourites_list);
+		
+		ActionBar actionBar = getActionBar();
+		actionBar.setHomeButtonEnabled(true);
+		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		preferences = this.getSharedPreferences("myAppPrefs",
 				Context.MODE_PRIVATE);		
@@ -178,5 +184,12 @@ public class FavouritesList extends ListActivity {
 		}
 
 	}
+	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem menuItem)
+    {       
+        startActivity(new Intent(FavouritesList.this, Start.class)); 
+        return true;
+    }
 
 }

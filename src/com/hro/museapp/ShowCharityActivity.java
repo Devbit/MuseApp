@@ -319,7 +319,7 @@ public class ShowCharityActivity extends Activity {
 
 		case android.R.id.home:
 			// app icon in action bar clicked; go home
-			Intent intentHome = new Intent(this, AllPlacesActivity.class);
+			Intent intentHome = new Intent(this, AllCharitiesActivity.class);
 			intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intentHome);
 			break;

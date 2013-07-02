@@ -21,21 +21,10 @@ public class AboutAppActivity extends Activity {
 	}
 	
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			
-		case android.R.id.home:
-			// app icon in action bar clicked; go home
-            Intent intentHome = new Intent(this, Start.class);
-            intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intentHome);
-            break;
-
-		default:
-			break;
-		}
-
-		return true;
-	}
+    public boolean onOptionsItemSelected(MenuItem menuItem)
+    {       
+        startActivity(new Intent(AboutAppActivity.this, Start.class)); 
+        return true;
+    }
 
 }
