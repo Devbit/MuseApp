@@ -23,7 +23,9 @@ public class AboutAppActivity extends Activity {
 	@Override
     public boolean onOptionsItemSelected(MenuItem menuItem)
     {       
-        startActivity(new Intent(AboutAppActivity.this, Start.class)); 
+		Intent intentHome = new Intent(this, Start.class);
+		intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intentHome);
         return true;
     }
 

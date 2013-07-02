@@ -188,7 +188,9 @@ public class FavouritesList extends ListActivity {
 	@Override
     public boolean onOptionsItemSelected(MenuItem menuItem)
     {       
-        startActivity(new Intent(FavouritesList.this, Start.class)); 
+        Intent intentHome = new Intent(this, Start.class);
+		intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intentHome);
         return true;
     }
 
