@@ -21,7 +21,7 @@
             android:layout_gravity="center_horizontal"
             android:orientation="vertical"
             android:scaleType="centerCrop"
-            android:src="@drawable/louvre_start" />
+            android:src="@drawable/rijksmuseum" />
     </LinearLayout>
 
     <LinearLayout

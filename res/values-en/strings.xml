@@ -40,7 +40,7 @@
     <string name="charities">Charities</string>
     <string name="discover">Discover</string>
     <string name="discoverAmsterdam">Discover Amsterdam</string>
-    <string name="about">MuseApp is developed by Not Even Entertaining, a company started by five students of the Rotterdam University of Applied Sciences. \n\Developers:\nCasper van Dorp \nGiovanni Paul \nErik Schamper \nTimon van Spronsen \nBart Vollebregt</string>
+    <string name="about">MuseApp is developed by Not Even Entertaining, a company started by five students of the Rotterdam University of Applied Sciences. \n\nDevelopers:\nCasper van Dorp \nGiovanni Paul \nErik Schamper \nTimon van Spronsen \nBart Vollebregt</string>
 	<string name="aboutus">About us</string>
 	<string name="loadingCharities">Loading charities&#8230;</string>
 

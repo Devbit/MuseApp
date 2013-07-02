@@ -5,8 +5,8 @@
     <dimen name="padding">66dp</dimen>
     <dimen name="circle_stroke_width">5dp</dimen>
 
-    <color name="action_bar_bg_color">@color/blue</color>
-    <color name="action_bar_title_color">@color/white</color>
+    <color name="action_bar_bg_color">#33B5E5</color>
+    <color name="action_bar_title_color">#FFF</color>
     <color name="blue">#33B5E5</color>
     <color name="darker_blue">#2da2ce</color>
     <color name="dark_blue">#0099CC</color>

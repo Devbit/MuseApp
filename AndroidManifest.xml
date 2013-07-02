@@ -5,8 +5,8 @@
     android:versionName="2.1" >
 
     <uses-sdk
-        android:minSdkVersion="11"
-        android:targetSdkVersion="14" />
+        android:minSdkVersion="14"
+        android:targetSdkVersion="17" />
 
     <permission
         android:name="com.hro.museapp.permission.MAPS_RECEIVE"
@@ -135,14 +135,17 @@
         </activity>
         <activity
             android:name="AllCharitiesActivity"
+            android:label="@string/charities"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="AboutAppActivity"
+            android:label="@string/aboutus"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="ShowCharityActivity"
+            android:label="@string/charities"
             android:screenOrientation="portrait" >
         </activity>
     </application>
