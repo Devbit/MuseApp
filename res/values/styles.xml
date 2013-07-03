@@ -4,7 +4,7 @@
     <style name="Theme.MyAppTheme" parent="android:style/Theme.Holo.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/Theme.MyAppTheme.ActionBar</item>
         <item name="android:actionBarItemBackground">@drawable/actionbar_drawable</item>
-        <item name="android:actionBarWidgetTheme">@style/Theme.DropDown</item>
+        <item name="android:popupBackground">@style/Theme.DropDown</item>
     </style>
 
     <style name="Theme.MyAppTheme.ActionBar" parent="android:style/Widget.Holo.Light.ActionBar.Solid">
